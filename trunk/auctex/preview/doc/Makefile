@@ -2,15 +2,12 @@
 infodir=/usr/local/info
 TEX=tex
 
-all: preview-latex.dvi preview-latex
-
-dist: preview-latex INSTALL README preview-latex_toc.html preview-latex.ps
+all: preview-latex.dvi preview-latex.info
 
 preview-latex/index.html: preview-latex.texi install.texi readme.texi \
 	copying.texi problems.texi
 	makeinfo --html preview-latex.texi
-	# Small manual: use 'makeinfo --html' ????
-	# texi2html goofs terribly on macros.
+
 html-docs: preview-latex/index.html
 
 preview-latex.dvi: preview-latex.texi install.texi readme.texi copying.texi \
