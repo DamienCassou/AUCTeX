@@ -1,3 +1,8 @@
+2004-02-26  David Kastrup  <dak@gnu.org>
+
+	* tex.el (TeX-master-file): Don't overwrite TeX-master when we
+	decide not to ask yet.
+
 2004-02-22  David Kastrup  <dak@gnu.org>
 
 	* latex.el (LaTeX-newline): New function.  Spread it throughout
