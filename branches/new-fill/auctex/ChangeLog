@@ -3,6 +3,7 @@
 	* latex.el (LaTeX-newline): New function.  Spread it throughout
 	the code in order to stay in comments for completion and
 	insertion commands.
+	(doctex-mode): New function.
 
 2004-02-19  David Kastrup  <dak@gnu.org>
 
