@@ -1,0 +1,185 @@
+@c This is to enable generation of text-file from this file
+@ifnottex
+@unmacro LaTeX
+@unmacro previewlatex
+@macro LaTeX {}
+La@TeX{}
+@end macro
+@macro previewlatex {}
+preview-latex
+@end macro
+@end ifnottex
+@c -----------------------
+@cindex @kbd{M-x preview-report-bug @key{RET}}
+@cindex @code{preview-report-bug}
+@cindex Report a bug
+Some of the known problems can be solved by moving to newer versions of
+the problematic software, by simple patches, or in one case, by changing
+OS(!). If you find something not mentioned here, please send a bug
+report using @kbd{M-x preview-report-bug @key{RET}}. This will fill in a
+lot of information interesting to us.
+
+Some bugs are being fixed as you read this, there is a mailing list for
+developers, look at
+@uref{http://lists.sourceforge.net/lists/listinfo/preview-latex-devel}.
+For more information, send a message with just the word ``help'' as
+subject or body to
+@email{preview-latex-devel-request@@lists.sourceforge.net}. Suggestions
+for new features, and pleas for help should go to
+@email{preview-latex-devel@@lists.sourceforge.net} (the @previewlatex{}
+devel team).
+
+@node Problems with GhostScript, Font problems with Dvips, Known problems, Known problems
+@section Problems with GhostScript
+
+Most of the problems encountered come from interaction with GhostScript.
+It is a good idea to have a fairly recent version of GhostScript
+installed.  In particular, the device names have changed over the time,
+so you should check that the devices demanded by the customizable
+variable @code{preview-image-creators} fit your version of GhostScript,
+at least the entry corresponding to the current value of
+@code{preview-image-type}.  While not being best in file size and image
+quality, setting @code{preview-image-creators} to @code{jpeg} should
+probably be one of the best bets, since that device name has not changed
+in quite some time.
+
+When GhostScript fails, the necessary information and messages from
+Ghostscript go somewhere.  If GhostScript fails before starting to
+process images, you'll find the information at the end of the process
+buffer you can see with @kbd{C-c C-l}.  If GhostScript fails while
+processing a particular image, this image will be tagged with
+middle-clickable buttons for the error description and for the
+corresponding source file.
+
+The default options configurable with
+
+@display
+@kbd{M-x customize-variable @key{RET} preview-gs-options @key{RET}}
+@end display
+@noindent
+include the options @option{-dTextAlphaBits=4} and
+@option{-dGraphicsAlphaBits=4}.  These options have been reported to
+make GhostScript 5.50 fail, but should work under GhostScript 6.51 and
+later.  If you are experiencing problems, it might help to customize
+them away.  Of course, this also takes away the joy of antialiasing, so
+upgrading GhostScript might not be the worst idea after all.
+
+@node Font problems with Dvips, Emacs problems, Problems with GhostScript, Known problems
+@section Font problems with Dvips
+Some fonts have been reported to produce wrong characters with
+@previewlatex{}.  @previewlatex{} calls Dvips by default with the option
+@option{-Pwww} in order to get scalable fonts for nice results.  If you
+are using antialiasing, however, the results might be sufficiently nice
+with bitmapped fonts, anyway.  You might try @option{-Ppdf} for another
+stab at scalable fonts, or other printer definitions.  Use
+
+@display
+@kbd{M-x customize-variable @key{RET} preview-dvips-command @key{RET}}
+@end display
+@noindent
+in order to customize this.
+
+One particular problem is that several printer setup files (typically in
+a file called @file{/usr/share/texmf/dvips/config/config.pdf} if you are
+using the @option{-Ppdf} switch) contain the @option{G} option for
+`character shifting'.  This option will result in @samp{fi} being
+rendered as @samp{£} in several fonts.
+
+@node Emacs problems, AUC TeX prior to 11.0, Font problems with Dvips, Known problems
+@section Emacs problems
+
+@itemize @bullet
+@item GNU Emacs versions prior to 21.1
+
+Don't use them.  20.x will not work, 21.0.x were prereleases, anyway.
+
+@item GNU Emacs under Windows operating systems
+
+As of GNU Emacs 21.1, no image support is available in Emacs under
+Windows.  Without images, @previewlatex{} is useless.  If it is important
+to you, support the Emacs developer crew with regard to image support
+(PostScript image support is @emph{not} necessary).  I do not use
+Windows myself, but will accept patches necessary to make @previewlatex{}
+work under it.
+
+@item XEmacs
+
+Does not work yet.  Volunteers welcome.  Quite a bit of the necessary
+work has already been sorted out.
+
+@item GNU Emacs @acronym{EPS} handling
+
+Direct @acronym{EPS} rendering still is in need of improvement and very
+experimental, so the default setting of @previewlatex{} replaces
+Emacs' internal @acronym{EPS} handling by an indirect rendering
+mechanism. If you feel capable of helping out with Emacs' @acronym{EPS}
+interface (meaning that the APIs connecting GhostScript and viewers such
+as GhostView and Xdvi are not a book with seven seals for you), feel
+free to do so. Report bugs you can reproduce along with the files needed
+to reproduce them. The new display engine for 21.1 is quite powerful,
+and some bugs still might be lurking inside.
+@end itemize
+
+@node AUC TeX prior to 11.0, LaTeX international characters, Emacs problems, Known problems
+@section AUC @TeX{} prior to 11.0
+
+AUC @TeX{} versions up to and including 10.0g have a bug in the
+calculation of the offsets for the start of a region.  This affects
+@kbd{C-c C-r} commands where the start of the region does not lie on the
+start of a line.  It also affects regeneration of single previews.  To
+correct this, apply the patch in @file{patches/auctex-10.patch}.  It
+might be more prudent to install a more recent version of AUC @TeX{},
+however.
+
+@node LaTeX international characters, x-symbol interoperation, AUC TeX prior to 11.0, Known problems
+@section @LaTeX{} international characters
+
+To determine the position of a preview, @previewlatex{} correlates
+error messages from @TeX{} with the input text.  The delivered example
+file @file{circ.tex} contains @samp{ISO-8859-1} input characters (also
+called @samp{Latin-1}).  If your language environment is not properly
+set up, or your @TeX{} version is rather old, @TeX{} will, for
+example, display @samp{@"u} (German u-Umlaut) as @samp{^^fc}.  In that
+case the correlation will fail, with the result that the preview
+images get misplaced.  Personally, I have set the environment variable
+@env{LANG} to the string @code{en_US.ISO8859-1}.  Your system may have
+different ways of achieving something similar.  If you have a
+graphical login screen, chances are that it offers a @samp{Language}
+setting.  It may help to choose @samp{US English} or similar instead
+of the plain @samp{English} setting.  This problem has also been
+reported as being caused by te@TeX{} compiled against @samp{libc5}
+libraries.
+
+@code{configure} currently tries checking for an 8-bit-clean
+configuration of @LaTeX{} and refuses to continue until you have fixed
+it.  If you know your configuration is 8-bit-clean and the test still
+fails, pass the option @code{--disable-8bit-test} to configure.
+
+@node x-symbol interoperation, Middle-clicks paste instead of toggling, LaTeX international characters, Known problems
+@section x-symbol interoperation
+
+Thanks to the work of Christoph Wedler, starting with version
+@samp{4.0h/beta} of x-symbol, the line parsing of AUC @TeX{} and
+@previewlatex{} is fully supported.  Earlier versions exhibit problems.
+If you wonder about what x-symbol is, take a look at
+@uref{http://www.fmi.uni-passau.de/~wedler/x-symbol/emacs.html}.  In a
+nutshell, x-symbol transforms various tokens and subscripts to a more
+readable form while editing and offers a few input methods handy
+especially for dealing with math.
+
+@node Middle-clicks paste instead of toggling,  , x-symbol interoperation, Known problems
+@section Middle-clicks paste instead of toggling
+
+This is probably the fault of your favorite package.  In Emacs-21.1, the
+following culprits are known; later versions might have this corrected
+already, so apply the patches only if you encounter the problem.
+
+@itemize @bullet
+@item flyspell.el
+
+Apply the patch in @file{patches/flyspell.patch}.
+
+@item mouse-drag.el
+
+Apply the patch in @file{patches/mouse-drag.patch}.
+@end itemize

@@ -1,0 +1,512 @@
+\input texinfo
+@documentencoding ISO-8859-1
+@documentlanguage en
+@setfilename preview-latex.info
+@settitle preview-latex
+@dircategory TeX
+@direntry
+* preview-latex: (preview-latex).       A preview mode for GNU Emacs
+@end direntry
+@dircategory Emacs
+@direntry
+* preview-latex: (preview-latex).       To preview LaTeX constructs
+@end direntry
+@c footnotestyle separate
+@c paragraphindent 2
+@comment %**end of header 
+@iftex
+@tolerance 10000 @emergencystretch 3em
+@end iftex
+@ifnottex
+@macro LaTeX {}
+La@TeX{}
+@end macro
+@macro previewlatex {}
+preview-latex
+@end macro
+@end ifnottex
+@tex
+\gdef\LaTeX{L\kern-.36em\raise.3ex\hbox{\sc{a}}\kern-.15em\TeX}
+\gdef\previewlatex{Preview-\LaTeX}
+@end tex
+
+@finalout
+@titlepage
+@title @previewlatex{}
+@subtitle A @LaTeX{} preview mode for AUC @TeX{} in Emacs.
+@subtitle Version 0.6
+  
+@author by David Kastrup and Alan Shutko 
+@author manual by Jan-@AA{}ke Larsson
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 2001, 2002, David Kastrup, Alan Shutko, and
+Jan-@AA{}ke Larsson
+ 
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+@end ignore
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+section entitled ``Copying'' is included exactly as in the original, and
+provided that the entire resulting derived work is distributed under the
+terms of a permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by the Free Software Foundation.
+@end titlepage
+@page
+
+@summarycontents
+@c @contents
+
+@ifnottex
+@node top, Introduction, (dir), (dir)
+@top preview-latex
+ 
+@previewlatex{} is a package that allows extraction of certain
+environments (most notably displayed formulas) for use in different
+contexts. While the first application has been the embedding of those
+preview fragments into Emacs source buffers under the AUC @TeX{} editing
+environment, other applications are easily imaginable.
+
+The name of the package is really @samp{preview-latex}, all in
+lowercase letters, with a hyphen.  If you want to use it in a more
+formal way, prettily typeset including the regular @LaTeX{} logo, it
+can be written `Preview-@LaTeX{}', but this use is not recommended for
+Email and other electronic communication, it is a `manual' form.
+
+This file documents @previewlatex{} version 0.6
+
+If you want to use @previewlatex{} in AUC @TeX{} right away, be sure to
+have a working AUC @TeX{} installation, install @previewlatex{} and insert
+the following in your @file{.emacs} file.  This will make Emacs load
+@file{preview.el} into AUC @TeX{} when you first load a @LaTeX{} file.
+
+@lisp
+(autoload 'LaTeX-preview-setup "preview")
+(add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+@end lisp
+
+@cindex Xemacs
+@strong{Please note:} Currently XEmacs support is not yet operative.
+
+This documentation is preliminary. It should however cover most
+important points. Corrections or perhaps rewrites of sections are
+@emph{very welcome}.
+
+David Kastrup, Alan Shutko, and Jan-Åke Larsson
+
+@end ifnottex
+
+@menu
+* Introduction::                What is it good for?
+* Getting started::             Simple and fast.
+* Installation::                Make Install.
+* Keys and lisp::               Key bindings and user-level lisp functions.
+* Customization::               Fitting it in.
+* Known problems::              When things go wrong.
+* Internals::                   Under the hood.
+* License::                     GPL.
+* Index::                       A menu of many topics.             
+@end menu
+
+@node Introduction, Getting started, top, top
+@c Used as @file{README} as well: in separate file
+@chapter Introduction
+@include readme.texi
+
+@node Getting started, Installation, Introduction, top
+@chapter Getting started
+
+If someone already has installed @previewlatex{} for you
+(@pxref{Installation}), the simplest way to use @previewlatex{} is to
+insert the following in your @file{.emacs} file:
+@cindex @file{.emacs}
+
+@lisp
+(autoload 'LaTeX-preview-setup "preview")
+(add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+@end lisp
+
+Now, load a @LaTeX{} document, and press @kbd{C-c C-c g @key{RET}} (for
+``Generate Preview'') or press @kbd{C-c C-p C-p} (for ``De/Preview at
+point'').  You may also use the appropriate menu entries.  Previews will
+now be generated for various objects in your document. You'll see them
+change into a large question-mark when the process is half
+finished. Note that you can freely navigate the buffer while this is
+going on.  It is a bad idea, however, to edit the buffer before the
+question marks appear, since that is the moment when the correlation
+between the original text and the buffer locations gets established.  If
+the buffer changes before that point of time, the previews will not be
+placed where they belong.  When the process is finished you will see the
+objects typeset in your buffer.
+
+To see/edit the @LaTeX{} code for a specific object, put the point (the
+cursor) on it and press @kbd{C-c C-p C-p}. Now you can edit the code,
+and generate a new preview by again pressing @kbd{C-c C-p C-p}.
+
+@node Installation, Keys and lisp, Getting started, top
+@c Used as @file{INSTALL} as well: in separate file
+@chapter Installation 
+@include install.texi
+
+@node Keys and lisp, Customization, Installation, top
+@chapter Key bindings and user-level lisp functions 
+
+To the functions and key bindings in AUC @TeX{} @inforef{Key
+Index,,auctex}, the following are added:
+
+@table @w
+@item @kbd{C-c C-c g RET} 
+Generate preview. This command generates previews for all appropriate
+objects in the current document. Already preset previews are
+re-generated.
+
+You can use the AUC @TeX{} variants starting with @kbd{C-c C-b g
+@key{RET}} and @kbd{C-c C-r g @key{RET}} for generating previews just in
+the current buffer of the document, or a region of it.
+@cindex @kbd{C-c C-c g @key{RET}}
+@cindex @kbd{C-c C-b g @key{RET}}
+@cindex @kbd{C-c C-r g @key{RET}}
+@cindex Generate Preview
+
+@item @kbd{C-c C-p C-p}
+@itemx @code{preview-at-point}
+De/Preview at point. If the cursor is positioned on or inside of a
+preview area, this toggles its visibility, regenerating the preview if
+necessary. If not, it will run the surroundings through preview. The
+surroundings include all areas up to the next valid preview, unless
+invalid previews occur before, in which case the area will include the
+last such preview.
+@cindex @kbd{C-c C-p C-p}
+@cindex @code{preview-at-point}
+@cindex De/Preview at point
+
+@item @kbd{C-c C-k}
+Kill preview-generating process. This is really an AUC @TeX{}
+keybinding, but it is included here as a hint. If you start generating a
+preview and then make a change that affects the number of lines in the
+buffer, @previewlatex{} may be confused and place the previews wrong.
+@cindex @kbd{C-c C-k}
+@cindex Kill preview-generating process
+
+@item @kbd{C-c C-p C-s}
+@itemx @code{preview-section} 
+Run preview on this @LaTeX{} section.
+@cindex @kbd{C-c C-p C-s}
+@cindex @code{preview-section}
+@cindex Preview section 
+
+@item @kbd{C-c C-p C-e}
+@itemx @code{preview-environment}
+Run preview on this @LaTeX{} environment.
+@cindex @kbd{C-c C-p C-e}
+@cindex @code{preview-environment}
+@cindex Preview environment
+
+@item @kbd{C-c C-p C-r}
+@itemx @code{preview-region (begin end)}
+Run preview on current region. If called non-interactively, runs preview
+on region between BEGIN and END.
+@cindex @kbd{C-c C-p C-r}
+@cindex @code{preview-region}
+@cindex Preview region
+
+@item @kbd{C-c C-p C-c C-b}
+@itemx @code{preview-clearout-buffer (&optional buffer)}
+Clear out all previews in current buffer. This makes the current buffer
+lose all previews. If run non-interactively BUFFER is cleared out from
+previews, current buffer if nil.
+@cindex @kbd{C-c C-p C-c C-b}
+@cindex @code{preview-clearout-buffer}
+@cindex Clearout previews
+
+@item @kbd{C-c C-p C-c C-r}
+@itemx @code{preview-clearout (&optional start end keep-dir)}
+Clear out all previews in the current region. When called interactively,
+the current region is used. Non-interactively, the region between START
+and END is affected. Those two values default to the borders of the
+entire buffer. If KEEP-DIR is set to a value from `TeX-active-tempdir',
+previews associated with that directory are kept.
+@cindex @kbd{C-c C-p C-c C-r}
+@cindex @code{preview-clearout}
+@end table
+
+@node Customization, Known problems, Keys and lisp, top
+@chapter Customization
+@cindex Customization
+
+Customization options can be found by typing @kbd{M-x customize-group
+@key{RET} preview @key{RET}}. The list of suggestions can be made very
+long, but some are:
+
+@itemize @bullet
+@item Adjust the smoothening of the previews
+
+@cindex Ghostscript options
+In the @code{Preview Gs} group, change @code{Preview Gs Options}: try
+setting @code{-dGraphicsAlphaBits=2}, for instance.
+
+@item Change the color of the preview background
+
+If you use a non-white background in emacs, it is possible to make the
+previews have the same background color. In the @code{Preview
+Appearance} group, set @code{Preview Transparent Color} to
+@code{Autodetect}. This will also make the point (the cursor) cover the
+whole background of a preview, but you'll have to live with that.
+
+@item Preview inline math
+
+@cindex Inline math
+In the @code{Preview Latex} group, check the box next to @code{textmath}
+in @code{Preview Default Option List}.  Beware if you use
+@code{x-symbol}, there is a known issue with that package if you are
+using a version before 4.0h/beta.
+
+@item The @code{showkeys} package
+
+@cindex @code{showkeys}
+When using @previewlatex{}, the @code{\label}s are hidden by the previews.
+To show them in the previews (yes, this is possible) use the @LaTeX{}
+package @code{showkeys}, by changing @code{Preview Default Preamble} in
+the @code{Preview Latex} group to include @code{\usepackage@{showkeys@}}
+before the @code{\RequirePackage[%P]@{preview@}} line (press the @key{Show}
+and the first @key{INS} buttons).
+
+@end itemize
+
+@node Known problems, Internals, Customization, top
+@chapter Known problems
+@comment also used as PROBLEMS file
+A number of issues are known concerning the interoperation with various
+other software.
+
+@menu
+* Problems with GhostScript::   
+* Font problems with Dvips::    
+* Emacs problems::              
+* AUC TeX prior to 11.0::    
+* LaTeX international characters::  
+* x-symbol interoperation::     
+* Middle-clicks paste instead of toggling::  
+@end menu
+@include problems.texi
+
+@node Internals, License, Known problems, top
+@chapter Internals/more customization
+
+This package consists of two parts. A @LaTeX{} style that splits the
+output into appropriate parts with one preview object on each page, and
+an Emacs-lisp part integrating the thing into emacs (aided by AUC
+@TeX{}).
+
+@menu
+* The LaTeX style file::        
+* The emacs interface::         
+* On EPS previews::             
+* Misplaced previews::          
+@end menu
+
+@node The LaTeX style file, The emacs interface, Internals, Internals
+@section The @LaTeX{} style file
+
+(To be written, or at least copied from preview.dtx)
+
+@node The emacs interface, On EPS previews, The LaTeX style file, Internals
+@section The emacs interface
+
+When you generate previews on a buffer or a region, the command in
+@code{preview-LaTeX-command} gets run (that variable should only be
+changed with @code{M-x customize @key{RET}} so that changes get propagated to
+AUC @TeX{}'s command list).
+
+
+@cindex @code{preview-default-option-list}
+@cindex @code{preview-default-preamble}
+This command passes options @code{auctex} and @code{active} to the
+preview package so that the user need not supply these by himself in
+case he wants to be able to still compile his document without it
+turning into an incoherent mass of little pictures. If the document does
+not call in the package itself (via @code{\usepackage}) in the preamble,
+the preview package is loaded using default options from
+@code{preview-default-option-list} and additional commands specified in
+@code{preview-default-preamble}.
+
+@cindex @code{preview-dvips-command}
+This run produces a dvi file where every preview is on a separate page.
+As usual with AUC @TeX{}, you can continue working while this is going
+on.  It is not a good idea to change the file until after @previewlatex{}
+has established where to place the previews which it can only do after
+the @LaTeX{} run completes.  This run produces a host of pseudo-error
+messages that get parsed by @previewlatex{} at the end of the @LaTeX{} run
+and give it the necessary information about where in the source file the
+@LaTeX{} code for the various previews is located exactly. The parsing
+takes a moment and will render Emacs busy. Before Emacs starts the
+parsing of the error messages, it starts conversion of the previews into
+PostScript @acronym{EPS} files, by calling the configurable
+@code{preview-dvips-command}. The printer specified in there is
+@code{-Pwww} by default, which will usually get you scalable fonts where
+available. If you are experiencing problems, you might want to try
+playing around with Dvips options @inforef{Command-line options,,dvips}.
+
+When Emacs has finished parsing the error messages, it activates all
+detected previews.  This entails throwing away any previous previews
+covering the same areas, and then replacing the text in its visual
+appearance by a placeholder looking like a question mark.
+
+@cindex @code{preview-image-type}
+What happens when Dvips is finished depends on the configuration of
+@code{preview-image-type}. If this is set to @code{'postscript},
+@previewlatex{} will simply tell Emacs about where it can find the
+@acronym{EPS} files for each image and will then be finished. Emacs runs
+GhostScript whenever it finds it needs to have one image displayed. It
+turns out that at the time of writing, the implementation in Emacs
+causes this to make editing painfully slow and non-responsive. This is
+because Emacs starts one GhostScript process per image. For this reason,
+@code{preview-image-type} defaults to @code{'png}. This makes
+@previewlatex{} start up a single GhostScript process on its own and feeds
+it the various @acronym{EPS} files in sequence for conversion into
+@acronym{PNG} format which can be displayed much faster by
+Emacs. Actually, not in sequence but backwards since you are most likely
+editing at the end of the document. And as an added convenience, any
+preview that happens to be on-screen is given higher priority so that
+@previewlatex{} will first cater for the images that are displayed. There
+are various options customizable concerning aspects of that operation,
+see the customization group @code{preview-gs} for this.
+
+Running and feeding GhostScript from @previewlatex{} happens
+asynchronously again: you can resume editing while the images arrive.
+While those pretty pictures filling in the blanks on screen tend to
+make one marvel instead of work, rendering the non-displayed images
+afterwards will not take away your attention and will eventually
+guarantee that jumping around in the document will encounter only
+prerendered images.
+
+@node On EPS previews, Misplaced previews, The emacs interface, Internals
+@section On @acronym{EPS} previews
+
+@cindex @code{preview-image-type}
+@cindex @code{preview-image-creators}
+As mentioned above, @previewlatex{}'s default mechanism calls GhostScript
+itself for first rendering all preview images into png format, then the
+rendered images get used instead of making use of Emacs' builtin
+@acronym{EPS} support. For this to work, your version of GhostScript
+needs to support the @option{png256} device. Other options are available
+by customizing @code{preview-image-type}. The appropriate type must be
+supported in the @code{preview-image-creators} variable which you can
+customize as well, so adding a suitable device or changing an existing
+one in a way to better suit the version of GhostScript you happen to be
+using should be possible if you take the existing settings as
+example. Please send information about such devices to the addresses
+mentioned in the README file so that we can improve @previewlatex{}.
+
+IF you want to use Emacs' embedded @acronym{EPS} rendering support
+(which is @emph{not} the default), you almost certainly want to put
+@code{(setq gs-device "x11alpha")} into your @file{.emacs} file. This
+will turn on anti-aliasing.
+
+If you are using GhostScript 6.63 or later, you may get better output
+using the following.
+@cindex @code{gs-device}
+@cindex @code{gs-options}
+
+@lisp
+(require 'gs)
+(setq gs-device "x11")
+(setq gs-options 
+      (append 
+       '("-dTextAlphaBits=4" 
+         "-dGraphicsAlphaBits=2" 
+         "-dMaxBitmap=10000000") 
+       gs-options))
+@end lisp
+
+@node Misplaced previews,  , On EPS previews, Internals
+@section Misplaced previews
+
+As explained previously, Emacs uses pseudo-error messages generated by
+the @samp{preview} package in order to pinpoint the exact source
+location where a preview originated. This works in running text, but
+fails when preview material happens to lie in macro arguments, like the
+contents of @code{\emph}. Those macros first read in their entire
+argument, munge it through, perhaps transform it somehow, process it and
+perhaps then typeset something. When they finally typeset something,
+where is the location where the stuff originated? @TeX{}, having read in
+the entire argument before, does not know and actually there would be no
+sane way of defining it.
+
+For previews contained inside such a macro argument, the default
+behaviour of @previewlatex{} is to use a position immediately after the
+closing brace of the argument. All the previews get placed there, all at
+a zero-width position, which means that Emacs displays it in an order
+that @previewlatex{} cannot influence (currently in Emacs it is even
+possible that the order changes between runs). And since the placement
+of those previews is goofed up, you will not be able to regenerate them
+by clicking on them. The default behaviour is thus somewhat undesirable.
+
+@cindex @code{\PreviewMacro}
+@cindex @code{\PreviewMacro*}
+@cindex @code{\PreviewEnvironment*}
+The solution (like with other preview problems) is to tell the @LaTeX{}
+@samp{preview} package how to tackle this problem. You know the
+@code{\PreviewMacro} command explained above (cough, cough). There is a
+variant @code{\PreviewMacro*} and its cousin @code{\PreviewEnvironment*}
+that do just the opposite. @code{\PreviewMacro\somecommand} puts the
+entire @code{\somecommand} in one box to be previewed. For macros like
+@code{\emph} this is pretty inappropriate since the result for a larger
+passage gets unwieldy for display and editing. But you don't need
+@code{\emph} do anything at all during previews! So the solution is to
+use @code{\PreviewMacro*\emph} in the preamble of your document which
+will make @LaTeX{} ignore @code{\emph} completely as long as it is not
+part of a larger preview (in which case it gets typeset as usual). Its
+argument thus becomes ordinary text and gets treated like ordinary text.
+
+Note that it would be a bad idea to declare
+@code{\PreviewMacro*[@{@{@}@}]\emph} since then both @code{\emph} as
+well as its argument would be ignored instead of previewed. For
+user-level macros, this is almost never wanted, but there may be
+internal macros where you might want to ignore internal arguments.
+
+The same mechanism can be used for a number of other text-formatting
+commands like @code{\textrm}, @code{\textit} and the like. While they
+all use the same internal macro @code{\text@@command}, it will not do to
+redefine just that, since they call it only after having read their
+argument in, and then it already is too late. So you need to disable
+every of those commands by hand in your document preamble, or
+alternatively in @code{preview-default-preamble}, which is customizable
+in the Preview Latex group.
+
+Actually, we wrote all of the above just to scare you.  At least all of
+the above mentioned macros and a few more are already catered for by a
+configuration file @file{prauctex.cfg} that gets loaded by default
+unless the @code{preview} package get loaded with the
+@option{noconfig} option.  You can make your own copy of this file in a
+local directory and edit it in case of need.  You can also add loading
+of a file of your liking to @code{preview-default-preamble}.
+
+@node License, Index, Internals, top
+@c Not to be changed often, I think: in separate file.
+@appendix License
+@include copying.texi
+
+@c @node Credits, Index, Internals, top
+@c @appendix Credits 
+
+@node Index,  , License, top
+@unnumbered Index
+
+@printindex cp
+@bye
+
+
