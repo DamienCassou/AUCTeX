@@ -1,0 +1,30 @@
+@section News in 9.1
+
+Coordinater: Per Abrahamsen, 1994.
+
+Alpha testers (in order of appearance): 
+and probably more.@refill
+
+@itemize @bullet
+@item 
+When determining the current environment, stop when you see a section.
+Thanks to David Aspinall @samp{<da@@dcs.edinburgh.ac.uk>}.
+
+@item
+Fixed documentation for @kbd{` ~} in @file{math-ref.tex}.  Thanks to
+Morten Welinder @samp{<terra@@diku.dk>}.
+
+@item
+Made @code{LaTeX-math-mode} work better with FSF Emacs 19 in the case
+where you press something undefined, in particular function keys.
+Requested by several.
+
+@item
+Inserting an itemize environment around the active region now insert the
+first item inside the environment.  Thanks to Berwin A. Turlach
+@samp{<berwin@@core.ucl.ac.be>} for reporting this.
+
+@item
+Fixed bug in right button menu under Lucid.  Reported by Frederic
+Devernay @samp{<Frederic.Devernay@@sophia.inria.fr>}.
+@end itemize
