@@ -51,6 +51,20 @@ A list of strings."
 
  (make-variable-buffer-local 'LaTeX-default-options)
 
+(defcustom LaTeX-insert-into-comments t
+  "*Whether insertion commands stay in comments.
+This allows using the insertion commands even when
+the lines are outcommented, like in dtx files."
+  :group 'LaTeX-environment
+  :type 'boolean)
+
+(defun LaTeX-newline ()
+  "Start a new line potentially staying within comments.
+This depends on `LaTeX-insert-into-comments'."
+  (if LaTeX-insert-into-comments
+      (indent-new-comment-line)
+    (newline)))
+
 ;;; Syntax Table
 
 (defvar LaTeX-mode-syntax-table (copy-syntax-table TeX-mode-syntax-table)
@@ -101,9 +115,9 @@ LaTeX-section-label	Prefix to all section labels."
 	 (toc nil)
 	 (title "")
 	 (done-mark (make-marker)))
-    (newline)
+    (LaTeX-newline)
     (run-hooks 'LaTeX-section-hook)
-    (newline)
+    (LaTeX-newline)
     (if (marker-position done-mark)
 	(goto-char (marker-position done-mark)))
     (set-marker done-mark nil)))
@@ -386,7 +400,7 @@ assumes the section already is inserted."
     (if (zerop (length title))
 	(set-marker done-mark (point)))
     (insert title TeX-grcl)
-    (newline)
+    (LaTeX-newline)
     ;; If RefTeX is available, tell it that we've just made a new section
     (and (fboundp 'reftex-notice-new-section)
 	 (reftex-notice-new-section)))
@@ -398,7 +412,7 @@ inserted after the sectioning command.
 
 The behaviour of this hook is controlled by `LaTeX-section-label'."
   (and (LaTeX-label name)
-       (newline)))
+       (LaTeX-newline)))
 
 ;;; Environments
 
@@ -487,13 +501,16 @@ It may be customized with the following variables:
   (if (> (point)
 	 (save-excursion
 	   (beginning-of-line)
+	   (when LaTeX-insert-into-comments
+	     (if (looking-at comment-start-skip)
+		 (goto-char (match-end 0))))
 	   (skip-chars-forward " \t")
 	   (point)))
-      (insert "\n"))
+      (LaTeX-newline))
   (insert "\\end{" (LaTeX-current-environment 1) "}")
   (indent-according-to-mode)
   (if (not (looking-at "[ \t]*$"))
-      (insert "\n")
+      (LaTeX-newline)
     (let ((next-line-add-newlines t))
       (next-line 1)
       (beginning-of-line)))
@@ -526,33 +543,40 @@ It may be customized with the following variables:
 	(if (< (mark) (point))
 	    (exchange-point-and-mark))
 	(or (TeX-looking-at-backward "^[ \t]*")
-	    (newline))
+	    (LaTeX-newline))
 	(insert TeX-esc "begin" TeX-grop environment TeX-grcl)
 	(indent-according-to-mode)
 	(if extra (insert extra))
-	(newline)
+	(LaTeX-newline)
 	(goto-char (mark))
-	(or (TeX-looking-at-backward "^[ \t]*")
-	    (newline))
+	(unless (TeX-looking-at-backward
+		  (if LaTeX-insert-into-comments
+		      (concat "^" comment-start-skip "[ \t]*")
+		    "^[ \t]*"))
+	    (LaTeX-newline))
 	(insert TeX-esc "end" TeX-grop environment TeX-grcl)
 	(or (looking-at "[ \t]*$")
-	    (save-excursion (newline-and-indent)))
+	    (save-excursion (LaTeX-newline) (indent-according-to-mode)))
 	(indent-according-to-mode)
 	(end-of-line 0)
 	(or (assoc environment LaTeX-indent-environment-list)
 	    (LaTeX-fill-environment nil)))
-    (or (TeX-looking-at-backward "^[ \t]*")
-	(newline))
+    (unless (TeX-looking-at-backward
+	     (if LaTeX-insert-into-comments
+		 (concat "^" comment-start-skip "[ \t]*")
+	       "^[ \t]*"))
+      (LaTeX-newline))
     (insert TeX-esc "begin" TeX-grop environment TeX-grcl)
     (indent-according-to-mode)
     (if extra (insert extra))
-    (newline-and-indent)
-    (newline)
+    (LaTeX-newline)
+    (LaTeX-newline)
     (insert TeX-esc "end" TeX-grop environment TeX-grcl)
     (or (looking-at "[ \t]*$")
-	(save-excursion (newline-and-indent)))
+	(save-excursion (LaTeX-newline) (indent-according-to-mode)))
     (indent-according-to-mode)
-    (end-of-line 0)))
+    (end-of-line 0)
+    (indent-according-to-mode)))
 
 (defun LaTeX-modify-environment (environment)
   "Modify current environment."
@@ -641,7 +665,9 @@ To insert a hook here, you must insert it in the appropiate style file.")
 			"documentstyle"
 		      "documentclass"))
 
-  (newline 3)
+  (LaTeX-newline)
+  (LaTeX-newline)
+  (LaTeX-newline)
   (end-of-line 0)
   (LaTeX-insert-environment "document")
   (run-hooks 'LaTeX-document-style-hook)
@@ -790,7 +816,7 @@ job to this function."
 	(progn
 	  (insert TeX-esc "centering")
 	  (indent-according-to-mode)
-	  (newline)))
+	  (LaTeX-newline)))
 
     (if (member environment LaTeX-top-caption-list)
 	(progn
@@ -801,13 +827,13 @@ job to this function."
 	    (insert TeX-esc "caption" TeX-grop caption TeX-grcl)
 	    (indent-according-to-mode))
 
-	  (newline-and-indent)
+	  (LaTeX-newline) (indent-according-to-mode)
 	  (LaTeX-label environment)
 	  (indent-according-to-mode)
 	  (end-of-line 0)
-	  (newline-and-indent))
+	  (LaTeX-newline) (indent-according-to-mode))
       ;; not top caption but bottom caption (default).
-      (newline-and-indent)
+      (LaTeX-newline) (indent-according-to-mode)
       (LaTeX-label environment)
       (end-of-line 0)
       (indent-according-to-mode)
@@ -815,7 +841,8 @@ job to this function."
       (if (zerop (length caption))
 	  ()
 	;; NOTE: Caption is _inside_ center because that looks best typeset.
-	(newline-and-indent)
+	(LaTeX-newline)
+	(indent-according-to-mode)
 	(insert TeX-esc "caption" TeX-grop caption TeX-grcl)
 	(end-of-line 0)
 	(indent-according-to-mode)))
@@ -842,8 +869,9 @@ Just like array and tabular."
 (defun LaTeX-env-label (environment)
   "Insert ENVIRONMENT and prompt for label."
   (LaTeX-insert-environment environment)
-  (and (LaTeX-label environment)
-       (newline-and-indent))
+  (when (LaTeX-label environment)
+       (LaTeX-newline)
+       (indent-according-to-mode))
   (TeX-math-input-method-off))
 
 (defun LaTeX-env-list (environment)
@@ -942,7 +970,7 @@ The cdr is the name of the function, used to insert this kind of items.")
 You may use `LaTeX-item-list' to change the routines used to insert the item."
   (interactive "*")
   (let ((environment (LaTeX-current-environment)))
-    (newline)
+    (LaTeX-newline)
     (if (assoc environment LaTeX-item-list)
 	(funcall (cdr (assoc environment LaTeX-item-list)))
       (TeX-insert-macro "item"))
@@ -1548,7 +1576,8 @@ the cdr is the brace used with \\right.")
   (save-excursion
     (backward-word 1)
     (backward-char)
-    (newline-and-indent)
+    (LaTeX-newline)
+    (indent-according-to-mode)
     (beginning-of-line 0)
     (if (looking-at "^[ \t]*$")
 	(progn (delete-horizontal-space)
@@ -1557,11 +1586,12 @@ the cdr is the brace used with \\right.")
                      (TeX-argument-prompt optional prompt "Which brace")
                      TeX-left-right-braces)))
     (insert left-brace)
-    (newline-and-indent)
+    (LaTeX-newline)
+    (indent-according-to-mode)
     (save-excursion
       (let ((right-brace (cdr (assoc left-brace
                                      TeX-braces-association))))
-	(newline)
+	(LaTeX-newline)
         (insert TeX-esc "right")
         (if (and TeX-arg-right-insert-p
                  right-brace)
