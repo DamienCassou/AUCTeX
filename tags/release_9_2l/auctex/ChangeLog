@@ -1,0 +1,275 @@
+Wed Oct 26 15:37:53 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* Makefile (dist): Automatically update AUC-TeX-version and
+	AUC-TeX-date in tex.el
+
+	* tex.el (AUC-TeX-version): Added AUC-TeX-version and
+	AUC-TeX-date from auc-ver.el. 
+
+        * auc-ver.el: File removed.
+
+	* tex.el: Added version specific code from seperate files.
+
+	* tex-19.el, tex-18.el, tex-lcd.el: Files removed.
+
+Tue Oct 25 13:05:36 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* doc/auc-tex.texi (Projects): Removed an implemented item.
+
+	* tex.el (TeX-command-current): New variable.
+	(TeX-command-select-master): New function.
+	(TeX-command-select-buffer): New function.
+	(TeX-command-select-region): New function.
+	(TeX-command-menu): Use TeX-command-current instead of explicit
+	file argument.
+	(TeX-command-menu-print): Remove file argument.
+	(TeX-command-menu-printer-entry): Don't pass file argument.
+	(TeX-command-create-menu): Removed.
+	(TeX-mode-menu): New menu.
+	(plain-TeX-mode-menu): Removed entries now in TeX-mode-menu. 
+	(plain-TeX-mode-menu): Use `toggle' for bad boxes.
+	(plain-TeX-common-initialization): Enable TeX-mode-menu.
+
+	* latex.el (LaTeX-mode-menu): Removed entries now in
+	TeX-mode-menu. 
+	(LaTeX-mode-menu): Use `toggle' for bad boxes.
+	(LaTeX-common-initialization): Enable TeX-mode-menu.
+
+	* tex-info.el (TeXinfo-command-menu): New menu.
+	(TeXinfo-mode-menu): Move commands to new menu.
+	(TeXinfo-mode-menu): Use `toggle' for bad boxes.
+	(texinfo-mode): Enable TeXinfo-command-menu.
+
+Mon Oct 24 22:49:51 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* Makefile (AUCSRC): Removed auc-menu.el from AUC TeX distribution.
+	(MINMAPSRC): Added easymenu.el temporarily to min-map distribution.
+
+	* auc-menu.el: Just load easymenu.el when using GNU Emacs.
+
+	* easymenu.el Try to use RMS's easymenu instead of auc-menu.
+        (easy-menu-define): Call `easy-menu-do-define' to do
+	the real work.  Document XEmacs keyword arguments.
+	(easy-menu-do-define): New function.
+	(easy-menu-create-keymaps): Support XEmacs keyword arguments in
+	menu definition.
+	(easy-menu-remove): Make is a function instead of a macro.
+	(easy-menu-add): Ditto.
+
+Fri Oct 21 14:46:16 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* doc/auc-tex.texi (Completion): Less confusing BibTeX advice, I hope.
+
+	* tex-jp.el: Added patch from koba@flab.fujitsu.co.jp (Kobayashi
+	Shinji).
+
+	* latex.el (TeX-arg-insert-braces): Have \left and \right on
+	different lines.  Patch by thiemann@informatik.uni-tuebingen.de
+	(Peter Thiemann). 
+
+	* Makefile (dist): Add CHANGES and ChangeLog files to the ftp
+	directory.  Suggested by Frederic Devernay
+	<Frederic.Devernay@sophia.inria.fr>. 
+
+	* latex.el (LaTeX-indent-calculate): Allow nil second element in
+	`LaTeX-indent-environment-list'.  
+	(LaTeX-indent-environment-list): Added special environments
+	suggested by thiemann@informatik.uni-tuebingen.de (Peter
+	Thiemann). 
+
+Thu Oct 20 22:58:59 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* tex.el (TeX-auto-list-information): Spelling error.
+
+Tue Oct 18 13:24:26 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* latex.el (LaTeX-common-initialization): Make "LaTeX2e" the
+	default command if you have set `LaTeX-version' to "2" and is
+	using "\documentclass".
+
+Thu Oct  6 14:38:52 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* latex.el (LaTeX-paragraph-commands): End each word with a "\\b"
+	to avoid accidentally matching longer macros.
+
+	* tex.el (TeX-add-local-master): Use three %'s when adding buffer
+	local variables.  Suggested by Raymond Toy <toy@rtp.ericsson.se>. 
+
+	* tex.el (TeX-format-list): Added entry for AmSTeX by Ulf Juergens
+	<ulf@Mathematik.Uni-Bielefeld.DE>.
+
+	* tex.el (ams-tex-mode): Run AmS-TeX-mode-hook, not
+	plain-TeX-mode-hook.  Reported by Ulf Juergens
+	<ulf@Mathematik.Uni-Bielefeld.DE>.
+
+	* tex-buf.el (TeX-format-filter): Add `save-match-data'.  Patch by
+	David Aspinall <da@dcs.edinburgh.ac.uk>. 
+
+Wed Sep 14 10:53:15 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* cpp.el: Use RMS's version.
+
+Tue Sep 13 10:59:07 1994  Per Abrahamsen  <abraham@iesd.auc.dk>
+
+	* doc/history.texi, doc/auc-tex.texi: Fixes from Chris Fearnley
+	<@vm.uni-c.dk:FEARNLCJ@DUVM>. 
+
+Fri Sep  9 13:15:33 1994  Per Abrahamsen  <abraham@research.att.com>
+
+	* latex.el (LaTeX-insert-environment): Don't fill environments
+	listed in `LaTeX-indent-environment-list'.  Suggestion by Graham
+	Gough <graham@cs.man.ac.uk>.
+
+	* tex.el (LaTeX-command-style): Made latex2e first in the list.
+	Suggested by Frederic Devernay <Frederic.Devernay@sophia.inria.fr>. 
+
+Mon Sep  5 05:14:31 1994  Per Abrahamsen  <abraham@research.att.com>
+
+	* tex.el (TeX-file-extensions): Added LaTeX2 `cls' extension after
+	query by jmv@di.uminho.pt (Jose Manuel Valenca).
+
+Tue Aug 30 00:05:28 1994  Per Abrahamsen  <abraham@research.att.com>
+
+	* tex-jp.el: New version from koba@flab.fujitsu.co.jp (Kobayashi
+	Shinji).
+
+	* tex.el (TeX-command-list): Fifth element is now ignored.
+
+	* tex-buf.el (TeX-command-query): Check if region file is newer
+	than dvi file.
+	(TeX-command-region): Only query for command _after_ region file
+	is created.  
+	(TeX-region-create): Only save file if the new content is
+	different than the original content.
+
+Mon Aug 29 13:41:59 1994  Per Abrahamsen  (abraham@research.att.com)
+
+	* tex-buf.el (TeX-warning): Use offset for line end.  Fixed by 
+	ddw2@sunbim.be (Dominique de Waleffe).
+
+Fri Aug 26 18:17:57 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* doc/auc-tex.texi (Projects): Removed preceding item from
+	wishlist. 
+
+	* latex.el (LaTeX-common-initialization): Fix to comments
+	separating paragraphs by koba@flab.fujitsu.co.jp (Kobayashi
+	Shinji). 
+
+	* tex-jp.el (LaTeX-fill-region-as-paragraph): New version for MULE
+	2.0 by Tomotake FURUHATA <furuhata@trl.ibm.co.jp>.
+
+	* tex.el (TeX-function-p): Spelling error in doc.
+
+Tue Aug 23 11:00:35 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* doc/intro.texi (Contacts): Some reformulations.
+
+Sun Aug 21 18:47:23 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* tex-jp.el (TeX-insert-punctuation): Japanese version from
+	koba@flab.fujitsu.co.jp (Kobayashi Shinji).
+
+Fri Aug 19 14:59:57 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* doc/install.texi: The `site-lisp' directory is also available in
+	Lucide Emacs 19.10.  Reported by Tim Geisler
+	<geisler@pms.informatik.uni-muenchen.de>.
+
+Thu Aug 18 06:56:53 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* latex.el (TeX-arg-cite): Prompt for multiple keys.  Suggested by
+	Masahiro Kitagawa <kitagawa@ee.es.osaka-u.ac.jp>.
+
+Wed Aug 17 14:00:16 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* style/german.el ("german"): Use `TeX-quote-after-quote'.
+	Suggested by te@informatik.uni-hannover.de (Thomas Esser).
+
+	* latex.el (LaTeX-common-initialization): Error in regexp for
+	multiple arguments to `\cite', reported by Masahiro Kitagawa
+	<kitagawa@ee.es.osaka-u.ac.jp>.
+
+Wed Aug 17 01:24:55 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* latex.el (LaTeX-env-figure): Put caption inside center
+	environment.  Suggested by Martin Wunderli <wunderli@inf.ethz.ch>. 
+
+	* tex.el (TeX-strip-extension): If NODIR is set to `path', remove
+	the directory part iff it is equal to the current directory, or is
+	a member of either `TeX-macro-global' or `TeX-macro-private'.
+	(TeX-master-file): Use `path' for NODIR when querying the user for
+	a file name.  Reported finger@brachio.Informatik.Uni-Dortmund.DE
+	(Bernd Finger).
+
+Tue Aug 16 12:22:04 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* latex.el (LaTeX-common-initialization): `eqnarray*' should not
+	have a label.  Reported by dodd@roebling.poly.edu (Lawrence R.
+	Dodd). 
+
+Thu Aug 11 16:00:18 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* tex-buf.el (TeX-background-filter): Always show background
+	output.
+
+Wed Aug 10 19:14:42 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* Makefile (MINMAPSRC): Added `all.el'.
+
+	* all.el: New file.
+
+	* tex-buf.el (TeX-LaTeX-sentinel): Write "some" if
+	TeX-current-page is nil.  Reported by Michail Rozman
+	<roz@physik.uni-ulm.de>. 
+
+Tue Aug  9 01:26:58 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* auc-menu.el (easy-menu-add): Undid previous change.
+	(top level `cond'): Use Emacs 18 code if `window-system' is nil.
+	Patch by Patrice Belleville <patrice@cs.sfu.ca>.
+
+Mon Aug  8 21:40:01 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* tex.el (TeX-electric-macro): No electricity after `.' or `\'.
+
+Sat Aug  6 13:53:01 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* latex.el (LaTeX-paragraph-commands): New variable.
+	(LaTeX-common-initialization): Use it.  Suggested by
+	liyuan@allwise.research.att.com (Yuan P. Li).
+
+	* auc-menu.el (easy-menu-add): Check that `x-popup-menu' is bound
+	and that we are running under X before calling it.  Reported by
+	Adrian F. Clark <alien@essex.ac.uk>
+
+Thu Aug  4 19:14:53 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* tex-jp.el (LaTeX-fill-region-as-paragraph): Patch for Emacs 19
+	regexps by koba@flab.fujitsu.co.jp (Kobayashi Shinji) reported by
+	Uenami Ken'ichi <uenami@rita.cow.melco.co.jp>.
+
+	* doc/auc-tex.texi (European): Mention `iso-cvt.el' as suggested
+	by mike@vlsivie.tuwien.ac.at (Michael Gschwind).
+
+Wed Aug  3 15:36:02 1994  Per Abrahamsen  (abraham@iesd.auc.dk)
+
+	* doc/history.texi: New file.
+
+	* doc/Makefile (HISTORY): Added rule.
+
+	* Makefile (EXTRAFILES): Added `ChangeLog'.
+	(DOCFILES): Added `history.texi'.
+
+	* doc/auc-tex.texi (History): Made ready for 9.2.  Move history to 
+	`history.texi'.
+
+	* doc/changes.texi: Made ready for 9.2.  Introduce ChangeLog.
+
+	* Makefile (LispInstall): Use "/bin/pwd" instead of "pwd".
+	reported by mic@cs.ucsd.edu (Michelangelo Grigni).
+
+	* ChangeLog: New file.
+
+	* Version 9.1 released.
+
