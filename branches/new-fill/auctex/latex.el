@@ -1951,7 +1951,7 @@ justify too.  From program, pass args FROM, TO and JUSTIFY-FLAG."
 
 ;; The content of `LaTeX-fill-region-as-para-do' was copied from the
 ;; function `fill-region-as-paragraph' in `fill.el' (CVS Emacs,
-;; January 2004) and adapted the needs of AUCTeX.
+;; January 2004) and adapted to the needs of AUCTeX.
 
 (defun LaTeX-fill-region-as-para-do (from to &optional justify
                                           nosqueeze squeeze-after)
@@ -2134,10 +2134,28 @@ space does not end a sentence, so don't break a line there."
         (while (and (= final-breakpoint orig-breakpoint)
                     (re-search-forward
                      (concat "\\(\\=\\|[^\\]\\)\\(\\\\\\\\\\)*"
-                             "\\({\\|}\\|\\\\(\\|\\\\)\\|\\$\\)")
+                             "\\(\\[\\|{\\|}\\|\\\\(\\|\\\\)\\|\\$\\)")
                      orig-breakpoint t))
           (let ((match-string (match-string 0)))
             (cond
+             ;; [ (opening bracket) (The closing bracket should
+             ;; already be handled implicitely by the code for the
+             ;; opening brace.)
+             ((save-excursion
+                (and (memq 'braced LaTeX-fill-distinct-contents)
+                     (string= (substring match-string -1) "[")
+                     (re-search-forward
+                      (concat
+                       "\\(\\=\\|[^\\]\\)\\(\\\\\\\\\\)*\\][ \t]*"
+                       "\\(\\\\\\\\\\)*{")
+                      (line-end-position) t)
+                     (> (- (TeX-find-closing-brace)
+                           (line-beginning-position))
+                        fill-column)))
+              (save-excursion
+                (skip-chars-backward "^ \n")
+                (when (> (point) start-point)
+                  (setq final-breakpoint (point)))))
              ;; { (opening brace)
              ((save-excursion
                 (and (memq 'braced LaTeX-fill-distinct-contents)
@@ -2147,6 +2165,21 @@ space does not end a sentence, so don't break a line there."
                         fill-column)))
               (save-excursion
                 (skip-chars-backward "^ \n")
+                ;; The following is a primitive and error-prone method
+                ;; to cope with point probably being inside square
+                ;; brackets.  A better way would be to use functions
+                ;; to determine if point is inside an optional
+                ;; argument and to jump to the start and end brackets.
+                (when (save-excursion
+                        (re-search-forward
+                         (concat
+                          "\\(\\=\\|[^\\]\\)\\(\\\\\\\\\\)*\\][ \t]*"
+                          "\\(\\\\\\\\\\)*{")
+                         orig-breakpoint t))
+                  (re-search-backward
+                   "\\(\\=\\|[^\\]\\)\\(\\\\\\\\\\)*\\["
+                   (line-beginning-position) t)
+                  (skip-chars-backward "^ \n"))
                 (when (> (point) start-point)
                   (setq final-breakpoint (point)))))
              ;; } (closing brace)
@@ -2211,7 +2244,7 @@ space does not end a sentence, so don't break a line there."
 
 ;; The content of `LaTeX-fill-newline' was copied from the function
 ;; `fill-newline' in `fill.el' (CVS Emacs, January 2004) and adapted
-;; the needs of AUCTeX.
+;; to the needs of AUCTeX.
 
 (defun LaTeX-fill-newline ()
   "Replace whitespace here with one newline and indent the line."
