@@ -1884,18 +1884,19 @@ justify too.  From program, pass args FROM, TO and JUSTIFY-FLAG."
 	(narrow-to-region from to)
 	(goto-char from)
 	(while (not (eobp))
-          (if (re-search-forward (concat "\\("
-                                         "[^ \t].*"
-                                         "[^" (regexp-quote TeX-esc) "\n]%+"
-                                         ".*$"
-                                         "\\|"
-                                         "^.*"
-					 (regexp-quote TeX-esc)
-					 (regexp-quote TeX-esc)
-					 "\\(\\s-*\\*\\)?"
-					 "\\(\\s-*\\[[^]]*\\]\\)?"
-                                         "\\s-*$\\)")
-				 nil t)
+          (if (re-search-forward
+               (concat "\\("
+                       "[^ \t%\n\r].*"
+                       "[^" (regexp-quote TeX-esc) "\n\r]%+"
+                       ".*$"
+                       "\\|"
+                       "^.*"
+                       (regexp-quote TeX-esc)
+                       (regexp-quote TeX-esc)
+                       "\\(\\s-*\\*\\)?"
+                       "\\(\\s-*\\[[^]]*\\]\\)?"
+                       "\\s-*$\\)")
+               nil t)
 	      (progn
 		(goto-char (match-end 0))
 		(delete-horizontal-space)
@@ -2017,13 +2018,14 @@ space does not end a sentence, so don't break a line there."
           ;; Delete the comment prefix and any whitespace from every
           ;; line of the region in concern except the first. (The
           ;; implementation is heuristic to a certain degree.)
-          (when (> (length fill-prefix) 0)
-            (save-excursion
-              (goto-char from)
-              (forward-line 1)
-              (when (< (point) to)
-                (while (re-search-forward comment-start-skip (point-max) t)
-                  (delete-region (match-beginning 0) (match-end 0)))))))
+          (save-excursion
+            (goto-char from)
+            (forward-line 1)
+            (when (< (point) to)
+              (while (re-search-forward
+                      (concat "\\(^[ \t]+\\|" comment-start-skip "\\)")
+                      (point-max) t)
+                (delete-region (match-beginning 0) (match-end 0))))))
 
 	(setq from (point))
 
