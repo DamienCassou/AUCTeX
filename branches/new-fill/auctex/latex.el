@@ -2010,7 +2010,7 @@ space does not end a sentence, so don't break a line there."
 	    (remove-list-of-text-properties from to '(hard)))
 	;; Make sure first line is indented (at least) to left margin...
         (LaTeX-indent-line)
-        ;; COMPATIBILITY for Emacs <= ???
+        ;; COMPATIBILITY for Emacs <= 21.1
         (if (fboundp 'fill-delete-prefix)
             ;; Delete the fill-prefix from every line.
             (fill-delete-prefix from to fill-prefix)
@@ -2027,7 +2027,7 @@ space does not end a sentence, so don't break a line there."
 	;; FROM, and point, are now before the text to fill,
 	;; but after any fill prefix on the first line.
 
-        ;; COMPATIBILITY for Emacs <= ???
+        ;; COMPATIBILITY for Emacs <= 21.1
         (if (fboundp 'fill-delete-newlines)
             (fill-delete-newlines from to justify nosqueeze squeeze-after)
 	  ;; Make sure sentences ending at end of line get an extra space.
@@ -2089,7 +2089,7 @@ linebreaks before and after them if they do not fit into one
 
 (defun LaTeX-fill-move-to-break-point (linebeg)
   "Move to the position where the line should be broken."
-  ;; COMPATIBILITY for Emacs <= ???
+  ;; COMPATIBILITY for Emacs <= 21.2
   (if (fboundp 'fill-move-to-break-point)
       (fill-move-to-break-point linebeg)
     (skip-chars-backward "^ \n"))
@@ -2247,13 +2247,16 @@ LIMIT is non-nil, search up to this position in the buffer."
   (set-text-properties (1- (point)) (point)
 		       (text-properties-at (point)))
   (and (looking-at "\\( [ \t]*\\)\\(\\c|\\)?")
-       (or (aref (char-category-set (or (char-before (1- (point))) ?\000)) ?|)
+       ;; COMPATIBILITY for XEmacs
+       (or (if (featurep 'xemacs)
+               (char-in-category-p (or (char-before (1- (point))) ?\000) ?|)
+             (aref (char-category-set (or (char-before (1- (point))) ?\000)) ?|))
 	   (match-end 2))
        ;; When refilling later on, this newline would normally not be replaced
        ;; by a space, so we need to mark it specially to re-install the space
        ;; when we unfill.
        (put-text-property (1- (point)) (point) 'fill-space (match-string 1)))
-  ;; COMPATIBILITY for Emacs <= ???
+  ;; COMPATIBILITY for Emacs <= 21.2
   (when (boundp 'fill-nobreak-invisible)
     ;; If we don't want breaks in invisible text, don't insert
     ;; an invisible newline.

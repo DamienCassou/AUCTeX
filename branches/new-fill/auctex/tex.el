@@ -495,7 +495,12 @@ Full documentation will be available after autoloading the function."
 
   (fset 'TeX-activate-region (symbol-function 'zmacs-activate-region))
 
-  )
+  ;; I am aware that this counteracts coding conventions but I am sick
+  ;; of it.
+  (unless (fboundp 'line-beginning-position)
+    (defalias 'line-beginning-position 'point-at-bol))
+  (unless (fboundp 'line-end-position)
+    (defalias 'line-end-position 'point-at-eol)))
 
 ;;; Special support for GNU Emacs
 
@@ -509,13 +514,11 @@ Full documentation will be available after autoloading the function."
     (and transient-mark-mode mark-active))
 
   (defun TeX-activate-region ()
-    nil)
-
-  )
+    nil))
 
 (defconst AUCTeX-version (eval-when-compile
   (let ((name "$Name: not supported by cvs2svn $")
-	(rev "$Revision: 5.326.2.1 $"))
+	(rev "$Revision: 5.326.2.2 $"))
     (or (when (string-match "\\`[$]Name: *\\(release_\\)?\\([^ ]+\\) *[$]\\'"
 			    name)
 	  (setq name (match-string 2 name))
@@ -530,7 +533,7 @@ If not a regular release, CVS revision of `tex.el'.")
 
 (defconst AUCTeX-date
   (eval-when-compile
-    (let ((date "$Date: 2004-02-19 15:01:03 $"))
+    (let ((date "$Date: 2004-02-19 18:58:33 $"))
       (string-match
        "\\`[$]Date: *\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)"
        date)
