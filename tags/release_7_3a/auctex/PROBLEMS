@@ -1,0 +1,91 @@
+* I get errors during byte compilation.
+
+This is almost always because some old version of AUC TeX gets loaded
+during the compilation.  Make sure to remove all old versions, and try
+again.
+
+* You are using NeXT Emacs.
+
+NeXT Emacs is broken, a workaround is available by ftp:
+
+host: ftp.emacs.auc.dk
+file: /pack/ftp/pub/emacs-lisp/get-proc-env.el.z (gzip'ed)
+
+* Applying style hooks...  is sloooow.
+
+AUC TeX is parsing your file each time you load it.
+
+You can create a subdirectory named `auto' in the directory where you
+have your tex files, AUC TeX will then only have to parse the file the
+first time you load the file.  It also have the benefit that you get
+access to macros, labels, etc. in all the files in a multifile
+document from any of the files.
+
+* Applying style hooks... is still too slow.
+
+Set the variable TeX-auto-global to nil.  You will then not get
+macro expansion for all macros, but AUC TeX will still expand the
+standard LaTeX macros.
+
+* Now saving the buffer is too slow.
+
+AUC TeX parses your buffer and save the information each time you
+save the buffer.  You may be able to speed it up by limiting the
+amount of information AUC TeX tries to extract.  You can do this by
+setting the variable `TeX-auto-regexp-list' before loading AUC TeX.
+Look at the definition of the variable in the file `tex-auto.el'.  If
+you only use LaTeX commands a good setting would be
+
+(setq TeX-auto-regexp-list
+  '(("\\\\newcommand{?\\\\\\([a-zA-Z]+\\)}?\\[\\([0-9]+\\)\\]"
+     (1 2) TeX-auto-arguments)
+    ("\\\\newcommand{?\\\\\\([a-zA-Z]+\\)}?" 1 TeX-auto-symbol)
+    ("\\\\newenvironment{\\([a-zA-Z]+\\)}" 1 TeX-auto-environment)
+    ("\\\\newtheorem{\\([a-zA-Z]+\\)}" 1 TeX-auto-environment)
+    ("\\\\input{\\([^#\\\\\\.\n]+\\)\\(\\.sty\\)?}" 1 TeX-auto-file)
+    ("\\\\include{\\([^#\\\\\\.\n]+\\)\\(\\.sty\\)?}" 1 TeX-auto-file)
+    ("\\\\label{\\([]a-zA-Z0-9.:;,?!`'()[---/*@_]+\\)}" 1 TeX-auto-label)
+    ("\\\\documentstyle\\[\\([^#\\\\\\.\n]+\\)\\]{\\([^#\\\\\\.\n]+\\)}"
+     (2 1) TeX-auto-style)
+    ("\\\\documentstyle{\\([^#\\\\\\.\n]+\\)}" (1) TeX-auto-style)))
+
+This will approximately cut the parse time to half.  If you don't use
+macro, environment, or label completion, set it to
+
+(setq TeX-auto-regexp-list
+  '(("\\\\documentstyle\\[\\([^#\\\\\\.\n]+\\)\\]{\\([^#\\\\\\.\n]+\\)}"
+     (2 1) TeX-auto-style)
+    ("\\\\documentstyle{\\([^#\\\\\\.\n]+\\)}" (1) TeX-auto-style)))
+
+This will cut the parse time to a quarter of the original.  To
+completly avoid parsing, set TeX-parse-self to nil.  AUC TeX will then
+never parse your files.  This will disable most of AUC TeX.
+
+* C-c C-c has too great a delay.
+
+By default AUC TeX will look in the current directory for files that
+may have changed in order to determine if it is necessary to run TeX
+or LaTeX again.  You can disable it with
+
+	(setq TeX-check-path nil)
+
+You can also make AUC TeX search your private or the global macro
+directories, so AUC TeX will suggest "LaTeX" if any of the style files
+have changed.
+
+	(setq TeX-check-path
+	      (append '("./") TeX-macro-private TeX-macro-global))
+
+* Only the master file knows about styles, macros, etc.
+
+Create a `auto' subdirectory, and save the master file.  This will put
+the necessary information in the `auto' subdirectory, and the other
+files in the document will read this information when they apply the
+style hooks.
+
+* After I write the file under a new name, AUC TeX still use the old!
+
+AUC @TeX{} cache a lot of information for efficiency, press C-c C-n to
+flush the cache after changing the name of a file.  Press C-u C-c C-n
+to flush everything.
+
