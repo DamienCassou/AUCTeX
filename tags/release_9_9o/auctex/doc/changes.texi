@@ -1,0 +1,57 @@
+@section News in 9.9
+
+@itemize @bullet
+@item Fixed some custom types.  
+Patch by Markus Rost <markus.rost@@mathematik.uni-regensburg.de>.
+
+@item Support loading byte compiled files, even if
+@code{TeX-byte-compile} is nil.
+Patch by Christoph Wedler  <wedler@@fmi.uni-passau.de>.
+
+@item The command to replace a LaTeX2e font should work more reliably
+now.  Patch by Christoph Wedler  <wedler@@fmi.uni-passau.de>.
+
+@item Minor XEmacs packaging changes.
+Patch by Christoph Wedler  <wedler@@fmi.uni-passau.de>.
+
+@item @code{TeX-file-recurse} now accepts an integer value, max depth of
+recursion.  Patch by Alastair Burt  <burt@@dfki.bde>.
+
+@item Simple imenu support for La@TeX{}.
+
+@item Workaround for 20.3 bugs. 
+
+@item The `Spell' command now works on all open buffers in the
+document.  Patch by Jason Stewart <jasons@@cs.unm.edu>.
+
+@item @kbd{C-c C-m} now puts content of region inside first empty brackets
+in the macro, if any.  Patch by Peter Thiemann <pjt@@cs.nott.ac.uk>.
+
+@item Update of @file{natbib.el} style file by Carsten Dominik
+<dominik@@strw.LeidenUniv.nl>.
+
+@item Much better detection of @TeX{} math mode.  Patch by Carsten Dominik
+<dominik@@strw.LeidenUniv.nl>.
+
+@item New @samp{%n} escape in @code{TeX-command-list} for entering the
+current line number.  Suggested by "Lee, Sang-Min"
+<smagus@@acorn.snu.ac.kr>. 
+
+@item Doc fixes in manual.  Patch by Gustavo Chaves
+<gustavo@@cpqd.com.br>.
+
+@item Better reftex support for sections.  Patch by Carsten Dominik
+<dominik@@strw.LeidenUniv.nl>. 
+
+@item Bug fixes in math card.  Reported by "Ron Smith"
+<rsmith@@eel.ufl.edu>. 
+
+@item Better multifile support.  Patch by Soren Dayton
+<csdayton@@cs.uchicago.edu>. 
+
+@item Don't expand abbreviations when @code{abbrev-mode} is nil.
+Suggested by Alastair Burt <alastair.burt@@dfki.de>.
+
+@item @samp{direntry} support in manual, by SL Baur
+<steve@@altair.xemacs.org>. 
+@end itemize
