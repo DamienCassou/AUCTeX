@@ -1674,7 +1674,7 @@ Lines starting with an item is given an extra indentation of
                            (save-excursion
                              (beginning-of-line)
                              (re-search-forward
-                              (concat comment-start "+"))
+                              (concat "[ \t]*" comment-start "+") nil t)
                              (concat
                               (match-string 0)
                               ;; `comment-padding' formerly was an
