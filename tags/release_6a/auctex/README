@@ -1,0 +1,108 @@
+
+$Id: README,v 5.17 1992-07-22 19:30:17 krab Exp $
+
+AUC TeX 
+=======
+
+AUC TeX is an Emacs lisp mode for editing TeX and LaTeX documents. 
+
+********** NEWS NEWS NEWS NEWS **********
+
+Version 6:
+
+DOCS!	Preliminary documentation is avilable in the directory
+	`doc'.  It isn't very well written, but I beleve it covers
+	most interesting points.  Comments, suggestions, or even
+	rewrites of sections are VERY WELCOME...
+
+	LaCheck has been incorporated in the package.  The source
+	code for it is avilable in the directory `lacheck' along
+	with the documentation for it.  Lacheck may also be used 
+	from the command line.  It is bound to C-c $.
+
+	Some minor changes in:
+
+	  TeX-region:  Should work better with `Master:' option
+
+	  LaTeX-environment:  Numerous new hooks added by Masayuki
+			      Kuwada (hope I spelled it correctly)
+
+	  TeX-command-on-region: removed. C-c C-o used for 
+			      outline-minor-mode instead.
+
+	And some additional minor fixes...
+	
+**************************************************
+
+You're welcome to direct questions to the current maintainer, whose
+address is at the bottom of this file.
+
+
+
+Installation
+------------
+
+Just type `make' and follow the instructions.  
+
+
+
+Warranty
+--------
+
+AUC TeX is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY.  No author or distributor accepts responsibility to
+anyone for the consequences of using it or for whether it serves any
+particular purpose or works at all.
+
+Everyone is granted permission to copy, modify and redistribute this
+file, but only under the conditions described in the document "GNU
+Emacs copying permission notice".  An exact copy of the document is
+supposed to have been given to you along with this file so that you
+can know how you may redistribute it all.  It should be in a file
+named COPYING.  Among other things, the copyright notice and this
+notice must be preserved on all copies.
+
+Availability
+------------
+
+AUC-TeX is available by anonymous ftp to `iesd.auc.dk' as
+"/pub/emacs-lisp/auctex_X_x.tar.Z". (where `X.x' specifies the release
+version) The most resent version is ALLWAYS available in
+`/pub/emacs-lisp/auctex.tar.Z'. Also, it should be available at major
+TeX and Elisp archives around the world.  In case you don't have
+access anonymous ftp, you can get it by Email requests to
+`auc-tex_mgr@iesd.auc.dk'.
+
+Contacts
+--------
+
+There has been established a mailing list for discussion of the
+evaluation of auc-tex.  You're very welcome to join.  However, If you
+are only interested in information on updates, you should refer to the
+newsgroups comp.text.tex and gnu.emacs.sources.
+
+If you want to contact the auc-tex mailing list, mail:
+
+	Articles:	auc-tex@iesd.auc.dk 
+
+	Requests:	auc-tex-request@iesd.auc.dk
+
+
+To contact the current maintainer of auc-tex, Email:
+
+			auc-tex_mgr@iesd.auc.dk
+
+
+The address of the author is:
+
+			krab@iesd.auc.dk
+
+			Kresten Krab Thorup 
+			Dept. of Math and Computer Science
+			University of Aalborg
+			Aalborg, Denmark
+
+
+
+
+
