@@ -515,7 +515,7 @@ Full documentation will be available after autoloading the function."
 
 (defconst AUCTeX-version (eval-when-compile
   (let ((name "$Name: not supported by cvs2svn $")
-	(rev "$Revision: 5.326 $"))
+	(rev "$Revision: 5.326.2.1 $"))
     (or (when (string-match "\\`[$]Name: *\\(release_\\)?\\([^ ]+\\) *[$]\\'"
 			    name)
 	  (setq name (match-string 2 name))
@@ -530,7 +530,7 @@ If not a regular release, CVS revision of `tex.el'.")
 
 (defconst AUCTeX-date
   (eval-when-compile
-    (let ((date "$Date: 2004-02-03 09:23:39 $"))
+    (let ((date "$Date: 2004-02-19 15:01:03 $"))
       (string-match
        "\\`[$]Date: *\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)"
        date)
@@ -1562,6 +1562,10 @@ Choose `ignore' if you don't want AUCTeX to install support for font locking."
 	 (regexp-quote TeX-esc)
 	 (regexp-quote TeX-esc)
 	 "\\)*\\)\\(%+ *\\)"))
+  ;; `comment-padding' is defined here as an integer for compatibility
+  ;; reasons because older Emacsen could not cope with a string.
+  (make-local-variable 'comment-padding)
+  (setq comment-padding 1)
   ;; Removed as commenting in (La)TeX is done with one `%' not two
   ;; (make-local-variable 'comment-add)
   ;; (setq comment-add 1) ;default to `%%' in comment-region
