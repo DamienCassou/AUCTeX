@@ -740,6 +740,8 @@ the label inserted, or nil if no label was inserted."
 	(end-of-line 1))
     (end-of-line 0))
   (delete-char 1)
+  (unless (looking-at "$")
+    (delete-region (point) (line-end-position)))
   (delete-horizontal-space)
   (LaTeX-insert-item))
 
