@@ -1,0 +1,102 @@
+@SET_MAKE@
+prefix=@prefix@#
+datadir=@datadir@#
+packagedir=@packagedir@#
+infodir=@infodir@#
+TEX=@TEX@
+PDFTEX=@PDFTEX@
+MAKEINFO=@MAKEINFO@ @MAKEINFO_MACROS@
+INSTALL_INFO=@INSTALL_INFO@
+INSTALL=@INSTALL@
+INSTALL_DATA=@INSTALL_DATA@
+TEXI2HTML=@TEXI2HTML@
+TEXI2DVI=@TEXI2DVI@
+TEXI2PDF=@TEXI2PDF@
+MKINSTALLDIRS = ../mkinstalldirs
+DVIPS=@DVIPS@
+TEXIFILES = auctex.texi install.texi wininstall.texi intro.texi \
+	changes.texi todo.texi faq.texi
+
+all: auctex.dvi tex-ref.dvi auctex
+
+dist: auctex INSTALL INSTALL.windows README CHANGES TODO FAQ \
+	auctex_toc.html auctex.ps auctex.pdf tex-ref.ps tex-ref.pdf
+
+auctex_toc.html: auctex.texi
+	$(TEXI2HTML) -split_node auctex.texi
+
+tex-ref.dvi: tex-ref.tex
+	$(TEX) tex-ref
+	@echo "**********************************************************"
+	@echo "** doc/tex-ref.dvi may now be printed (1 page)"
+	@echo "**********************************************************"
+
+tex-ref.ps: tex-ref.dvi
+	$(DVIPS) tex-ref.dvi -Ppdf -o tex-ref.ps
+
+tex-ref.pdf: tex-ref.tex
+	$(PDFTEX) tex-ref.tex
+
+auctex.dvi: auctex.texi
+	$(TEXI2DVI) auctex.texi
+
+auctex.pdf: auctex.texi
+	$(TEXI2PDF) auctex.texi
+
+# dvips spews two error lines.  I don't know why.
+auctex.ps: auctex.dvi
+	$(DVIPS) auctex.dvi -Ppdf -o auctex.ps
+
+auctex: $(TEXIFILES)
+	-$(MAKEINFO) auctex.texi
+	@echo "**********************************************************"
+	@echo "** If this gave trouble, maybe you need to install"
+	@echo "** a newer version of texinfo?"
+	@echo "**********************************************************"
+
+INSTALL: install.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		install.texi --output INSTALL
+
+INSTALL.windows: wininstall.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		wininstall.texi --output INSTALL.windows
+
+README: intro.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		intro.texi --output README
+
+CHANGES: changes.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		changes.texi --output CHANGES
+
+HISTORY: history.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		history.texi --output HISTORY
+
+TODO: todo.texi macros.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		todo.texi --output TODO
+
+FAQ: faq.texi macros.texi
+	-$(MAKEINFO) -D rawfile --no-headers --no-validate \
+		faq.texi --output FAQ
+
+install: auctex
+	-$(MKINSTALLDIRS) $(infodir)
+	$(INSTALL_DATA) auctex $(infodir)
+	for x in auctex-*; do \
+	  if [ -r $$x ]; then \
+	    $(INSTALL_DATA) $$x $(infodir) ; \
+	  fi; \
+	done
+	-$(INSTALL_INFO)  --info-dir=$(infodir) auctex
+
+clean:
+	rm -f *.dvi *.ps *.pdf *.aux *.cp *.fn *.info *.ky *.log *~ \#*\# \
+		*.tp *.vr *.pg *.toc *.tp *.bak *.cps *.kys *.tps \
+		*.fns *.vrs *.pgs *.tmp auctex auctex-* *.html INSTALL \
+		INSTALL.windows README CHANGES HISTORY TODO FAQ
+
+distclean: clean
+	rm -f Makefile
