@@ -1,3 +1,9 @@
+2004-02-27  Ralf Angeli  <angeli@iwi.uni-sb.de>
+
+	* latex.el (LaTeX-fill-move-to-break-point): Bandaid for not
+	breaking inside square brackets where the content fits into one
+	line.
+	
 2004-02-26  Ralf Angeli  <angeli@iwi.uni-sb.de>
 
 	* latex.el (LaTeX-fill-break-before-macro)
