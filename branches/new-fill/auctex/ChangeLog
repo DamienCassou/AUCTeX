@@ -1,3 +1,17 @@
+2004-02-26  Ralf Angeli  <angeli@iwi.uni-sb.de>
+
+	* latex.el (LaTeX-fill-break-before-macro)
+	(LaTeX-fill-break-after-macro): Unused, so removed.
+	(LaTeX-fill-distinct-contents): New name for defcustom
+	`LaTeX-fill-break-before-and-after'.
+	(LaTeX-fill-move-to-break-point): Fix filling of nested braces and
+	math.
+	(TeX-find-closing-brace, TeX-find-opening-brace)
+	(TeX-forward-comment-skip): Moved to `tex.el'.
+
+	* tex.el (TeX-find-closing-brace, TeX-find-opening-brace)
+	(TeX-forward-comment-skip): Moved from `latex.el'.
+
 2004-02-26  David Kastrup  <dak@gnu.org>
 
 	* tex.el (TeX-master-file): Don't overwrite TeX-master when we
