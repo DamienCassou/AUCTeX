@@ -1,0 +1,12 @@
+@section News in 9.6
+
+@itemize @bullet
+@item Insert @code{(require 'font-latex)} to get better font lock
+support. 
+
+@item
+Bug fixes.
+
+@end itemize
+
+
