@@ -1671,18 +1671,18 @@ Lines starting with an item is given an extra indentation of
          ;; characters will be disregarded and replaced by
          ;; `comment-padding'.
          (fill-prefix (and (TeX-in-commented-line)
-                           (progn (beginning-of-line)
-                                  (re-search-forward
-                                   (concat comment-start "+"))
-                                  (concat
-                                   (match-string 0)
-                                   ;; `comment-padding' formerly was
-                                   ;; an integer and now can also be
-                                   ;; defined as a string.  We support
-                                   ;; both.
-                                   (if (integerp comment-padding)
-                                       (make-string comment-padding ? )
-                                     comment-padding)))))
+                           (save-excursion
+                             (beginning-of-line)
+                             (re-search-forward
+                              (concat comment-start "+"))
+                             (concat
+                              (match-string 0)
+                              ;; `comment-padding' formerly was an
+                              ;; integer and now can also be defined
+                              ;; as a string.  We support both.
+                              (if (integerp comment-padding)
+                                  (make-string comment-padding ? )
+                                comment-padding)))))
 	 (indent (LaTeX-indent-calculate)))
     (save-excursion
       (if (/= (LaTeX-current-indentation) indent)
@@ -2014,14 +2014,17 @@ space does not end a sentence, so don't break a line there."
         (if (fboundp 'fill-delete-prefix)
             ;; Delete the fill-prefix from every line.
             (fill-delete-prefix from to fill-prefix)
-          ;; Delete the comment prefix from every line of the region
-          ;; in concern except the first.
+          ;; Delete the comment prefix and any whitespace from every
+          ;; line of the region in concern except the first. (The
+          ;; implementation is heuristic to a certain degree.)
           (when (> (length fill-prefix) 0)
             (save-excursion
               (goto-char from)
               (forward-line 1)
               (when (< (point) to)
-                (TeX-uncomment-region (point) to)))))
+                (while (re-search-forward comment-start-skip (point-max) t)
+                  (delete-region (match-beginning 0) (match-end 0)))))))
+
 	(setq from (point))
 
 	;; FROM, and point, are now before the text to fill,
