@@ -2491,7 +2491,10 @@ formatting."
   (save-restriction
     (save-excursion
       (let ((length (- to from))
-	    (to (set-marker (make-marker) to)))
+	    (to (set-marker (make-marker) to))
+            forward-par-point
+            comment-skip-point
+            comment-skip-used)
 	(goto-char from)
 	(beginning-of-line)
 	(while (< (point) to)
@@ -2501,11 +2504,59 @@ formatting."
 		     what)
 		   (/ (* 100 (- (point) from)) length))
 	  (save-excursion (LaTeX-fill-paragraph justify))
-	  (forward-paragraph 2)
-	  (if (not (eobp))
-	      (backward-paragraph)))
+          (setq forward-par-point(save-excursion
+                                   (forward-paragraph 2) (point)))
+          ;; `forward-paragraph' and `backward-paragraph' will not
+          ;; stop at points with adjacent commented and uncommented
+          ;; lines.  So we try to do this here.  Maybe this code
+          ;; should go into its own function which could also be used
+          ;; in `LaTeX-fill-paragraph'.
+          (if (< (setq comment-skip-point
+                       (save-excursion
+                         (TeX-forward-comment-skip 2 forward-par-point)
+                         (point)))
+                 forward-par-point)
+              (progn (goto-char comment-skip-point)
+                     (setq comment-skip-used t))
+            (goto-char forward-par-point)
+            (setq comment-skip-used nil))
+	  (unless (eobp)
+            (if comment-skip-used
+                (TeX-forward-comment-skip -1)
+              (backward-paragraph))
+            (skip-chars-forward "\n")))
 	(set-marker to nil)))
     (message "Finished")))
+
+(defun TeX-forward-comment-skip (&optional count limit)
+  "Move forward to the next switch between commented and
+uncommented adjacent lines.  With argument COUNT do it COUNT
+times.  If argument LIMIT is given, do not move point further
+than this value."
+  (unless count (setq count 1))
+  ;; A value of 0 is nonsense.
+  (when (= count 0) (setq count 1))
+  (unless limit (setq limit (point-max)))
+  (when (< count 0) (forward-line -1))
+  (dotimes (i (abs count))
+    (while (and (<= (point) limit)
+                (or (save-excursion
+                      (and (looking-at comment-start-skip)
+                           (zerop (if (> count 0)
+                                      (forward-line 1)
+                                    (forward-line -1)))
+                           (looking-at comment-start-skip)))
+                    (save-excursion
+                      (and (not (looking-at comment-start-skip))
+                           (zerop (if (> count 0)
+                                      (forward-line 1)
+                                    (forward-line -1)))
+                           (not (looking-at comment-start-skip))))))
+      (if (> count 0)
+          (forward-line 1)
+        (forward-line -1)))
+    (if (> count 0)
+        (forward-line 1))))
 
 (defun LaTeX-find-matching-end ()
   "Move point to the \\end of the current environment."
