@@ -1,0 +1,121 @@
+-*- Outline -*-
+** GhostScript failures
+
+Most of the problems encountered come from interaction with
+GhostScript.  It is a good idea to have a fairly recent version of
+GhostScript installed.  In particular, the device names have changed
+over the time, so you should check that the devices demanded by the
+customizable variable preview-image-creators fit your version of
+GhostScript, at least the entry corresponding to the current value of
+preview-image-type.  While not being best in file size and image
+quality, setting preview-image-creators to `jpeg' should probably be
+one of the best bets, since that device name has not changed in quite
+some time.
+
+When GhostScript fails, the necessary information and messages from
+Ghostscript go somewhere.  If GhostScript fails before starting to
+process images, you'll find the information at the end of the process
+buffer you can see with C-c C-l.  If GhostScript fails while
+processing a particular image, this image will be tagged with
+middle-clickable buttons for the error description and for the
+corresponding source file.
+
+The default options configurable with
+M-x customize-variable RET preview-gs-options
+
+include the options "-dTextAlphaBits=4" "-dGraphicsAlphaBits=4".
+These options have been reported to make GhostScript 5.50 fail, but
+are reported to work under GhostScript 6.51 and later.  If you are
+experiencing problems, it might help to customize them away.  Of
+course, this also takes away the joy of antialiasing, so upgrading
+GhostScript might not be the worst idea after all.
+
+** Various patches
+
+Cut those out and pipe them through the patch program in the
+appropriate directory.  Under Emacs, you can do this by first doing
+M-x cd RET and then entering the directory in which the file to patch
+resides, then marking the region in this file containing the patch and
+doing M-| patch RET.
+
+* Emacs-21.1 (don't use any earlier)
+
+Should work mostly.
+
+* AucTeX up to 10.0g
+
+AucTeX versions up to 10.0g have a bug in the calculation of the
+offsets for the start of a region.  This affects C-c C-r commands
+where the start of the region does not lie on the start of a line.  To
+correct this, apply the following patch (since I have edited around in
+it, you'll get messages about offsets).
+
+Index: tex-buf.el
+===================================================================
+RCS file: /pack/anoncvs/auctex/tex-buf.el,v
+retrieving revision 1.162
+retrieving revision 1.172
+diff -u -r1.162 -r1.172
+--- tex-buf.el	2001/04/11 11:53:25	1.162
++++ tex-buf.el	2001/10/13 20:32:53	1.172
+@@ -90,6 +90,17 @@
+ (make-variable-buffer-local 'TeX-command-region-begin)
+ (make-variable-buffer-local 'TeX-command-region-end)
+ 
++(defun TeX-current-offset (&optional pos)
++  "Calculate line offset of POS, or of point if POS is nil."
++  (save-restriction
++    (widen)
++    (save-excursion
++      (let ((inhibit-point-motion-hooks t)
++	    (inhibit-field-text-motion t))
++	(if pos (goto-char pos))
++	(+ (count-lines (point-min) (point))
++	   (if (bolp) 0 -1))))))
++
+ (defun TeX-command-region (&optional old)
+   "Run TeX on the current region.
+ 
+@@ -123,8 +134,7 @@
+     (TeX-region-create (TeX-region-file TeX-default-extension)
+ 		       (buffer-substring begin end)
+ 		       (file-name-nondirectory (buffer-file-name))
+-		       (count-lines (save-restriction (widen) (point-min))
+-				    begin)))
++		       (TeX-current-offset begin)))
+   (TeX-command (TeX-command-query (TeX-region-file)) 'TeX-region-file))
+ 
+ (defun TeX-command-buffer ()
+@@ -946,8 +959,7 @@
+ 				""
+ 			      ;;(beginning-of-line 1)
+ 			      (re-search-backward "[\r\n]" nil t)
+-			      (setq trailer-offset
+-				    (count-lines (point-min) (point)))
++			      (setq trailer-offset (TeX-current-offset))
+ 			      (buffer-substring (point) (point-max))))))))))
+     (save-excursion
+       (set-buffer file-buffer)
+@@ -959,12 +971,12 @@
+ 	      TeX-region-extra
+ 	      "\n\\message{ !name(" original ") !offset(")
+       (insert (int-to-string (- offset
+-				(count-lines (point-min) (point))))
++				(1+ (TeX-current-offset))))
+ 	      ") }\n"
+ 	      region
+ 	      "\n\\message{ !name("  master-name ") !offset(")
+       (insert (int-to-string (- trailer-offset
+-				(count-lines (point-min) (point))))
++				(1+ (TeX-current-offset))))
+ 	      ") }\n"
+ 	      trailer)
+       (run-hooks 'TeX-region-hook)
+
+* x-symbol
+
+Current versions of x-symbol confuse the line parsing of
+preview-LaTeX.  They also confuse that of Auc-TeX, but with less
+glaring consequences.  A solution is being worked on, but this depends
+on a few factors that will probably lead to some changed APIs in
+AucTeX.
