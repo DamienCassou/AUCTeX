@@ -22,23 +22,20 @@
 
 ;;; Commentary:
 
-;; $Id: preview.el,v 1.8 2001-09-24 14:48:18 dakas Exp $
+;; $Id: preview.el,v 1.8.1.1 2001-09-25 23:24:49 dakas Exp $
 ;;
 ;; This style is for the "seamless" embedding of generated EPS images
 ;; into LaTeX source code.  The current usage is to put
 ;; (require 'preview)
-;; into your .emacs file and the file somewhere into your load-path,
-;; preferably byte-compiled.  Since this stuff is pre-alpha, no
-;; customization and similar has been added up to now and
-;; documentation is scarce.  It need a style file "preview.sty"
-;; installed in your LaTeX path which probably should have been
-;; distributed together with this file in the form of a file
-;; "preview.dtx" and "preview.ins".  Running tex on "preview.ins" will
-;; give you "preview.drv" which you can latex for the LaTeX
-;; documentation and some files to put into your TeX path.  Of these,
-;; "preview.sty" and "prauctex.def" are mandatory for this package to
-;; function.
-
+;; into your .emacs file and the file somewhere into your load-path.
+;; Auc-TeX is required as to now.
+;; Please use the usual configure script for installation.
+;; Quite a few things with regard to its operation can be configured
+;; by using
+;; M-x customize-group RET preview RET
+;; LaTeX needs to access a special style file "preview.sty".  For the
+;; installation of this style file, use the provided configure and
+;; install scripts.
 
 ;;; History:
 ;;
@@ -140,13 +137,23 @@ Buffer-local to the appropriate TeX process buffer.")
 Buffer-local to the appropriate TeX process buffer.")
 (make-variable-buffer-local 'preview-gs-queue)
 
-(defvar preview-gs-tq nil
-  "Transaction queue for gs processing.")
-(make-variable-buffer-local 'preview-gs-tq)
+(defvar preview-gs-outstanding nil
+  "Overlays currently processed.")
+(make-variable-buffer-local 'preview-gs-outstanding)
 
-(defvar preview-gs-ov nil
-  "Overlay currently processed.")
-(make-variable-buffer-local 'preview-gs-ov)
+(defcustom preview-gs-allow-outstanding 2
+  "*Number of requests to be outstanding.
+This is the number of requests we might at any time have
+passed into GhostScript.  If this number is larger, the
+probability of GhostScript working continuously is larger.
+If this number is smaller, redisplay will follow changes in
+the displayed buffer area faster."
+  :type '(integer :tag "small integer"
+	  :match (lambda (widget value) (and (integerp value) (> value 0) (< value 20)))))
+
+(defvar preview-gs-answer nil
+  "Accumulated answer from GhostScript process.")
+(make-variable-buffer-local 'preview-gs-answer)
 
 (defvar preview-gs-image-type nil
   "Image type for gs produced images.")
@@ -172,6 +179,19 @@ YRES, the screen resulution in dpi."
 	  (* scale xres)
 	  (* scale yres)))
 
+(defun preview-gs-behead-outstanding ()
+  "Remove leading element of outstanding queue after error.
+Return element if non-nil."
+  (let ((ov (pop preview-gs-outstanding)))
+    (when ov
+      (condition-case nil
+	  (preview-delete-file
+	   (elt (overlay-get ov 'queued) 0)
+	   t)
+	(error nil))
+      (preview-deleter ov))
+    ov))
+    
 (defun preview-gs-sentinel (process string)
   "Sentinel function for rendering process.
 Gets the default PROCESS and STRING arguments
@@ -180,23 +200,63 @@ and tries to restart GhostScript if necessary."
     (when (or (eq status 'exit) (eq status 'signal))
       ;; process died.  Throw away culprit, go on.
       (with-current-buffer (process-buffer process)
-	(when preview-gs-ov
-	  (condition-case nil
-	      (preview-delete-file
-	       (elt (overlay-get preview-gs-ov 'queued) 0)
-	       t)
-	    (error nil))
-	  (preview-deleter preview-gs-ov)
-	  (setq preview-gs-ov nil)
-	  (if (eq status 'signal)
-	      (progn
-		(mapc 'preview-deleter preview-gs-queue)
-		(setq preview-gs-urgent nil)
-		(setq preview-gs-queue nil))
+	(if (or (null (preview-gs-behead-outstanding))
+		(eq status 'signal))
+	  ;; if process was killed explicitly by signal, or if nothing
+	  ;; was processed, we give up on the matter altogether.
+	    (progn
+	      (mapc (function preview-deleter) preview-gs-outstanding)
+	      (mapc (function preview-deleter) preview-gs-queue)
+	      (setq preview-gs-outstanding nil)
+	      (setq preview-gs-urgent nil)
+	      (setq preview-gs-queue nil))
 	    
 	    ;; restart only if we made progress since last call
-	    (when preview-gs-tq
-	      (preview-gs-restart))))))))
+	  (setq preview-gs-urgent (nconc preview-gs-outstanding
+					 preview-gs-urgent))
+	  (setq preview-gs-outstanding nil)
+	  (preview-gs-restart))))))
+
+(defun preview-gs-filter (process string)
+  (with-current-buffer (process-buffer process)
+    (let* ((pm (process-mark process))
+	   (moveit (= pm (point)))
+	   match)
+      (save-excursion
+	(move-char pm)
+	(setq preview-gs-answer (concat preview-gs-answer string))
+	(while
+	    (setq match (string-match "GS\\(<[0-9+]\\)?>"
+				      preview-gs-answer))
+	  (let ((me (match-end 0)))
+	    (if (= me 3)
+		(let ((ov (pop preview-gs-outstanding)))
+		  (condition-case nil
+		      (preview-delete-file (overlay-get ov 'filename) t)
+		    (file-error nil))
+		  (let* ((queued (overlay-get ov 'queued))
+			 (newfile (elt queued 0))
+			 (bbox (elt queued 1))
+			 (img (elt queued 2)))
+		    (overlay-put preview-gs-ov 'queued nil)
+		    (overlay-put preview-gs-ov 'filename newfile)
+		    (setcdr img (list :file (car newfile)
+				      :type preview-gs-image-type
+				      :heuristic-mask t
+				      :ascent (preview-ascent-from-bb
+					       bbox)))))
+	      (insert (substring preview-gs-answer 0 me))
+	      (preview-gs-behead-outstanding))
+	    (setq preview-gs-answer (substring preview-gs-answer me))))
+	(preview-gs-restart)
+	(set-marker pm (point)))
+      (if moveit
+	  (move-char (process-mark process))))))
+
+	    
+	    
+	    
+      
 
 (defvar preview-gs-command-line nil)
 (make-variable-buffer-local 'preview-gs-command-line)
