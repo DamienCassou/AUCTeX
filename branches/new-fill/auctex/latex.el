@@ -2010,7 +2010,12 @@ space does not end a sentence, so don't break a line there."
 	(if use-hard-newlines
 	    (remove-list-of-text-properties from to '(hard)))
 	;; Make sure first line is indented (at least) to left margin...
-        (LaTeX-indent-line)
+        (save-restriction
+          ;; `LaTeX-indent-line' might otherwise calculate the wrong
+          ;; indentation.  I think widening should be done here and
+          ;; not in `LaTeX-indent-line' to avoid it being to rude.
+          (widen)
+          (indent-according-to-mode))
         ;; COMPATIBILITY for Emacs <= 21.1
         (if (fboundp 'fill-delete-prefix)
             ;; Delete the fill-prefix from every line.
