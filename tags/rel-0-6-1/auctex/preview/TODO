@@ -1,0 +1,41 @@
+-*- text -*-
+
+Modularize AucTeX's error message parsing
+ so that we do not need to steal code from AucTeX, but can use
+ AucTeX's routines directly.  Submit to AucTeX development.
+
+Fix GhostScript rendering of Emacs
+ The current gs.el interface does not work well when multiple EPS
+ images appear.  A new process is started for every single image, but
+ the processes have to wait for one another.  See also code in
+ xdisp.c from the Emacs distribution.
+
+Think about temporary file handling
+ The current solution may be suboptimal.  Perhaps a different dvi file
+ from the main file would be preferable, perhaps compilation in a
+ separate directory, perhaps support for more than one Emacs session
+ or user properly accessing the same file.  In all fairness, the
+ current _region_ mechanism of AucTeX does not support this, either.
+
+Port to XEmacs
+ Very much wanted since we then would get a non-pretest audience for
+ preview-latex.
+
+Explore possibilities for generating a single PS file
+ Can we get at the page boundaries then with some PostScript
+ trickery?  Or should we write them into the log as part of the
+ preview error messages?  Would probably make implementing the
+ next point easier:
+
+Explore possibilities for working via PDF
+ Going via latexpdf->GhostScript and a single file would certainly be
+ faster than the current latex->dvips->GhostScript path.
+
+Explore using DSC comments for reordering of processing
+ That's just desirable for the last two proposals working from a
+ single file.
+
+Add style options for marking bounding box
+ Add options in TeX file to output zero-width rules around the shipped
+ box so that, for example, PStricks pictures have a chance of getting
+ a good bounding box.
