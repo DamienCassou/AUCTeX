@@ -1891,19 +1891,15 @@ Otherwise they will be filled like normal text."
   :type 'boolean
   :group 'LaTeX)
 
-(defcustom LaTeX-fill-break-before-macro nil
-  "If non-nil a line will be broken before the start of a
-multi-line macro and potential non-whitespace characters
-preceding it."
+(defcustom LaTeX-fill-distinct-contents nil
+  "List of contents which will be set apart by inserting
+linebreaks before and after them if they do not fit into one
+line."
   :group 'LaTeX
-  :type 'boolean)
-
-(defcustom LaTeX-fill-break-after-macro nil
-  "If non-nil a line will be broken after the end of a
-multi-line macro and potential non-whitespace characters
-following it."
-  :group 'LaTeX
-  :type 'boolean)
+  :type '(choice (const :tag "None" nil)
+                 (set :tag "Contents"
+                      (const :tag "Braced" braced)
+                      (const :tag "Math" math))))
 
 (defun LaTeX-fill-region-as-paragraph (from to &optional justify-flag)
   "Fill region as one paragraph.
@@ -2119,88 +2115,86 @@ space does not end a sentence, so don't break a line there."
       ;; Return the fill-prefix we used
       fill-prefix)))
 
-(defcustom LaTeX-fill-break-before-and-after (list 'braced 'math)
-  "List of contents which will be set apart by inserting
-linebreaks before and after them if they do not fit into one
-  line."
-  :group 'LaTeX
-  :type '(choice :tag "Contents"
-                 (const :tag "None" nil)
-                 (set (const :tag "Braced" braced)
-                      (const :tag "Math" math))))
-
 (defun LaTeX-fill-move-to-break-point (linebeg)
   "Move to the position where the line should be broken."
   ;; COMPATIBILITY for Emacs <= 21.2
   (if (fboundp 'fill-move-to-break-point)
       (fill-move-to-break-point linebeg)
     (skip-chars-backward "^ \n"))
-  (when LaTeX-fill-break-before-and-after
+  (when LaTeX-fill-distinct-contents
     (let ((orig-breakpoint (point))
           (final-breakpoint (point))
+          start-point
           math-sep)
       (save-excursion
         (beginning-of-line)
-        ;; Find the first occurence of `$', `{', `}', `\(' or `\)'.
-        (when (re-search-forward
-               (concat "\\("
-                       "[^ \t]+[ \t]+.*\\("
-                       "[^" (regexp-quote TeX-esc) "]"
-                       "\\(" (regexp-quote "$") "\\|{\\)"
-                       "\\|"
-                       (regexp-quote TeX-esc) "(\\)"
-                       "\\|"
-                       "\\([^" (regexp-quote TeX-esc) "]}"
-                       "\\|" (regexp-quote TeX-esc) ")\\)\\)")
-               orig-breakpoint t)
+        (skip-chars-forward " \t")
+        (setq start-point (point))
+        ;; Find occurences of `$', `{', `}', `\(' or `\)'.
+        (while (and (= final-breakpoint orig-breakpoint)
+                    (re-search-forward
+                     (concat "\\(\\=\\|[^\\]\\)\\(\\\\\\\\\\)*"
+                             "\\({\\|}\\|\\\\(\\|\\\\)\\|\\$\\)")
+                     orig-breakpoint t))
           (let ((match-string (match-string 0)))
             (cond
              ;; { (opening brace)
              ((save-excursion
-                (and (memq 'braced LaTeX-fill-break-before-and-after)
+                (and (memq 'braced LaTeX-fill-distinct-contents)
                      (string= (substring match-string -1) "{")
-                     (> (- (TeX-find-closing-brace) (line-beginning-position))
+                     (> (- (TeX-find-closing-brace)
+                           (line-beginning-position))
                         fill-column)))
-              (skip-chars-backward "^ \n")
-              (setq final-breakpoint (point)))
+              (save-excursion
+                (skip-chars-backward "^ \n")
+                (when (> (point) start-point)
+                  (setq final-breakpoint (point)))))
              ;; } (closing brace)
              ((save-excursion
-                (and (memq 'braced LaTeX-fill-break-before-and-after)
+                (and (memq 'braced LaTeX-fill-distinct-contents)
                      (string= (substring match-string -1) "}")
                      (save-excursion
                        (backward-char 2)
                        (not (TeX-find-opening-brace
                              nil (line-beginning-position))))))
-              (skip-chars-forward "^ \n")
-              (setq final-breakpoint (point)))
+              (save-excursion
+                (skip-chars-forward "^ \n")
+                (when (> (point) start-point)
+                  (setq final-breakpoint (point)))))
              ;; $ or \( (opening math)
              ((save-excursion
-                (and (memq 'math LaTeX-fill-break-before-and-after)
+                (and (memq 'math LaTeX-fill-distinct-contents)
                      (or (and (string= (setq math-sep
                                              (substring match-string -1)) "$")
-                              (not (texmathp)))
-                         (string= (setq math-sep
-                                        (substring match-string -2)) "\("))
+                              (texmathp))
+                         (and (> (length match-string) 1)
+                              (string= (setq math-sep
+                                             (substring match-string -2))
+                                       "\\(")))
                      (> (- (save-excursion
                              (re-search-forward
                               (if (string= math-sep "$")
                                   (concat "[^" (regexp-quote TeX-esc) "]"
                                           (regexp-quote "$"))
                                 (concat (regexp-quote TeX-esc) ")"))
-                              orig-breakpoint t)
+                              (point-max) t)
                              (point))
                            (line-beginning-position))
                         fill-column)))
+              (save-excursion
                 (skip-chars-backward "^ \n")
-                (setq final-breakpoint (point)))
+                (when (> (point) start-point)
+                  (setq final-breakpoint (point)))))
              ;; $ or \) (closing math)
              ((save-excursion
-                (and (memq 'math LaTeX-fill-break-before-and-after)
+                (and (memq 'math LaTeX-fill-distinct-contents)
                      (or (and (string= (setq math-sep
                                              (substring match-string -1)) "$")
-                              (texmathp))
-                         (string= (setq math-sep
-                                        (substring match-string -2)) "\)"))
+                              (not (texmathp)))
+                         (and (> (length match-string) 1)
+                              (string= (setq math-sep
+                                             (substring match-string -2))
+                                       "\\)")))
                      (if (string= math-sep "$")
                          (save-excursion
                            (backward-char 2)
@@ -2209,73 +2203,11 @@ linebreaks before and after them if they do not fit into one
                                          (regexp-quote "$"))
                                  (line-beginning-position) t)))
                        (texmathp-match-switch (line-beginning-position)))))
-              (skip-chars-forward "^ \n")
-              (setq final-breakpoint (point)))
-             ))))
+              (save-excursion
+                (skip-chars-forward "^ \n")
+                (when (> (point) start-point)
+                  (setq final-breakpoint (point)))))))))
       (goto-char final-breakpoint))))
-
-;;   (cond
-;;    ((save-excursion
-;;       (and LaTeX-fill-break-before-macro
-;;            (and (re-search-backward (concat (regexp-quote TeX-esc)
-;;                                             "[A-Za-z]+[ \t]*{")
-;;                                     (line-beginning-position) t)
-;;                 (save-excursion
-;;                   (skip-chars-backward "^ \n")
-;;                   (not (bolp))))
-;;            (and (re-search-forward "}" (line-end-position) t)
-;;                 (> (- (point) (line-beginning-position))
-;;                    fill-column))))
-;;     (re-search-backward (concat (regexp-quote TeX-esc)
-;;                                 "[A-Za-z]+[ \t]*{")
-;;                         (line-beginning-position) t)
-;;     (skip-chars-backward "^ \n"))
-;;    ((save-excursion
-;;       (and LaTeX-fill-break-after-macro
-;;            (re-search-backward (concat "[^" TeX-esc "]}")
-;;                                (line-beginning-position) t)
-;;            (not (re-search-backward (concat (regexp-quote TeX-esc)
-;;                                             "[A-Za-z]+[ \t]*{")
-;;                                     (line-beginning-position) t))))
-;;     (re-search-backward (concat "[^" TeX-esc "]}")
-;;                         (line-beginning-position) t)
-;;     (skip-chars-forward "^ \n"))))
-
-(defun TeX-find-closing-brace (&optional arg limit)
-  "Return the position of the closing brace for the current
-opening brace.  With optional ARG>=1, find that outer level.  If
-LIMIT is non-nil, search down to this position in the buffer."
-  (let ((arg (if arg (if (< arg 1) 1 arg) 1)))
-    (save-excursion
-      (while (and
-              (/= arg 0)
-              (re-search-forward (concat "[^" (regexp-quote TeX-esc) "]"
-                                         "\\({\\|}\\)") limit t 1))
-        (cond ((string= (substring (match-string 0) -1) "{")
-               (setq arg (1+ arg)))
-              (t
-               (setq arg (1- arg)))))
-      (if (/= arg 0)
-          nil
-        (point)))))
-
-(defun TeX-find-opening-brace (&optional arg limit)
-  "Return the position of the closing brace for the current
-opening brace.  With optional ARG>=1, find that outer level.  If
-LIMIT is non-nil, search up to this position in the buffer."
-  (let ((arg (if arg (if (< arg 1) 1 arg) 1)))
-    (save-excursion
-      (while (and
-              (/= arg 0)
-              (re-search-backward (concat "[^" (regexp-quote TeX-esc) "]"
-                                         "\\({\\|}\\)") limit t 1))
-        (cond ((string= (substring (match-string 0) -1) "}")
-               (setq arg (1+ arg)))
-              (t
-               (setq arg (1- arg)))))
-      (if (/= arg 0)
-          nil
-        (point)))))
 
 ;; The content of `LaTeX-fill-newline' was copied from the function
 ;; `fill-newline' in `fill.el' (CVS Emacs, January 2004) and adapted
@@ -2559,36 +2491,6 @@ formatting."
             (skip-chars-forward "\n")))
 	(set-marker to nil)))
     (message "Finished")))
-
-(defun TeX-forward-comment-skip (&optional count limit)
-  "Move forward to the next switch between commented and
-uncommented adjacent lines.  With argument COUNT do it COUNT
-times.  If argument LIMIT is given, do not move point further
-than this value."
-  (unless count (setq count 1))
-  ;; A value of 0 is nonsense.
-  (when (= count 0) (setq count 1))
-  (unless limit (setq limit (point-max)))
-  (when (< count 0) (forward-line -1))
-  (dotimes (i (abs count))
-    (while (and (<= (point) limit)
-                (or (save-excursion
-                      (and (looking-at comment-start-skip)
-                           (zerop (if (> count 0)
-                                      (forward-line 1)
-                                    (forward-line -1)))
-                           (looking-at comment-start-skip)))
-                    (save-excursion
-                      (and (not (looking-at comment-start-skip))
-                           (zerop (if (> count 0)
-                                      (forward-line 1)
-                                    (forward-line -1)))
-                           (not (looking-at comment-start-skip))))))
-      (if (> count 0)
-          (forward-line 1)
-        (forward-line -1)))
-    (if (> count 0)
-        (forward-line 1))))
 
 (defun LaTeX-find-matching-end ()
   "Move point to the \\end of the current environment."
