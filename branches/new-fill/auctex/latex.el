@@ -3608,14 +3608,20 @@ of `LaTeX-mode-hook'."
 	   filladapt-mode)
       (turn-off-filladapt-mode)))
 
-(defun doctex-mode ()
-  "Entry into LaTeX-mode for .dtx files.
-Calls `LaTeX-mode', sets a few variables and runs the hooks
-in `doctex-mode-hook'."
-  (latex-mode)
-  (set (make-local-variable 'LaTeX-insert-into-comments) t)
-  (set (make-local-variable 'LaTeX-fill-comment-syntax-aware) t)
-  (run-hooks 'doctex-mode-hook))
+(define-minor-mode doctex-mode
+  "Minor mode for editing .dtx files.
+Sets a few variables and runs the hooks in `doctex-mode-hook'."
+  nil "Doc" nil
+  (if doctex-mode
+      (progn
+	(unless (memq major-mode '(plain-tex-mode ams-tex-mode
+						  latex-mode
+						  context-mode))
+	  (tex-mode))
+	(set (make-local-variable 'LaTeX-insert-into-comments) t)
+	(set (make-local-variable 'LaTeX-fill-comment-syntax-aware) t))
+    (dolist (elt '(LaTeX-insert-into-comments LaTeX-fill-comment-syntax-aware))
+      (set elt (default-value elt)))))
 
 (defvar LaTeX-header-end
   (concat (regexp-quote TeX-esc) "begin *" TeX-grop "document" TeX-grcl)
