@@ -1,0 +1,128 @@
+@SET_MAKE@
+EMACS=@EMACS@
+ELCC=$(EMACS) -batch -q -no-site-file -no-init-file --eval '(setq load-path (cons "." load-path))'
+AUCTEX=-eval '(let ((dir (pop command-line-args-left))) \
+  (if (not (string-equal dir "")) (push dir load-path)))' $(auctexdir)
+AUTOLOAD=--eval '(let ((generated-autoload-file (expand-file-name "$@"))) \
+		(update-file-autoloads "preview.el")(save-buffers-kill-emacs t))'
+
+LISP_SOURCES = @PLAT_LISP@ preview.el
+LISP_OBJS = $(LISP_SOURCES:.el=.elc)
+
+ICON_SOURCES = \
+ images/prverr16.xpm  images/prverr20.xpm       images/prverr24.xbm \
+ images/prverr24.xpm  images/prvtex-cap-up.xpm  images/prvtex12.xbm \
+ images/prvtex12.xpm  images/prvtex16.xbm       images/prvtex16.xpm \
+ images/prvtex20.xpm  images/prvtex24.xbm       images/prvtex24.xpm \
+ images/prvwrk12.xpm  images/prvwrk14.xpm       images/prvwrk16.xpm \
+ images/prvwrk20.xpm  images/prvwrk24.xbm       images/prvwrk24.xpm
+
+prefix = @prefix@$(null)
+lispdir = @lispdir@$(null)
+icondir = @icondir@$(null)
+datadir = @datadir@$(null)
+packagedir = @packagedir@$(null)
+packagelispdir = @packagelispdir@$(null)
+auctexdir = @auctexdir@$(null)
+DESTDIR=
+
+INSTALL = @INSTALL@
+INSTALL_DATA = @INSTALL_DATA@
+MKINSTALLDIRS = ./mkinstalldirs
+
+all: texmf elisp docs install-hint
+
+elisp: $(LISP_OBJS)
+	if test $(packagedir) = no ; then \
+	  $(MAKE) preview-latex.el ; \
+	fi
+
+texmf: 
+	(cd latex ; $(MAKE) all)
+
+docs:
+	(cd doc ; $(MAKE) all)
+
+install-hint:
+	@echo 'Congratulations!  Build is complete.'
+	@echo 
+	@echo 'Now, run "make install" as root, or whatever user has permissions'
+	@echo 'to write to the install directory.'
+
+
+.PHONY: install
+
+install: install-texmf install-el install-icons \
+         install-docs install-startup use-hint
+
+install-docs:
+	(cd doc ; $(MAKE) DESTDIR=$(DESTDIR) install)
+
+use-hint:
+	@echo "Installation completed."
+	@echo
+	@echo "Please read the PROBLEMS file if you use"
+	@echo "a) AucTeX with a version less than 11.0"
+	@echo "b) GNU Emacs with a version less than 21.2"
+	@echo "   OR XEmacs with a version less than 21.4.9"
+	@echo "c) GhostScript with a version less than 6.51"
+	@echo "Please use M-x preview-report-bug if you experience any"
+	@echo "problems not mentioned in there."
+
+install-el: $(LISP_OBJS) auto.el
+	-$(MKINSTALLDIRS) $(DESTDIR)$(packagelispdir)
+	for x in $(LISP_SOURCES) ; do \
+	  echo $(INSTALL_DATA) $$x $(DESTDIR)$(packagelispdir) ; \
+	  $(INSTALL_DATA) $$x $(DESTDIR)$(packagelispdir) ; \
+	  echo $(INSTALL_DATA) $${x}c $(DESTDIR)$(packagelispdir) ; \
+	  $(INSTALL_DATA) $${x}c $(DESTDIR)$(packagelispdir) ; \
+	done
+	if test $(packagedir) != no; then \
+	  $(ELCC) -l prv-install -f preview-make-package $(DESTDIR)$(packagedir) $(LISP_SOURCES) ; \
+	fi
+
+install-icons: $(ICON_SOURCES)
+	-$(MKINSTALLDIRS) $(DESTDIR)$(icondir)
+	for x in $(ICON_SOURCES); do \
+	  echo $(INSTALL_DATA) $$x $(DESTDIR)$(icondir) ; \
+	  $(INSTALL_DATA) $$x $(DESTDIR)$(icondir) ; \
+	done
+
+install-texmf:
+	(cd latex ; $(MAKE) DESTDIR=$(DESTDIR) install)
+
+install-startup:
+	if test $(packagedir) = no; then \
+	  $(MAKE) preview-latex.el && \
+	  $(INSTALL_DATA) preview-latex.el $(DESTDIR)$(lispdir) ; \
+	fi
+
+$(LISP_OBJS):	$(LISP_SOURCES)
+	for x in $(LISP_SOURCES) ; do \
+	  echo $(ELCC) $(AUCTEX) -f batch-byte-compile $$x ; \
+	  $(ELCC) $(AUCTEX) -f batch-byte-compile $$x ; \
+	done
+
+preview-latex.el: preview.el auto.el
+	rm -f preview-latex.el
+	-$(EMACS) -batch -no-site-file -no-init-file $(AUTOLOAD) ; \
+	if test ! -r $@; then \
+	echo ";; Auto-generated preview-latex.el" > $@ ; \
+	echo "" >> $@ ; \
+	$(EMACS) -batch -no-site-file -no-init-file $(AUTOLOAD) ; \
+	fi
+	cat auto.el >> $@
+
+clean:
+	rm -f *.elc *~ *.aux *.dvi *.log latex.out testdocstrip.tex \
+	   preview-latex.el
+	rm -rf *.prv 
+	(cd doc ; $(MAKE) clean)
+	(cd latex ; $(MAKE) clean)
+
+distclean:
+	make clean
+	rm -f config.log config.cache config.status config.h aclocal.m4 
+	rm -f configure auto.el *.png TAGS
+	rm -f Makefile */Makefile
+	autoconf
