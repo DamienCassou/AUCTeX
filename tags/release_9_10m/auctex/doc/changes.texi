@@ -1,0 +1,37 @@
+@section News in 9.10
+
+@itemize @bullet
+@item 
+New @code{dwim} setting for @code{TeX-master} attempts to guess
+a default master for new files.
+Patch by Stefan Monnier <foo@@acm.com>.
+
+@item 
+@code{ngerman} style support.
+Just a copy of the german style support.
+
+@item
+Removed support for Emacs 18 and 19.
+
+@item @code{mdwlist} support.
+Patch by Stephen Heilbronner <heilbron@@nm.informatik.uni-muenchen.de>.
+
+@item
+Fixed various bugs with the babel package.
+
+@item @code{amsart} and @code{amsbook} now loads @code{amsthm} by default.
+Patch by Rune Kleveland <runekl@@math.uio.no>.
+
+@item Fixed bug with file searching.
+Reported by Berwin Turlach <bturlach@@maths.adelaide.edu.au>.
+
+@item Finalized index support, added index-related style files.
+Patch by Carsten Dominik <dominik@@strw.leidenuniv.nl>.
+
+@item New style files for @file{varioref.sty} and @file{fancyref.sty}.
+Patch by Carsten Dominik <dominik@@strw.leidenuniv.nl>.
+
+@item @code{texmathp} recognizes additional macros like @code{\fbox}.
+Patch by Ulrik Vieth <vieth@@thphy.uni-duesseldorf.de>.
+
+@end itemize
