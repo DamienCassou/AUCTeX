@@ -1,0 +1,102 @@
+@include macros.texi
+@c -----------------------
+
+@itemize @bullet
+@item Modularize @AUCTeX{}'s error message parsing
+
+so that we do not need to steal code from @AUCTeX{}, but can use
+@AUCTeX{}'s routines directly.  Submit to @AUCTeX{} development.
+
+@item Alternatively: factor out @AUCTeX{} specific code
+
+and provide alternatives.  This could make @previewlatex{} work with
+Emacs' default @TeX{}/@LaTeX{} modes which some people prefer.  Also one
+might provide an abstraction layer that would make it possible to embed
+@previewlatex{}'s core mechanisms into Emacs calc.
+
+@item Manual improvements
+
+@itemize @minus
+@item Pepper the manual with screen shots and graphics
+
+This will be of interest for the @acronym{HTML} and @TeX{} renditions
+of the texinfo manual.  Except for maybe autoconverted ASCII art
+versions of the @acronym{XBM} icons, the info rendition will usually be
+restricted to text descriptions, however.
+
+@item Fix duplicates
+
+The activation info is still duplicated.
+
+@item Customization
+
+The customization entries need to be documented and rearranged.
+
+@item XEmacs-specific docs
+
+Well, a lot needs to be done.
+
+@item Wrongly placed previews
+
+Rethink this section
+
+@end itemize
+
+@item Fix GhostScript rendering of Emacs
+
+The current @file{gs.el} interface does not work well when multiple
+@acronym{EPS} images appear.  A new process is started for every single
+image, but the processes have to wait for one another.  See also code in
+@file{xdisp.c} from the Emacs distribution.
+
+@item Think about temporary file handling
+ 
+The current solution may be suboptimal.  Perhaps a different dvi file
+from the main file would be preferable, perhaps compilation in a
+separate directory, perhaps support for more than one Emacs session or
+user properly accessing the same file.  In all fairness, the current
+@file{_region_} mechanism of @AUCTeX{} does not support this, either.
+
+@item Port to XEmacs
+
+In progress, most important first:
+
+@itemize @minus
+@item Enfeaturize.
+
+Eliminate the use of one-character propertized strings, maybe.
+(I think this requires a change to the XEmacs core, though.)
+
+@end itemize
+
+@item Explore possibilities for working via PDF
+ 
+Going via latexpdf->GhostScript and a single file would certainly be
+faster than the current latex->dvips->GhostScript path.  The current
+implementation via Dvips, however, uses just a single PostScript file
+and spends rather little time in Dvips, and the Dvips-generated
+PostScript code is rather simple, so that there is not much hope in
+GhostScript being able to deal much faster with @acronym{PDF} than with
+PostScript in this case.  But could come handy for previewing documents
+intended for use with pdflatex.
+
+@item Program a direct dvi->png rendering daemon
+
+that gets sent page requests and file names for both input and output
+and replaces the Dvips->GhostScript chain.  This could be done using
+DVIlib2 from the @TeX{}-Guy project.  The current performance of that,
+however, does not seem to offer any advantage.
+
+@item Integrate into ref@TeX{}
+
+When referencing to equations and the like, the preview-images of the
+source rather than plain text should be displayed.  If the preview in
+question covers labels, those should appear in the bubble help and/or a
+context menu.  Apropos:
+
+@item Implement context menus
+
+right mouse key currently just kills previews.  Offer more options than
+that.
+
+@end itemize
