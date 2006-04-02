@@ -63,20 +63,6 @@
   :prefix "font-latex-"
   :group 'font-latex)
 
-(defcustom font-latex-do-multi-line t
-  "Control multi-line fontification.
-
-Emacs provides its own facilities for multi-line fontification
-which can be controlled by the variable `font-lock-multiline'.
-
-Setting `font-latex-do-multi-line' to a non-nil value will enable
-this mechanism if it is available.
-
-Setting this variable will only have effect after resetting
-buffers controlled by font-latex or restarting Emacs."
-  :group 'font-latex
-  :type 'boolean)
-
 (defvar font-latex-multiline-boundary 5000
   "Size of region to search for the start or end of a multiline construct.")
 
@@ -653,14 +639,21 @@ use \\[customize] or restart Emacs."
 	     (unless (boundp (intern (concat prefix (car elt))))
 	       ;; defvar font-latex-match-*
 	       (eval `(defvar ,(intern (concat prefix (car elt))) nil)))
-	     (let ((keywords (nth 1 elt)))
+	     (let ((keywords (nth 1 elt))
+		   single-char-macro-flag)
+	       (setq keywords (if (listp (car keywords))
+				  (mapcar 'car keywords)
+				keywords))
+	       (catch 'single-char
+		 (dolist (keyword keywords)
+		   (unless (string-match "^[A-Za-z]" keyword)
+		     (setq single-char-macro-flag t)
+		     (throw 'single-char nil))))
 	       (set (intern (concat prefix (car elt)))
-		    (when (and (listp keywords)
-			     (> (safe-length keywords) 0))
+		    (when (> (safe-length keywords) 0)
 		    (concat "\\\\" (let ((max-specpdl-size 1000))
-				     (regexp-opt (if (listp (car keywords))
-						     (mapcar 'car keywords)
-						   keywords) t))))))))))
+				     (regexp-opt keywords t))
+			    (unless single-char-macro-flag "\\>")))))))))
 
 (defun font-latex-make-user-keywords ()
   "Build defuns and defvars for user keyword fontification."
@@ -998,9 +991,8 @@ backwards to the minimum over their return values.")
 				       instance (current-buffer))))
 	      (built-in-face-specifiers))))
 
-  ;; Configure multi-line fontification.
-  (when (and font-latex-do-multi-line
-	     (boundp 'font-lock-multiline))
+  ;; Activate multi-line fontification facilities if available.
+  (when (boundp 'font-lock-multiline)
     (set (make-local-variable 'font-lock-multiline) t))
 
   ;; Functions for extending the region.
@@ -1019,36 +1011,46 @@ backwards to the minimum over their return values.")
   ;; well, remove the call to `TeX-install-font-lock' from
   ;; `VirTeX-common-initialization' and place it in the different
   ;; `xxx-mode' calls instead, but _after_ `major-mode' is set.
-  (cond
-   ((eq major-mode 'doctex-mode)
-    (setq font-lock-defaults
-          '((font-latex-keywords font-latex-keywords-1 font-latex-keywords-2
-				 font-latex-doctex-keywords)
-            nil nil ((?\( . ".") (?\) . ".") (?$ . "\"")) nil
-            (font-lock-comment-start-regexp . "%")
-            (font-lock-mark-block-function . mark-paragraph)
-	    (font-lock-fontify-region-function
-	     . font-latex-fontify-region)
-	    (font-lock-unfontify-region-function
-	     . font-latex-unfontify-region)
-            (font-lock-syntactic-face-function
-             . font-latex-doctex-syntactic-face-function)
-            (font-lock-syntactic-keywords
-             . font-latex-doctex-syntactic-keywords))))
-   (t
-    (setq font-lock-defaults
-          '((font-latex-keywords font-latex-keywords-1 font-latex-keywords-2)
-            nil nil ((?\( . ".") (?\) . ".") (?$ . "\"")) nil
-            (font-lock-comment-start-regexp . "%")
-            (font-lock-mark-block-function . mark-paragraph)
-	    (font-lock-fontify-region-function
-	     . font-latex-fontify-region)
-	    (font-lock-unfontify-region-function
-	     . font-latex-unfontify-region)
-            (font-lock-syntactic-face-function
-             . font-latex-syntactic-face-function)
-            (font-lock-syntactic-keywords
-             . font-latex-syntactic-keywords))))))
+  (let ((defaults
+	 '((font-latex-keywords font-latex-keywords-1 font-latex-keywords-2)
+	   nil nil ((?\( . ".") (?\) . ".") (?$ . "\"")) nil))
+	(variables
+	 '((font-lock-comment-start-regexp . "%")
+	   (font-lock-mark-block-function . mark-paragraph)
+	   (font-lock-fontify-region-function
+	    . font-latex-fontify-region)
+	   (font-lock-unfontify-region-function
+	    . font-latex-unfontify-region))))
+    ;; Add the mode-dependent stuff to the basic variables defined above.
+    (if (eq major-mode 'doctex-mode)
+	(progn
+	  (setcar defaults (append (car defaults)
+				   '(font-latex-doctex-keywords)))
+	  (setq variables
+		(append variables
+			'((font-lock-syntactic-face-function
+			   . font-latex-doctex-syntactic-face-function)
+			  (font-lock-syntactic-keywords
+			   . font-latex-doctex-syntactic-keywords)))))
+      (setq variables
+	    (append variables
+		    '((font-lock-syntactic-face-function
+		       . font-latex-syntactic-face-function)
+		      (font-lock-syntactic-keywords
+		       . font-latex-syntactic-keywords)))))
+    ;; Cater for the idiosyncrasies of Emacs and XEmacs.
+    (if (featurep 'xemacs)
+	(progn
+	  ;; XEmacs does not set these variables via `font-lock-defaults'
+	  ;; but requires them to be set explicitely.
+	  (mapcar (lambda (alist)
+		    (set (car alist) (cdr alist))) variables)
+	  ;; Has to be set to t as otherwise syntax properties will not be
+	  ;; be picked up during fontification.
+	  (set (make-local-variable 'lookup-syntax-properties) t))
+      (setq defaults (append defaults variables)))
+    ;; Set the defaults.
+    (setq font-lock-defaults defaults)))
 
 (defun font-latex-fontify-region (beg end &optional loudly)
   "Fontify region from BEG to END.
@@ -1068,9 +1070,15 @@ If optional argument is non-nil, print status messages."
 
 ;; Copy and adaption of `tex-font-lock-unfontify-region' from
 ;; tex-mode.el in GNU Emacs on 2004-08-04.
-(defun font-latex-unfontify-region (beg end)
+;; (XEmacs passes a third argument to the function.)
+(defun font-latex-unfontify-region (beg end &rest ignored)
   "Unfontify region from BEG to END."
   (font-lock-default-unfontify-region beg end)
+  ;; XEmacs does not provide `font-lock-extra-managed-props', so
+  ;; remove the `font-latex-multiline' property manually.  (The
+  ;; property is only added if `font-lock-multiline' is bound.)
+  (unless (boundp 'font-lock-multiline)
+    (remove-text-properties beg end '(font-latex-multiline)))
   (while (< beg end)
     (let ((next (next-single-property-change beg 'display nil end))
 	  (prop (get-text-property beg 'display)))
@@ -1081,6 +1089,30 @@ If optional argument is non-nil, print status messages."
 	       (null (cddr prop)))
 	  (put-text-property beg next 'display nil))
       (setq beg next))))
+
+(defadvice font-lock-after-change-function (before font-latex-after-change
+						   activate)
+  "Extend region for fontification of multiline constructs.
+This is only necessary if the editor does not provide multiline
+fontification facilities like `font-lock-multiline' itself."
+  (unless (boundp 'font-lock-multiline)
+    (let ((ad-beg (ad-get-arg 0))
+	  (ad-end (ad-get-arg 1)))
+      (save-excursion
+	(goto-char ad-beg)
+	(beginning-of-line)
+	(when (get-text-property (point) 'font-latex-multiline)
+	  (setq ad-beg (previous-single-property-change (point)
+							'font-latex-multiline))
+	  (when (numberp ad-beg)
+	    (ad-set-arg 0 ad-beg)))
+	(goto-char ad-end)
+	(end-of-line)
+	(when (get-text-property (point) 'font-latex-multiline)
+	  (setq ad-end (next-single-property-change (point)
+						    'font-latex-multiline))
+	  (when (numberp ad-end)
+	    (ad-set-arg 1 ad-end)))))))
 
 
 ;;; Utility functions
@@ -1185,12 +1217,24 @@ In docTeX mode \"%\" at the start of a line will be treated as whitespace."
 	  t))
     (forward-comment 1)))
 
+(defun font-latex-put-multiline-property-maybe (beg end)
+  "Add a multiline property if no equivalent is provided by the editor.
+The text property is used to find the start or end of a multiline
+construct when unfontifying a region.  Emacs adds such a text
+property automatically if `font-lock-multiline' is set to t and
+extends the region to be unfontified automatically as well.
+XEmacs does not do this at the time of this writing."
+  (unless (boundp 'font-lock-multiline)
+    (put-text-property beg end 'font-latex-multiline t)))
+
 
 ;;; Match functions
 
-(defvar font-latex-matched-faces nil)
+(defvar font-latex-matched-faces nil
+  "List of faces corresponding to matches in match data.")
 
 (defun font-latex-matched-face (pos)
+  "Return face at position POS in `font-latex-matched-faces'."
   (nth pos font-latex-matched-faces))
 
 (defun font-latex-match-command-with-arguments (regexp keywords face limit)
@@ -1203,6 +1247,7 @@ Returns nil if none of KEYWORDS is found."
 					    font-latex-verbatim-face)
 					  (match-beginning 0))
 	(let ((beg (match-beginning 0))
+	      end		   ; Used for multiline text property.
 	      match-data
 	      (spec (cadr (assoc (match-string 1) keywords)))
 	      (parse-sexp-ignore-comments t)) ; scan-sexps ignores comments
@@ -1214,6 +1259,7 @@ Returns nil if none of KEYWORDS is found."
 	    (skip-chars-forward "*" (1+ (point))))
 	  (add-to-list 'match-data (point) t)
 	  (add-to-list 'font-latex-matched-faces 'font-lock-keyword-face)
+	  (setq end (point))
 	  (while (and (not (eobp)) (font-latex-forward-comment)))
 	  (catch 'break
 	    (while (> (length spec) 0)
@@ -1231,7 +1277,8 @@ Returns nil if none of KEYWORDS is found."
 			      (progn
 				(nconc match-data (list (1+ match-beg)
 							(1- (point))))
-				(nconc font-latex-matched-faces (list face)))
+				(nconc font-latex-matched-faces (list face))
+				(setq end (max end (1- (point)))))
 			    (nconc match-data (list match-beg (1+ match-beg)))
 			    (nconc font-latex-matched-faces
 				   (list 'font-latex-warning-face))
@@ -1249,12 +1296,14 @@ Returns nil if none of KEYWORDS is found."
 			(progn
 			  (nconc match-data (list (1+ match-beg) (1- (point))))
 			  (nconc font-latex-matched-faces
-				 (list 'font-lock-variable-name-face)))
+				 (list 'font-lock-variable-name-face))
+			  (setq end (max end (1- (point)))))
 		      (nconc match-data (list match-beg (1+ match-beg)))
 		      (nconc font-latex-matched-faces
 			     (list 'font-latex-warning-face))
 		      (throw 'break nil))
 		    (while (and (not (eobp)) (font-latex-forward-comment))))))))
+	  (font-latex-put-multiline-property-maybe beg end)
 	  (store-match-data match-data)
 	  (throw 'match t))))))
 
@@ -1272,7 +1321,6 @@ Returns nil if none of KEYWORDS is found."
 	    (throw 'extend macro-start))))
       beg)))
 
-;; XXX: Check if `font-latex-multiline-boundary' has to be taken into account.
 (defun font-latex-match-command-in-braces (keywords limit)
   "Search for command like {\\bfseries fubar} before LIMIT.
 Sets `match-data' so that:
@@ -1305,9 +1353,11 @@ Returns nil if no command is found."
 	      (narrow-to-region (point-min) limit)
 	      (forward-char -1)		; Move on the opening bracket
 	      (if (font-latex-find-matching-close ?\{ ?\})
-		  (store-match-data (list kbeg kbeg
-					  kbeg kend
-					  beg (1- (point))))
+		  (progn
+		    (font-latex-put-multiline-property-maybe beg (1- (point)))
+		    (store-match-data (list kbeg kbeg
+					    kbeg kend
+					    beg (1- (point)))))
 		(goto-char kend)
 		(store-match-data (list (1- kbeg) kbeg
 					kbeg kend
@@ -1352,7 +1402,11 @@ Used for patterns like:
 	  (goto-char (match-end 0))
 	(let ((beg (point)))
 	  (if (search-forward (if (match-beginning 1) "\\)" "\\]") limit 'move)
-	      (store-match-data (list beg beg beg (point)))
+	      ;; Found closing tag.
+	      (progn
+		(font-latex-put-multiline-property-maybe beg (point))
+		(store-match-data (list beg beg beg (point))))
+	    ;; Did not find closing tag.
 	    (goto-char (+ beg 2))
 	    (store-match-data (list beg (point) (point) (point))))
 	  (throw 'match t))))))
@@ -1398,6 +1452,7 @@ The \\begin{equation} and \\end{equation} are not fontified here."
           (setq end (match-beginning 0))
 	(goto-char beg)
         (setq end beg))
+      (font-latex-put-multiline-property-maybe beg end)
       (store-match-data (list beg end))
       t)))
 
@@ -1476,6 +1531,7 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
 	      (progn
 		(goto-char after-beg)
 		(store-match-data (list after-beg after-beg beg after-beg)))
+	    (font-latex-put-multiline-property-maybe beg (point))
 	    (store-match-data (list beg (point) (point) (point))))
 	  (throw 'match t))))))
 
@@ -1509,14 +1565,6 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
 	    (when (< (point) beg)
 	      (throw 'extend (point)))))
 	beg))))
-
-;; (defadvice jit-lock-after-change (before TeX-jit-lock-after-change
-;; 					    activate)
-;;   "Extend region backwards for multiline constructs."
-;;   (let* ((obeg (ad-get-arg 0)))
-;;     (ad-set-arg 0 (or (font-latex-extend-region-backwards-quotation
-;; 		       obeg (ad-get-arg 1))
-;; 		      obeg))))
 
 (defun font-latex-match-script (limit)
   "Match subscript and superscript patterns up to LIMIT."
