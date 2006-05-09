@@ -1267,6 +1267,7 @@ Returns nil if none of KEYWORDS is found."
 		    (closing-tag (string-to-char (substring spec 1 2)))
 		    match-beg)
 		(setq spec (substring spec 2))
+		(while (and (not (eobp)) (font-latex-forward-comment)))
 		(if (eq opening-tag ?\{)
 		    ;; Mandatory arguments {...}
 		    (if (eq (following-char) opening-tag)
@@ -1503,7 +1504,8 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
   (catch 'match
     (while (re-search-forward font-latex-quote-regexp-beg limit t)
       (unless (font-latex-faces-present-p '(font-lock-comment-face
-					    font-latex-verbatim-face)
+					    font-latex-verbatim-face
+					    font-latex-math-face)
 					  (match-beginning 0))
 	(let* ((beg (match-beginning 0))
 	       (after-beg (match-end 0))
@@ -1568,15 +1570,16 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
 
 (defun font-latex-match-script (limit)
   "Match subscript and superscript patterns up to LIMIT."
-  (when font-latex-fontify-script
-    (re-search-forward
-     (eval-when-compile
-       ;; Regexp taken from `tex-font-lock-keywords-3' from
-       ;; tex-mode.el in GNU Emacs on 2004-07-07.
-       (concat "[_^] *\\([^\n\\{}]\\|" "\\\\"
-	       "\\([a-zA-Z@]+\\|[^ \t\n]\\)" "\\|"
-	       "{\\(?:[^{}\\]\\|\\\\.\\|{[^}]*}\\)*" "}\\)"))
-     limit t)))
+  (when (and font-latex-fontify-script
+	     (re-search-forward "[_^] *\\([^\n\\{}]\\|\
+\\\\\\([a-zA-Z@]+\\|[^ \t\n]\\)\\|\\({\\)\\)" limit t))
+    (when (match-end 3)
+      (let ((beg (match-beginning 3))
+	    (end (TeX-find-closing-brace)))
+	(store-match-data (if end
+			      (list (match-beginning 0) end beg end)
+			    (list beg beg beg beg)))))
+    t))
 
 ;; Copy and adaption of `tex-font-lock-suscript' from tex-mode.el in
 ;; GNU Emacs on 2004-07-07.
