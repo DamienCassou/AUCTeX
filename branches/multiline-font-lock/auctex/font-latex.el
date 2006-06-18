@@ -1443,11 +1443,18 @@ Used for patterns like:
 \\[ F = ma \\] but not \\\\ [len]"
   (catch 'match
     (while (re-search-forward "\\(\\\\(\\)\\|\\(\\\\\\[\\)" limit t)
-      (goto-char (match-beginning 0))
-      (if (eq (preceding-char) ?\\)	; \\[ is not a math environment
-	  (goto-char (match-end 0))
-	(let ((beg (point)))
-	  (if (search-forward (if (match-beginning 1) "\\)" "\\]") limit 'move)
+      (unless (save-excursion
+		(goto-char (match-beginning 0))
+		(eq (preceding-char) ?\\)) ; \\[ is not a math environment
+	(let ((beg (match-beginning 0))
+	      (open-tag (if (match-beginning 1) "\\(" "\\["))
+	      (close-tag (if (match-beginning 1) "\\)" "\\]")))
+	  ;; Search for both opening and closing tags in order to be
+	  ;; able to avoid erroneously matching stuff like "\(foo \(bar\)".
+	  (if (and (re-search-forward (concat (regexp-quote open-tag) "\\|"
+					      (regexp-quote close-tag))
+				      limit 'move)
+		   (string= (match-string 0) close-tag))
 	      ;; Found closing tag.
 	      (progn
 		(font-latex-put-multiline-property-maybe beg (point))
