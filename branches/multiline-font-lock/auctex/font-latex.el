@@ -1556,7 +1556,7 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
   (font-latex-update-quote-list)
   ;; Search for matches.
   (catch 'match
-    (while (re-search-forward font-latex-quote-regexp-beg limit t)
+    (while (TeX-re-search-forward-unescaped font-latex-quote-regexp-beg limit t)
       (unless (font-latex-faces-present-p '(font-lock-comment-face
 					    font-latex-verbatim-face
 					    font-latex-math-face)
@@ -1627,12 +1627,23 @@ set to french, and >>german<< (and 8-bit) are used if set to german."
   (when (and font-latex-fontify-script
 	     (re-search-forward "[_^] *\\([^\n\\{}]\\|\
 \\\\\\([a-zA-Z@]+\\|[^ \t\n]\\)\\|\\({\\)\\)" limit t))
-    (when (match-end 3)
-      (let ((beg (match-beginning 3))
-	    (end (TeX-find-closing-brace)))
-	(store-match-data (if end
-			      (list (match-beginning 0) end beg end)
-			    (list beg beg beg beg)))))
+    (if (font-latex-faces-present-p '(font-latex-subscript-face
+				      font-latex-superscript-face))
+	;; Apply subscript and superscript highlighting only once in
+	;; order to prevent the font size becoming too small.  We set
+	;; an empty match to do that.
+	(let ((point (point)))
+	  (store-match-data (list point point point point)))
+      (when (match-end 3)
+	(let ((beg (match-beginning 3))
+	      (end (TeX-find-closing-brace
+		    ;; Don't match groups spanning more than one line
+		    ;; in order to avoid visually wrong indentation in
+		    ;; subsequent lines.
+		    nil (line-end-position))))
+	  (store-match-data (if end
+				(list (match-beginning 0) end beg end)
+			      (list beg beg beg beg))))))
     t))
 
 ;; Copy and adaption of `tex-font-lock-suscript' from tex-mode.el in
