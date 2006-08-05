@@ -282,63 +282,64 @@ variable `font-latex-fontify-sectioning'." num)
       "appendix" "displaybreak" "allowdisplaybreaks" "include")
      'font-latex-warning-face 1 noarg)
     ("variable"
-     (("setlength" "{}{}") ("settowidth" "{}{}") ("setcounter" "{}{}")
-      ("addtolength" "{}{}") ("addtocounter" "{}{}"))
+     (("setlength" "{} {}") ("settowidth" "{} {}") ("setcounter" "{} {}")
+      ("addtolength" "{} {}") ("addtocounter" "{} {}"))
      'font-lock-variable-name-face 2 command)
     ("reference"
-     (("nocite" "{}") ("cite" "[]{}") ("label" "{}") ("pageref" "{}")
+     (("nocite" "{}") ("cite" "[] {}") ("label" "{}") ("pageref" "{}")
       ("vref" "{}") ("eqref" "{}") ("ref" "{}") ("include" "{}")
       ("input" "{}") ("bibliography" "{}") ("index" "{}") ("glossary" "{}")
-      ("footnote" "[]{}") ("footnotemark" "[]") ("footnotetext" "[]{}"))
+      ("footnote" "[] {}") ("footnotemark" "[]") ("footnotetext" "[] {}"))
      'font-lock-constant-face 2 command)
     ("function"
      (("begin" "{}") ("end" "{}") ("pagenumbering" "{}")
       ("thispagestyle" "{}") ("pagestyle" "{}") ("nofiles" "")
-      ("includeonly" "{}") ("bibliographystyle" "{}") ("documentstyle" "[]{}")
-      ("documentclass" "[]{}") ("newenvironment" "*{}[][]{}{}")
-      ("newcommand" "*{}[][]{}") ("newlength" "{}") ("newtheorem" "{}[]{}[]")
-      ("newcounter" "{}[]") ("renewenvironment" "*{}[]{}{}")
-      ("renewcommand" "*{}[][]{}") ("renewtheorem" "{}[]{}[]")
-      ("usepackage" "[]{}") ("fbox" "{}") ("mbox" "{}") ("sbox" "{}")
-      ("vspace" "*{}") ("hspace" "*{}") ("thinspace" "") ("negthinspace" "")
+      ("includeonly" "{}") ("bibliographystyle" "{}") ("documentstyle" "[] {}")
+      ("documentclass" "[] {}") ("newenvironment" "* {} [] [] {} {}")
+      ("newcommand" "* {}|\\ [] [] {}") ("newlength" "{}")
+      ("newtheorem" "{} [] {} []")
+      ("newcounter" "{} []") ("renewenvironment" "* {} [] {} {}")
+      ("renewcommand" "* {} [] [] {}") ("renewtheorem" "{} [] {} []")
+      ("usepackage" "[] {}") ("fbox" "{}") ("mbox" "{}") ("sbox" "{}")
+      ("vspace" "* {}") ("hspace" "* {}") ("thinspace" "") ("negthinspace" "")
       ;; XXX: Should macros without arguments rather be listed in a
       ;; separate category with 'noarg instead of 'command handling?
       ("enspace" "") ("enskip" "") ("quad" "") ("qquad" "") ("nonumber" "")
       ("centering" "") ("TeX" "") ("LaTeX" ""))
      'font-lock-function-name-face 2 command)
     ("sectioning-0"
-     (("part" "*[]{}"))
+     (("part" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-0-face)
      2 command)
     ("sectioning-1"
-     (("chapter" "*[]{}"))
+     (("chapter" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-1-face)
      2 command)
     ("sectioning-2"
-     (("section" "*[]{}"))
+     (("section" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-2-face)
      2 command)
     ("sectioning-3"
-     (("subsection" "*[]{}"))
+     (("subsection" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-3-face)
      2 command)
     ("sectioning-4"
-     (("subsubsection" "*[]{}"))
+     (("subsubsection" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-4-face)
      2 command)
     ("sectioning-5"
-     (("paragraph" "*[]{}") ("subparagraph" "*[]{}")
-      ("subsubparagraph" "*[]{}"))
+     (("paragraph" "* [] {}") ("subparagraph" "* [] {}")
+      ("subsubparagraph" "* [] {}"))
      (if (eq font-latex-fontify-sectioning 'color)
 	 'font-lock-type-face
        'font-latex-sectioning-5-face)
@@ -346,7 +347,7 @@ variable `font-latex-fontify-sectioning'." num)
     ("slide-title" () 'font-latex-slide-title-face 2 command)
     ("textual"
      (("item" "[]") ("title" "{}") ("author" "{}") ("date" "{}")
-      ("thanks" "{}") ("address" "{}") ("caption" "[]{}")
+      ("thanks" "{}") ("address" "{}") ("caption" "[] {}")
       ("textsuperscript" "{}"))
      'font-lock-type-face 2 command)
     ("bold-command"
@@ -1291,67 +1292,144 @@ Returns nil if none of KEYWORDS is found."
       (unless (font-latex-faces-present-p '(font-lock-comment-face
 					    font-latex-verbatim-face)
 					  (match-beginning 0))
-	(let ((beg (match-beginning 0))
-	      end		   ; Used for multiline text property.
-	      match-data
-	      (spec (cadr (assoc (match-string 1) keywords)))
-	      (parse-sexp-ignore-comments t)) ; scan-sexps ignores comments
+	(let* ((beg (match-beginning 0))
+	       end		   ; Used for multiline text property.
+	       match-data
+	       (spec-string (cadr (assoc (match-string 1) keywords)))
+	       (spec-list (when spec-string
+			    (save-match-data
+			      ;; Create a list from space-separated specs.
+			      (split-string spec-string))))
+	       (parse-sexp-ignore-comments t)) ; scan-sexps ignores comments
 	  (add-to-list 'match-data beg)
 	  (goto-char (match-end 0))
-	  (when (and (> (length spec) 0)
-		     (string= (substring spec 0 1) "*"))
-	    (setq spec (substring spec 1))
+	  ;; Check for starred macro if first spec is an asterisk.
+	  (when (string= (car spec-list) "*")
+	    (setq spec-list (cdr spec-list))
 	    (skip-chars-forward "*" (1+ (point))))
+	  ;; Add current point to match data and use keyword face for
+	  ;; region from start to point.
 	  (add-to-list 'match-data (point) t)
 	  (add-to-list 'font-latex-matched-faces 'font-lock-keyword-face)
 	  (setq end (point))
-	  (while (and (not (eobp)) (font-latex-forward-comment)))
 	  (catch 'break
-	    (while (> (length spec) 0)
-	      (let ((opening-tag (string-to-char (substring spec 0 1)))
-		    (closing-tag (string-to-char (substring spec 1 2)))
-		    match-beg)
-		(setq spec (substring spec 2))
-		(while (and (not (eobp)) (font-latex-forward-comment)))
-		(if (eq opening-tag ?\{)
-		    ;; Mandatory arguments {...}
-		    (if (eq (following-char) opening-tag)
-			(progn
-			  (setq match-beg (point))
-			  (if (font-latex-find-matching-close opening-tag
-							      closing-tag)
-			      (progn
-				(nconc match-data (list (1+ match-beg)
-							(1- (point))))
-				(nconc font-latex-matched-faces (list face))
-				(setq end (max end (1- (point)))))
-			    (nconc match-data (list match-beg (1+ match-beg)))
-			    (nconc font-latex-matched-faces
-				   (list 'font-latex-warning-face))
-			    (throw 'break nil)))
-		      ;; Add the warning face at the front of the list because
-		      ;; the matcher uses 'append and the face would otherwise
-		      ;; be overridden by the keyword face.  (Alternatively
-		      ;; the start of the keyword face could be adjusted.)
+	    ;; Walk the list of specs.
+	    (dolist (spec spec-list)
+	      (while (and (not (eobp)) (font-latex-forward-comment)))
+	      ;; Create list of alternatives for current token to be matched.
+	      (setq spec (split-string spec "|"))
+	      ;; Was more than one alternative specified?
+	      (if (> (length spec) 1)
+		  (let (found)
+		    ;; Walk the list of alternatives.
+		    (dolist (elt spec)
+		      (let ((opening-tag (string-to-char (substring elt 0 1)))
+			    (next-char (char-after)))
+			(cond
+			 ;; Mandatory arguments {...}
+			 ((and (eq opening-tag ?{)
+			       (eq next-char ?{))
+			  (let ((closing-tag (string-to-char
+					      (substring elt 1 2))))
+			    (font-latex-match-mandatory-arg opening-tag
+							    closing-tag
+							    'match-beg
+							    'match-data
+							    'end
+							    'found)))
+			 ;; Macros \foo
+			 ((and (eq opening-tag ?\\)
+			       (eq next-char ?\\))
+			  (nconc match-data
+				 (list (point)
+				       (progn
+					 (forward-char)
+					 (if (zerop (skip-chars-forward
+						     "A-Za-z@"))
+					     (forward-char) ; Single-char macro.
+					   (skip-chars-forward "*"))
+					 (point))))
+			  (nconc font-latex-matched-faces (list face))
+			  (setq found t)))))
+		    (unless found
 		      (setq match-data (append (list beg (1+ beg)) match-data))
-		      (push 'font-latex-warning-face font-latex-matched-faces))
-		  ;; Optional arguments [...] and others
-		  (when (eq (following-char) opening-tag)
-		    (setq match-beg (point))
-		    (if (font-latex-find-matching-close opening-tag closing-tag)
-			(progn
-			  (nconc match-data (list (1+ match-beg) (1- (point))))
-			  (nconc font-latex-matched-faces
-				 (list 'font-lock-variable-name-face))
-			  (setq end (max end (1- (point)))))
-		      (nconc match-data (list match-beg (1+ match-beg)))
-		      (nconc font-latex-matched-faces
-			     (list 'font-latex-warning-face))
-		      (throw 'break nil))
-		    (while (and (not (eobp)) (font-latex-forward-comment))))))))
+		      (push 'font-latex-warning-face font-latex-matched-faces)))
+		;; ELSE: Only one alternative specified.
+		(setq spec (car spec))
+		(let ((opening-tag (string-to-char (substring spec 0 1)))
+		      (closing-tag (string-to-char (substring spec 1 2)))
+		      match-beg)
+		  (while (and (not (eobp)) (font-latex-forward-comment)))
+		  (if (eq opening-tag ?\{)
+		      ;; Mandatory arguments {...}
+		      (if (eq (following-char) opening-tag)
+			  (progn
+			    (font-latex-match-mandatory-arg opening-tag
+							    closing-tag
+							    'match-beg
+							    'match-data
+							    'end))
+			;; Add the warning face at the front of the list because
+			;; the matcher uses 'append and the face would otherwise
+			;; be overridden by the keyword face.  (Alternatively
+			;; the start of the keyword face could be adjusted.)
+			(setq match-data (append (list beg (1+ beg))
+						 match-data))
+			(push 'font-latex-warning-face
+			      font-latex-matched-faces))
+		    ;; Optional arguments [...] and others
+		    (when (eq (following-char) opening-tag)
+		      (setq match-beg (point))
+		      (if (font-latex-find-matching-close opening-tag
+							  closing-tag)
+			  (progn
+			    (nconc match-data
+				   (list (1+ match-beg) (1- (point))))
+			    (nconc font-latex-matched-faces
+				   (list 'font-lock-variable-name-face))
+			    (setq end (max end (1- (point)))))
+			(nconc match-data (list match-beg (1+ match-beg)))
+			(nconc font-latex-matched-faces
+			       (list 'font-latex-warning-face))
+			(throw 'break nil))
+		      (while (and (not (eobp))
+				  (font-latex-forward-comment)))))))))
 	  (font-latex-put-multiline-property-maybe beg end)
 	  (store-match-data match-data)
 	  (throw 'match t))))))
+
+(defun font-latex-match-mandatory-arg (in-opening-tag
+				       in-closing-tag
+				       out-match-beg
+				       out-match-data
+				       out-end
+				       &optional out-found)
+  "Internal function for matching a mandatory argument.
+The function will set `out-match-beg', `out-match-data',
+`out-end' and `out-found' to values expected by the respective
+variables without the out- prefix in
+`font-latex-match-command-with-arguments'.  The out- arguments
+therefore have to be symbol names.
+
+The arguments `in-opening-tag' and `in-closing-tag' are input
+variables and have to be passed as normal values.
+
+In case no closing brace is found the function will throw a
+'break symbol."
+  (set out-match-beg (point))
+  (if (font-latex-find-matching-close in-opening-tag in-closing-tag)
+      (progn
+	(nconc (symbol-value out-match-data)
+	       (list (1+ (symbol-value out-match-beg)) (1- (point))))
+	(nconc font-latex-matched-faces (list face))
+	(set out-end (max (symbol-value out-end) (1- (point))))
+	(when out-found
+	  (set out-found t)))
+    (nconc (symbol-value out-match-data)
+	   (list (symbol-value out-match-beg)
+		 (1+ (symbol-value out-match-beg))))
+    (nconc font-latex-matched-faces (list 'font-latex-warning-face))
+    (throw 'break nil)))
 
 (defun font-latex-extend-region-backwards-command-with-args (beg end)
   "Extend region backwards if necessary for a multiline construct to fit in."
