@@ -1,0 +1,25 @@
+2007-02-07  Ralf Angeli  <angeli@caeruleus.net>
+
+	Create `reftex' module.
+
+	* CHANGES: New file.  Taken from RefTeX 4.31.
+
+	* COPYING: New file.  Taken from RefTeX 4.31.
+
+	* INSTALL: New file.  Taken from RefTeX 4.31.
+
+	* Makefile: New file.  Taken from RefTeX 4.31.
+
+	* README: New file.  Taken from RefTeX 4.31.
+
+	* lisp/lpath.el: New file.  Taken from RefTeX 4.31.
+
+	* ChangeLog: New file.
+
+;; Local Variables:
+;; coding: iso-8859-1
+;; End:
+
+    Copyright (C) 2007 Free Software Foundation, Inc.
+  Copying and distribution of this file, with or without modification,
+  are permitted provided the copyright notice and this notice are preserved.
