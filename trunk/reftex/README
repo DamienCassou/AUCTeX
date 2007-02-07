@@ -1,0 +1,41 @@
+This is the README file of the RefTeX distribution, version 4.31 
+
+Your kit should contain the following files:
+
+README             This file
+INSTALL            A brief installation guide
+NUTSHELL           A 3-page summary of how to use RefTeX
+CHANGES            The package history
+COPYING            The GNU General Public License
+Makefile           The Makefile to compile and install RefTeX
+reftex.texinfo     The TeX-Info file containing the documentation
+lpath.el           A file needed to compile the lisp files
+
+reftex.el          The basic file with the parser and the mode definitions
+reftex-auc.el      The AUCTeX interface.
+reftex-cite.el     Code for making citations.
+reftex-global.el   Actions on entire multifile documents.
+reftex-index.el    Code to support the Index.
+reftex-parse.el    RefTeX's parser for LaTeX files.
+reftex-ref.el      Code to create and reference labels.
+reftex-sel.el      The selection modes.
+reftex-toc.el      The Table of Contents mode.
+reftex-vars.el     All user variables (defcustom forms).
+reftex-dcr.el      Code to display cross references and citations.
+
+reftex             \
+reftex-1            \
+reftex-2             >  The info files (online documentation)
+reftex-3            /
+reftex-4           /
+reftex-5          /
+
+RefTeX is part of Emacs (version 20.2 and later) and is distributed as
+one of the XEmacs packages.  If you use an earlier version of Emacs,
+this kit can be used to install RefTeX.
+
+The most recent version of RefTeX is available at
+
+    http://www.strw.leidenuniv.nl/~dominik/Tools
+
+
