@@ -1,3 +1,41 @@
+2007-02-17  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-auc.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-cite.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-dcr.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-global.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-index.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-parse.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-ref.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-sel.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-toc.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-vars.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* doc/reftex.texi: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
 2007-02-07  Ralf Angeli  <angeli@caeruleus.net>
 
 	Create `reftex' module.
