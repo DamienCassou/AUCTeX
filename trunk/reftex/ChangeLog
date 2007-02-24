@@ -1,3 +1,16 @@
+2007-02-24  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile: Make building and installing possible.  (Necessary due
+	to different directory and file layout in repository compared to
+	original tar ball.)
+
+	* lisp/Makefile: New file.
+
+	* doc/Makefile: New file.
+
+	* doc/reftex.texi: Set correct filename for standalone
+	distribution.
+
 2007-02-17  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-auc.el: New file.  Copied (including change history)
