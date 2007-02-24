@@ -1,10 +1,30 @@
-# Makefile - for the RefTeX distribution.
-#
-# Maintainer: Carsten Dominik <dominik@science.uva.nl>
-# Version: 4.31 
-#
+# Makefile for the RefTeX distribution.
+
+# Maintainer: auctex-devel@gnu.org
+
+# Copyright (C) 2007 Free Software Foundation, Inc.
+
+# This file is part of RefTeX.
+
+# RefTeX is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# RefTeX is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with RefTeX; see the file COPYING.  If not, write to the Free
+# Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301, USA.
+
+# Commentary:
+
 # To install RefTeX, edit the Makefile, type `make', then `make install'.
-# To create the postscript documentation file reftex.ps, type `make ps'.
+# To create the PostScript documentation file reftex.ps, type `make ps'.
 # To create the HTML documentation file reftex.html, type `make html'.
 
 ##----------------------------------------------------------------------
@@ -15,69 +35,72 @@
 prefix=/usr/local
 
 # Where info files go.
-infodir = $(prefix)/info
+infodir=$(prefix)/share/info
 
 # Where local lisp files go.
-lispdir = $(prefix)/share/emacs/site-lisp
+lispdir=$(prefix)/share/emacs/site-lisp/reftex
 
 # Name of your emacs binary
-EMACS=xemacs
+EMACS=emacs
 
 ##----------------------------------------------------------------------
 ## YOU MAY NEED TO EDIT THESE
 ##----------------------------------------------------------------------
 
-# Using emacs in batch mode.
-BATCH=$(EMACS) -batch -q -l lpath.el
-
-# Specify the byte-compiler for compiling RefTeX files
-ELC= $(BATCH) -f batch-byte-compile
-
-# How to make a dvi file from a texinfo file
-TEXI2DVI = texi2dvi
-
-# How to make a pdf file from a texinfo file
-TEXI2PDF = texi2dvi --pdf
-
 # How to create directories
-MKDIR = mkdir -p
-
-# How to make a postscript file from a dvi file
-DVIPS = dvips
-
-# How to create the info files from the texinfo file
-MAKEINFO = makeinfo
-
-# How to create the HTML file
-#TEXI2HTML = texi2html -monolithic -number
-TEXI2HTML = makeinfo --no-split --html --number-sections
+MKDIR=mkdir -p
 
 # How to move the byte compiled files to their destination.  
-MV = mv
+MV=mv
 
 # How to copy the lisp files to their distination.
-CP = cp -p
+CP=cp -p
 
 ##----------------------------------------------------------------------
 ##  BELOW THIS LINE ON YOUR OWN RISK!
 ##----------------------------------------------------------------------
 
+SHELL=/bin/sh
+
+.SUFFIXES: .el .elc .texi
+
+.PHONY: all install lisp info dvi ps pdf html
+
+all: lisp
+
+lisp:
+	cd lisp && make EMACS="$(EMACS)" lisp
+
+install:
+	cd lisp && make CP="$(CP)" MKDIR="$(MKDIR)" lispdir="$(lispdir)" install
+	cd doc && make CP="$(CP)" MKDIR="$(MKDIR)" infodir="$(infodir)" install
+
+info:
+	cd doc && make info
+
+dvi:
+	cd doc && make dvi
+
+ps:
+	cd doc && make ps
+
+pdf:
+	cd doc && make pdf
+
+html:
+	cd doc && make ps
+
+
+# =====================================================================
+# Not changed from original import below this point.
+
 # The following variables need to be defined by the maintainer
-LISPFILES  = reftex-vars.el reftex.el reftex-auc.el reftex-cite.el\
-             reftex-global.el reftex-parse.el reftex-ref.el\
-             reftex-sel.el reftex-toc.el reftex-dcr.el reftex-index.el
-ELCFILES   = $(LISPFILES:.el=.elc)
-TEXIFILES  = reftex.texi
-INFOFILES  = reftex
 FTPDIR     = /home/dominik/public_html/Tools/reftex
 HTMLDIR    = /home/dominik/public_html
 
 # An alternative installation point
 MY_INFODIR = /home/strw/dominik/lib/emacs/info
 MY_LISPDIR = /home/strw/dominik/lib/emacs/lisp
-
-.SUFFIXES: .el .elc .texi
-SHELL = /bin/sh
 
 DISTFILES=  README INSTALL CHANGES COPYING Makefile\
 	    $(LISPFILES) reftex.texi $(INFOFILES) lpath.el
@@ -86,62 +109,8 @@ XEMACSDISTFILES= CHANGES COPYING README \
 	$(LISPFILES) $(TEXIFILES) Makefile.xemacs-package \
 	package-info.in
 
-EMACSDISTFILES= $(LISPFILES) $(TEXIFILES) ChangeLog
-
-all:	lisp
-
-install: install-lisp install-info
-
-lisp:	$(LISPFILES)
-	$(ELC) $(LISPFILES)
-
-compile: $(LISPFILES)
-	$(ELC) $(LISPFILES)
-
-info:	$(INFOFILES)
-
-dvi:    reftex.dvi
-
-view:   
-	xdvi reftex.dvi&
-
-ps:	reftex.ps
-
-pdf:	reftex.pdf
-
-html:	reftex.html
-
-nutshell: reftex.nutshell
-
-install-lisp: $(LISPFILES) $(ELCFILES)
-	if [ ! -d $(lispdir) ]; then $(MKDIR) $(lispdir); else true; fi ;
-	$(CP) $(LISPFILES) $(lispdir)
-	$(CP) $(ELCFILES)  $(lispdir)
-
-install-info: $(INFOFILES)
-	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
-	$(CP) $(INFOFILES) $(infodir)
-
 reftex.elc: reftex.el
 	$(ELC) reftex.el
-
-reftex: reftex.texi
-	$(MAKEINFO) --no-split reftex.texi
-
-reftex.dvi: reftex.texi
-	$(TEXI2DVI) reftex.texi
-
-reftex.ps: reftex.dvi
-	$(DVIPS) -o reftex.ps reftex.dvi
-
-reftex.pdf: reftex.texi
-	$(TEXI2PDF) reftex.texi
-
-reftex.html: reftex.texi
-	$(TEXI2HTML) reftex.texi
-
-reftex.nutshell: reftex.html
-	perl nutshell.pl reftex.html > reftex.nutshell
 
 wcompile:
 	xemacs -batch -q -l lpath-warn.el -f batch-byte-compile $(LISPFILES)
