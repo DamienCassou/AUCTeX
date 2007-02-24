@@ -28,7 +28,7 @@ LISPFILES=reftex-vars.el reftex.el reftex-auc.el reftex-cite.el\
 	reftex-sel.el reftex-toc.el reftex-dcr.el reftex-index.el
 ELCFILES=$(LISPFILES:.el=.elc)
 
-.PHONY: all install
+.PHONY: all lisp install
 
 all: lisp
 
