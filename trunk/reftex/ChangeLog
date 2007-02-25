@@ -1,5 +1,11 @@
 2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-index.el (reftex-index-phrases-syntax-table): New
+	variable.  Give ?\" punctuation syntax as it usually is not used
+	as string quote in TeX-related modes and may occur unmatched.  The
+	change also prevents fontification of quoted content.
+	(reftex-index-phrases-mode): Use it.
+
 	* lisp/reftex-cite.el (reftex-parse-bibtex-entry): Match fields
 	containing hyphens (besides word constituents).
 
