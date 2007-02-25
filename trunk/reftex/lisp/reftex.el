@@ -2136,25 +2136,88 @@ Works on both Emacs and XEmacs."
       (setq list (cdr list)))
     (nreverse rtn)))
 
-(defun reftex-uniquify (list)
-  ;; Return a list of all elements in LIST, but each only once, keeping order
-  (let (new elm)
-    (while list
-      (setq elm (pop list))
-      (unless (member elm new)
-        (push elm new)))
-    (nreverse new)))
+(defun reftex-uniquify (list &optional sort)
+  ;; Return a list of all strings in LIST, but each only once, keeping order
+  ;; unless SORT is set (faster!).
+  (setq list (copy-sequence list))
+  (if sort
+      (progn
+	(setq list (sort list 'string<))
+	(let ((p list))
+	  (while (cdr p)
+	    (if (string= (car p) (car (cdr p)))
+		(setcdr p (cdr (cdr p)))
+	      (setq p (cdr p)))))
+	list)
+    (let ((p list) lst elt)
+      ;; push all sublists into lst in reverse(!) order
+      (while p
+	(push p lst)
+	(setq p (cdr p)))
+      ;; sort all sublists
+      (setq lst (sort lst (lambda (x1 x2) (string< (car x1) (car x2)))))
+      (while (cdr lst)
+	(setq elt (car (car lst)))
+	;; for equal elements in the sorted sublist, replace the
+	;; last(!) original list member with nil
+	(when (string= elt (car (cadr lst)))
+	  (setcar (pop lst) nil)
+	  (while (and (cdr lst) (string= elt (car (cadr lst))))
+	    (setcar (pop lst) nil)))
+	(pop lst)))
+    ;; weed out all nils and return.
+    (delq nil list)))
 
-(defun reftex-uniquify-by-car (alist &optional keep-list)
+(defun reftex-uniquify-by-car (alist &optional keep-list sort)
   ;; Return a list of all elements in ALIST, but each car only once.
   ;; Elements of KEEP-LIST are not removed even if duplicate.
-  (let (new elm)
-    (while alist
-      (setq elm (pop alist))
-      (if (or (member (car elm) keep-list)
-              (not (assoc (car elm) new)))
-          (push elm new)))
-    (nreverse new)))
+  ;; The order is kept unless SORT is set (faster!).
+  (setq keep-list (sort (copy-sequence keep-list) #'string<)
+	alist (copy-sequence alist))
+  (if sort
+      (let (lst elt)
+	(setq alist (sort alist (lambda(a b) (string< (car a) (car b)))))
+	(setq lst alist)
+	(while (cdr lst)
+	  (setq elt (car (car lst)))
+	  (when (string= elt (car (cadr lst)))
+	    (while (and keep-list (string< (car keep-list) elt))
+	      (pop keep-list))
+	    (if (and keep-list (string= elt (car keep-list)))
+		(progn
+		  (pop lst)
+		  (while (and (cdr lst)
+			      (string= elt (car (cadr lst))))
+		    (pop lst)))
+	      (setcdr lst (cdr (cdr lst)))
+	      (while (and (cdr lst)
+			  (string= elt (car (cadr lst))))
+		(setcdr lst (cdr (cdr lst))))))
+	  (pop lst))
+	alist)
+    (let ((p alist) lst elt)
+      (while p
+	(push p lst)
+	(setq p (cdr p)))
+      (setq lst (sort lst (lambda(a b) (string< (car (car a))
+						(car (car b))))))
+      (while (cdr lst)
+	(setq elt (car (car (car lst))))
+	(when (string= elt (car (car (cadr lst))))
+	  (while (and keep-list (string< (car keep-list) elt))
+	    (pop keep-list))
+	  (if (and keep-list (string= elt (car keep-list)))
+	      (progn
+		(pop lst)
+		(while (and (cdr lst)
+			    (string= elt (car (car (cadr lst)))))
+		  (pop lst)))
+	    (setcar (pop lst) nil)
+	    (while (and (cdr lst)
+			(string= elt (car (car (cadr lst)))))
+	      (setcar (pop lst) nil))))
+	(pop lst)))
+    (delq nil alist)))
 
 (defun reftex-abbreviate-title (string)
   (reftex-convert-string string "[-~ \t\n\r,;]" nil t t
