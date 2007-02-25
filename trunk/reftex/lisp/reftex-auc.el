@@ -72,7 +72,8 @@ What is being used depends upon `reftex-plug-into-AUCTeX'."
 			   " (default none): "))
       (setq items (multi-prompt "," t prompt (LaTeX-bibitem-list)))))
     (apply 'LaTeX-add-bibitems items)
-    (TeX-argument-insert (mapconcat 'identity items ",") optional)))
+    (TeX-argument-insert (mapconcat 'identity items reftex-cite-key-separator)
+			 optional)))
 
 
 (defun reftex-arg-index-tag (optional &optional prompt &rest args)
