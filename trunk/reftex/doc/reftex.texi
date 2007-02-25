@@ -4504,6 +4504,14 @@ The keymap which is active in the citation-key selection process
 (@pxref{Creating Citations}).
 @end deffn
 
+@defopt reftex-cite-key-separator
+String used to separate several keys in a single @samp{\\cite} macro.
+Per default this is @samp{","} but if you often have to deal with a lot
+of entries and need to break the macro across several lines you might
+want to change it to @samp{", "}.
+@end defopt
+
+
 @node Options (Index Support), Options (Viewing Cross-References), Options (Creating Citations),  Options
 @section Index Support
 @cindex Options, Index support
