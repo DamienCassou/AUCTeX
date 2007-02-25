@@ -1189,6 +1189,11 @@ should return the string to insert into the buffer."
   :group 'reftex-citation-support
   :type 'hook)
 
+(defcustom reftex-cite-key-separator ","
+  "String to be used for separating several keys in a \\cite macro."
+  :group 'reftex-citation-support
+  :type 'string)
+
 ;; Index Support Configuration
 
 (defgroup reftex-index-support nil
