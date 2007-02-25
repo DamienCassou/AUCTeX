@@ -1184,7 +1184,11 @@ This gets refreshed in every phrases command.")
   "Font lock defaults for reftex-index-phrases-mode.")
 (defvar reftex-index-phrases-map (make-sparse-keymap)
   "Keymap used for *toc* buffer.")
-
+(defvar reftex-index-phrases-syntax-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\" "." table)
+    table)
+  "Syntax table for RefTeX Index Phrases mode.")
 
 (defun reftex-index-phrase-selection-or-word (arg)
   "Add current selection or word at point to the phrases buffer.
@@ -1314,6 +1318,7 @@ Here are all local bindings.
   (kill-all-local-variables)
   (setq major-mode 'reftex-index-phrases-mode
         mode-name "Phrases")
+  (set-syntax-table reftex-index-phrases-syntax-table)
   (use-local-map reftex-index-phrases-map)
   (set (make-local-variable 'font-lock-defaults) 
        reftex-index-phrases-font-lock-defaults)
