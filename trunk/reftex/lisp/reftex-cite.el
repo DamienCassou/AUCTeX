@@ -471,7 +471,8 @@
                   (list
                    (cons "&type" (downcase (reftex-match-string 1)))
                    (cons "&key"  (reftex-match-string 2)))))
-        (while (re-search-forward "\\(\\w+\\)[ \t\n\r]*=[ \t\n\r]*" nil t)
+        (while (re-search-forward "\\(\\(:?\\w\\|-\\)+\\)[ \t\n\r]*=[ \t\n\r]*"
+				  nil t)
           (setq key (downcase (reftex-match-string 1)))
           (cond
            ((= (following-char) ?{)
