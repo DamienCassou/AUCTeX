@@ -4,7 +4,7 @@
 ;;   2006, 2007 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
-;; Version: 4.31
+;; Maintainer: auctex-devel@gnu.org
 
 ;; This file is part of GNU Emacs.
 
@@ -727,7 +727,7 @@ While entering the regexp, completion on knows citation keys is possible.
         (forward-char 1)))
     
     ;; Return the citation key
-    (car (car selected-entries))))
+    (mapcar 'car selected-entries)))
 
 (defun reftex-figure-out-cite-format (arg &optional no-insert format-key)
   ;; Check if there is already a cite command at point and change cite format
