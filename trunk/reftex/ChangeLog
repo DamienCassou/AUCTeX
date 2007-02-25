@@ -1,3 +1,11 @@
+2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el (reftex-do-citation): Return all keys, not
+	just the first one.
+
+	* lisp/reftex-auc.el (reftex-arg-cite): Correctly handle new
+	value type returned by `reftex-citation'.
+
 2007-02-24  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/Makefile (.PHONY): Add `lisp' target.
