@@ -656,7 +656,8 @@ While entering the regexp, completion on knows citation keys is possible.
       ;; All keys go into a single command - we need to trick a little
       ;; FIXME: Unfortunately, this meens that commenting does not work right.
       (pop selected-entries)
-      (let ((concat-keys (mapconcat 'car selected-entries ",")))
+      (let ((concat-keys (mapconcat 'car selected-entries
+				    reftex-cite-key-separator)))
         (setq insert-entries 
               (list (list concat-keys (cons "&key" concat-keys))))))
     
@@ -746,9 +747,13 @@ While entering the regexp, completion on knows citation keys is possible.
       (if (or (not arg) (not (listp arg)))
           (setq format
                 (concat
-                 (if (member (preceding-char) '(?\{ ?,)) "" ",")
+                 (if (member (preceding-char) '(?\{ ?,))
+		     ""
+		   reftex-cite-key-separator)
                  "%l"
-                 (if (member (following-char) '(?\} ?,)) "" ",")))
+                 (if (member (following-char) '(?\} ?,))
+		     ""
+		   reftex-cite-key-separator)))
         (setq format "%l")))
      (t
       ;; Figure out the correct format
