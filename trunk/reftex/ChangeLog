@@ -1,5 +1,16 @@
 2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-vars.el (reftex-cite-key-separator): New variable.
+
+	* lisp/reftex-auc.el (reftex-arg-cite): Use
+	`reftex-cite-key-separator'.
+
+	* lisp/reftex-cite.el (reftex-do-citation)
+	(reftex-figure-out-cite-format): Use `reftex-cite-key-separator'.
+
+	* doc/reftex.texi (Options (Creating Citations)): Document
+	`reftex-cite-key-separator'.
+
 	* lisp/reftex-cite.el (reftex-do-citation): Return all keys, not
 	just the first one.
 
