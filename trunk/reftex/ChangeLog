@@ -1,3 +1,10 @@
+2007-02-26  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-index.el (reftex-index-visit-phrases-buffer): Set
+	marker when visiting buffer.  This allows for returning from the
+	phrases file to the file one was just editing instead of the file
+	where the last phrases was added from.
+
 2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-index.el (reftex-index-phrases-syntax-table): New
