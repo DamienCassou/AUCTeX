@@ -1208,6 +1208,7 @@ You get a chance to edit the entry in the phrases buffer - finish with
   "Switch to the phrases buffer, initialize if empty."
   (interactive)
   (reftex-access-scan-info)
+  (set-marker reftex-index-return-marker (point))
   (let* ((master (reftex-TeX-master-file))
          (name (concat (file-name-sans-extension master)
                        reftex-index-phrase-file-extension)))
