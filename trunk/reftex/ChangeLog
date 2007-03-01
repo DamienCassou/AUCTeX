@@ -1,3 +1,16 @@
+2007-03-01  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/Makefile (MAKEINFO_PLAIN, DISTTEXTS): New variables.
+	(.PHONY): Add `dist' target.
+	(../CHANGES, dist): New targets.
+
+	* doc/reftex.texi (Changes): Merge content of section with content
+	of CHANGES files and move to doc/changes.texi.
+
+	* doc/changes.texi: New file.
+
+	* CHANGES: Remove.  Now generated from doc/changes.texi.
+
 2007-02-26  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-index.el (reftex-index-visit-phrases-buffer): Set
