@@ -24,11 +24,13 @@
 TEXI2DVI=texi2dvi
 TEXI2PDF=texi2dvi --pdf
 MAKEINFO=makeinfo
+MAKEINFO_PLAIN=-D rawfile --no-headers
 TEXI2HTML=makeinfo --no-split --html --number-sections
 DVIPS=dvips
 INSTALL_INFO=install-info
+DISTTEXTS=../CHANGES
 
-.PHONY: all info dvi ps pdf html install
+.PHONY: all info dvi ps pdf html install dist
 
 all: info
 
@@ -56,6 +58,11 @@ reftex.pdf: reftex.texi
 
 reftex.html: reftex.texi
 	$(TEXI2HTML) reftex.texi
+
+../CHANGES: changes.texi
+	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi --output $@
+
+dist: $(DISTTEXTS)
 
 install: reftex.info
 	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
