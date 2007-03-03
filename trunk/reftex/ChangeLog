@@ -1,5 +1,8 @@
 2007-03-03  Ralf Angeli  <angeli@caeruleus.net>
 
+	* Makefile (.PHONY): Add `dist' target.
+	(dist): New implementation.
+
 	* doc/Makefile (dist): Generate info file.
 
 2007-03-01  Ralf Angeli  <angeli@caeruleus.net>
