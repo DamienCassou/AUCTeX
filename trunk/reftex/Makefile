@@ -64,7 +64,7 @@ SHELL=/bin/sh
 
 .SUFFIXES: .el .elc .texi
 
-.PHONY: all install lisp info dvi ps pdf html
+.PHONY: all install lisp info dvi ps pdf html dist
 
 all: lisp
 
@@ -90,9 +90,26 @@ pdf:
 html:
 	cd doc && make ps
 
+# Call `make dist' either with `TAG=X.Y' or `TAG=YYYYMMDD'.  (You can
+# use `TAG=`date +%Y%m%d`' for automatic creation of the current date.)
+# Calling the `dist' target will create a subdirectory `reftex-$(TAG)'
+# with a clean checkout from CVS, generate info docs, and package
+# the directory in a gzipped tar file.
+dist:
+	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
+	rm -rf reftex-$(TAG)
+	mkdir reftex-$(TAG)
+	cvs export -d reftex-$(TAG) \
+          "`echo $(TAG) | sed -e '/^\([-0-9]*[0-9]\)[-a-z]*$$/s//-D \1T2359/' \
+                             -e '/[.]/{s/^/-r release_/;s/[.]/_/g}'`" reftex
+	cd reftex-$(TAG)/doc && make dist
+	chmod -R go-w+rX reftex-$(TAG)
+	tar -cf - --owner=root --group=root reftex-$(TAG) | \
+	  gzip --best > reftex-$(TAG).tar.gz
+
 
 # =====================================================================
-# Not changed from original import below this point.
+# From original import below this point.
 
 # The following variables need to be defined by the maintainer
 FTPDIR     = /home/dominik/public_html/Tools/reftex
@@ -154,26 +171,6 @@ xemacspatch:
 	(cd xemacs-reftex;cvs up)
 	-diff -c --exclude ChangeLog xemacs-reftex reftex-$(TAG) \
 		> xemacs-patch
-
-dist:
-	make distfile TAG=$(TAG)
-	cp reftex-$(TAG).tar.gz $(FTPDIR)
-	rm -f $(FTPDIR)/reftex.tar.gz
-	rm -f $(FTPDIR)/reftex-alpha.tar.gz
-	(cd $(FTPDIR); ln -s reftex-$(TAG).tar.gz reftex.tar.gz)
-	(cd $(FTPDIR); ln -s reftex-$(TAG).tar.gz reftex-alpha.tar.gz)
-	make ps
-	make pdf
-	make html
-	gtar zcvf reftex.info.tar.gz $(INFOFILES)
-	cp reftex.html $(HTMLDIR)/Tools/reftex/
-	cp reftex.pdf $(HTMLDIR)/Tools/reftex/
-	gzip -c reftex.ps > $(FTPDIR)/reftex.ps.gz
-	gzip -c reftex.texi > $(FTPDIR)/reftex.texi.gz
-	cp reftex.info.tar.gz $(FTPDIR)
-	cp CHANGES $(HTMLDIR)/Tools/reftex/
-	 #make nutshell
-	 #cp reftex.nutshell $(HTMLDIR)/Tools/reftex/reftex.nutshell
 
 alphadist:
 	make distfile TAG=$(TAG)
