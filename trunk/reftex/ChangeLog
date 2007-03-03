@@ -1,5 +1,17 @@
 2007-03-03  Ralf Angeli  <angeli@caeruleus.net>
 
+	* Makefile (.PHONY): Add `clean' and `maintainer-clean'.
+	(html): Call `html' target in `doc' directory.
+	(clean): Adapt to new directory structure.
+	(maintainer-clean): New target.
+	(veryclean, linkelc, unlinkelc, .el.elc): Remove targets.
+
+	* doc/Makefile (.PHONY): Add `clean' and `maintainer-clean'.
+	(clean, maintainer-clean): New targets.
+
+	* lisp/Makefile (.PHONY): Add `clean'.
+	(clean): New target.
+
 	* Makefile (.PHONY): Add `dist' target.
 	(dist): New implementation.
 
