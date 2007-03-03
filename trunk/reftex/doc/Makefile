@@ -62,9 +62,9 @@ reftex.html: reftex.texi
 ../CHANGES: changes.texi
 	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi --output $@
 
-dist: $(DISTTEXTS)
-
 install: reftex.info
 	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
 	$(CP) reftex.info $(infodir)
 	-$(INSTALL_INFO) --info-dir=$(infodir) reftex.info
+
+dist: $(DISTTEXTS) reftex.info
