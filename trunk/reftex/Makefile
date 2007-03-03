@@ -64,7 +64,7 @@ SHELL=/bin/sh
 
 .SUFFIXES: .el .elc .texi
 
-.PHONY: all install lisp info dvi ps pdf html dist
+.PHONY: all install lisp info dvi ps pdf html dist clean maintainer-clean
 
 all: lisp
 
@@ -88,7 +88,15 @@ pdf:
 	cd doc && make pdf
 
 html:
-	cd doc && make ps
+	cd doc && make html
+
+clean:
+	cd lisp && make clean
+	cd doc && make clean
+
+maintainer-clean:
+	cd lisp && make clean
+	cd doc && make maintainer-clean
 
 # Call `make dist' either with `TAG=X.Y' or `TAG=YYYYMMDD'.  (You can
 # use `TAG=`date +%Y%m%d`' for automatic creation of the current date.)
@@ -225,30 +233,3 @@ package_xemacs:
 	cp $(INFOFILES) distributions/XEmacs/package/info/reftex
 	cp $(TEXIFILES) distributions/XEmacs/package/man
 	(cd distributions/XEmacs/package/;ls -1 > pgkinfo/MANIFEST.reftex)
-
-clean:
-	rm -f $(ELCFILES)
-	rm -f *~ 
-	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.pg *.pgs
-	rm -f *.toc *.tp *.tps *.vr *.vrs *.log *.html *.ps
-
-veryclean:
-	rm -f $(LISPFILES) $(ELCFILES) REFTEX.elc
-	rm -f *~ reftex reftex-[1-9]
-	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.pg *.pgs
-	rm -f *.toc *.tp *.tps *.vr *.vrs *.log *.html *.ps
-	rm -f reftex-emacs.el reftex.el.orig reftex.texi.orig reftex.tar.gz
-	rm -f reftex.info.tar.gz reftex.nutshell *-patch-*
-	rm -f *.rel
-
-
-linkelc:
-	rm ../lisp/reftex*.elc
-	(cd ../lisp;ln -s ../reftex/reftex*.elc .)
-
-unlinkelc:
-	rm ../lisp/reftex*.elc
-
-.el.elc:
-	$(ELC) $<
-
