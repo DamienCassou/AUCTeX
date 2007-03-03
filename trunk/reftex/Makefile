@@ -25,7 +25,8 @@
 
 # To install RefTeX, edit the Makefile, type `make', then `make install'.
 # To create the PostScript documentation file reftex.ps, type `make ps'.
-# To create the HTML documentation file reftex.html, type `make html'.
+# Analogously you can use the targets `pdf', `html', or `dvi' to
+# generate documentation as PDF, HTML, or DVI file.
 
 ##----------------------------------------------------------------------
 ##  YOU MUST EDIT THE FOLLOWING LINES 
@@ -95,14 +96,19 @@ clean:
 	cd doc && make clean
 
 maintainer-clean:
+	@echo 'This command is intended for maintainers to use; it'
+	@echo 'deletes files that may need special tools to rebuild.'
 	cd lisp && make clean
 	cd doc && make maintainer-clean
 
 # Call `make dist' either with `TAG=X.Y' or `TAG=YYYYMMDD'.  (You can
-# use `TAG=`date +%Y%m%d`' for automatic creation of the current date.)
+# use `TAG=`date +%Y%m%d`' for automatic creation of the current
+# date.)  It is assumed that there is a `release_XY' tag in CVS if
+# `TAG=X.Y' is used.
+#
 # Calling the `dist' target will create a subdirectory `reftex-$(TAG)'
-# with a clean checkout from CVS, generate info docs, and package
-# the directory in a gzipped tar file.
+# with a clean checkout from CVS, generate info docs, and package the
+# directory in a gzipped tar file.
 dist:
 	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
 	rm -rf reftex-$(TAG)
@@ -114,122 +120,3 @@ dist:
 	chmod -R go-w+rX reftex-$(TAG)
 	tar -cf - --owner=root --group=root reftex-$(TAG) | \
 	  gzip --best > reftex-$(TAG).tar.gz
-
-
-# =====================================================================
-# From original import below this point.
-
-# The following variables need to be defined by the maintainer
-FTPDIR     = /home/dominik/public_html/Tools/reftex
-HTMLDIR    = /home/dominik/public_html
-
-# An alternative installation point
-MY_INFODIR = /home/strw/dominik/lib/emacs/info
-MY_LISPDIR = /home/strw/dominik/lib/emacs/lisp
-
-DISTFILES=  README INSTALL CHANGES COPYING Makefile\
-	    $(LISPFILES) reftex.texi $(INFOFILES) lpath.el
-
-XEMACSDISTFILES= CHANGES COPYING README \
-	$(LISPFILES) $(TEXIFILES) Makefile.xemacs-package \
-	package-info.in
-
-reftex.elc: reftex.el
-	$(ELC) reftex.el
-
-wcompile:
-	xemacs -batch -q -l lpath-warn.el -f batch-byte-compile $(LISPFILES)
-
-ecompile:
-	emacs -batch -q -l lpath-warn.el -f batch-byte-compile $(LISPFILES)
-
-ccompile:
-	xemacs -batch -q -l lpath-compatible.el -f batch-byte-compile $(LISPFILES)
-
-myinstall: $(LISPFILES) $(ELCFILES) $(INFOFILES)
-	if [ ! -d $(MY_LISPDIR) ]; then $(MKDIR) $(MY_LISPDIR); else true; fi ;
-	$(CP) $(LISPFILES) $(MY_LISPDIR)
-	$(CP) $(ELCFILES)  $(MY_LISPDIR)
-	if [ ! -d $(MY_INFODIR) ]; then $(MKDIR) $(MY_INFODIR); else true; fi ;
-	$(CP) $(INFOFILES) $(MY_INFODIR)
-
-distfile:
-	make info
-	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
-	rm -rf reftex-$(TAG)
-	$(MKDIR) reftex-$(TAG)
-	cp $(DISTFILES) reftex-$(TAG)/
-	perl -pi -e 's/\sVERSIONTAG\b/ $(TAG)/' reftex-$(TAG)/*
-	gtar zcvf reftex-$(TAG).tar.gz reftex-$(TAG)
-
-# Note: XTAG must be tag of the current XEmacs package.  The version
-#       number will be increased automatically by the XEmacs people.
-xemacsdistfile:
-	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
-	@if [ "X$(XTAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
-	rm -rf reftex-$(TAG)
-	mkdir reftex-$(TAG)
-	cp $(XEMACSDISTFILES) reftex-$(TAG)/
-	mv reftex-$(TAG)/Makefile.xemacs-package reftex-$(TAG)/Makefile
-	perl -pi -e 's/\sVERSIONTAG\b/ $(TAG)/' reftex-$(TAG)/*
-	perl -pi -e 's/\sXVERSIONTAG\b/ $(XTAG)/' reftex-$(TAG)/*
-
-xemacspatch:
-	make xemacsdistfile TAG=$(TAG) XTAG=$(XTAG)
-	(cd xemacs-reftex;cvs up)
-	-diff -c --exclude ChangeLog xemacs-reftex reftex-$(TAG) \
-		> xemacs-patch
-
-alphadist:
-	make distfile TAG=$(TAG)
-	cp reftex-$(TAG).tar.gz $(FTPDIR)
-	cp CHANGES $(HTMLDIR)/Tools/reftex/
-	rm -f $(FTPDIR)/reftex-alpha.tar.gz
-	(cd $(FTPDIR); ln -s reftex-$(TAG).tar.gz reftex-alpha.tar.gz)
-
-distfile_emacs:
-	rm -rf distributions/Emacs/reftex
-	$(MKDIR) distributions/Emacs/reftex
-	cp $(LISPFILES) reftex.texi etcNEWS distributions/Emacs/reftex
-submit_emacs:
-	make distfile_emacs
-	cp -r distributions/Emacs/reftex distributions/Emacs/reftex-submitted
-	cvs tag -F submit_emacs
-patch_emacs:
-	make distfile_emacs
-	cp -r distributions/Emacs/reftex distributions/Emacs/reftex-submitted
-	(cd distributions/Emacs; diff -c -r reftex.orig reftex>patch)
-	cvs tag -F submit_emacs
-accept_emacs:
-	cp -r distributions/Emacs/reftex-submitted distributions/Emacs/reftex.orig
-	cvs rtag -r submit_emacs -F accept_emacs
-
-distfile_xemacs:
-	rm -rf distributions/XEmacs/reftex
-	$(MKDIR) distributions/XEmacs/reftex
-	cp $(LISPFILES) reftex.texi etcNEWS distributions/XEmacs/reftex
-submit_xemacs:
-	make distfile_xemacs
-	cp -r distributions/XEmacs/reftex distributions/XEmacs/reftex-submitted
-	cvs tag -F submit_xemacs
-patch_xemacs:
-	make distfile_xemacs
-	cp -r distributions/XEmacs/reftex distributions/XEmacs/reftex-submitted
-	(cd distributions/XEmacs; diff -c -r reftex.orig reftex>patch)
-	cvs tag -F submit_xemacs
-accept_xemacs:
-	cp -r distributions/XEmacs/reftex-submitted distributions/XEmacs/reftex.orig
-	cvs rtag -r submit_xemacs -F accept_xemacs
-
-
-package_xemacs:
-	rm -rf distributions/XEmacs/package
-	$(MKDIR) distributions/XEmacs/package
-	$(MKDIR) distributions/XEmacs/package/lisp/reftex
-	$(MKDIR) distributions/XEmacs/package/info/reftex
-	$(MKDIR) distributions/XEmacs/package/pgkinfo
-	$(MKDIR) distributions/XEmacs/package/man
-	cp $(LISPFILES) $(ELCFILES) distributions/XEmacs/package/lisp/reftex
-	cp $(INFOFILES) distributions/XEmacs/package/info/reftex
-	cp $(TEXIFILES) distributions/XEmacs/package/man
-	(cd distributions/XEmacs/package/;ls -1 > pgkinfo/MANIFEST.reftex)
