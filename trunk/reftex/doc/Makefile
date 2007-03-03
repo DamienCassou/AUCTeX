@@ -30,7 +30,7 @@ DVIPS=dvips
 INSTALL_INFO=install-info
 DISTTEXTS=../CHANGES
 
-.PHONY: all info dvi ps pdf html install dist
+.PHONY: all info dvi ps pdf html install dist clean maintainer-clean
 
 all: info
 
@@ -66,5 +66,12 @@ install: reftex.info
 	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
 	$(CP) reftex.info $(infodir)
 	-$(INSTALL_INFO) --info-dir=$(infodir) reftex.info
+
+clean:
+	rm -f *.aux *.cp *.cps *.dvi *.fn *.fns *.ky *.kys *.pg *.pgs
+	rm -f *.toc *.tp *.tps *.vr *.vrs *.log *.html *.ps
+
+maintainer-clean: clean
+	rm -f $(DISTTEXTS) reftex.info
 
 dist: $(DISTTEXTS) reftex.info
