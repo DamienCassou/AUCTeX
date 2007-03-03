@@ -1,5 +1,9 @@
 2007-03-03  Ralf Angeli  <angeli@caeruleus.net>
 
+	* Makefile: Remove unnecessary targets left over from original
+	import.
+	(maintainer-clean): Add explanatory text.
+
 	* Makefile (.PHONY): Add `clean' and `maintainer-clean'.
 	(html): Call `html' target in `doc' directory.
 	(clean): Adapt to new directory structure.
