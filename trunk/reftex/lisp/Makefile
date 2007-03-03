@@ -28,7 +28,7 @@ LISPFILES=reftex-vars.el reftex.el reftex-auc.el reftex-cite.el\
 	reftex-sel.el reftex-toc.el reftex-dcr.el reftex-index.el
 ELCFILES=$(LISPFILES:.el=.elc)
 
-.PHONY: all lisp install
+.PHONY: all lisp install clean
 
 all: lisp
 
@@ -39,3 +39,6 @@ install: $(LISPFILES) $(ELCFILES)
 	if [ ! -d $(lispdir) ]; then $(MKDIR) $(lispdir); else true; fi ;
 	$(CP) $(LISPFILES) $(lispdir)
 	$(CP) $(ELCFILES)  $(lispdir)
+
+clean:
+	rm -f $(ELCFILES)
