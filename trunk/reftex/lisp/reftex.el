@@ -33,7 +33,7 @@
 
 
 ;;;### (autoloads (reftex-reset-scanning-information reftex-mode
-;;;;;;  turn-on-reftex) "reftex-base" "reftex-base.el" (17898 62342))
+;;;;;;  turn-on-reftex) "reftex-base" "reftex-base.el" (17899 3609))
 ;;; Generated autoloads from reftex-base.el
 
 (autoload (quote turn-on-reftex) "reftex-base" "\
