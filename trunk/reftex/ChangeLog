@@ -1,5 +1,11 @@
 2007-03-04  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex.el: Update.
+
+	* lisp/reftex-base.el (reftex-show-commentary): Look in
+	reftex-base.el.
+	(reftex-report-bug): New function.
+
 	* lisp/reftex.el: Move original content to reftex-base.el.  Add
 	new header and automatically generated autoloads.
 
