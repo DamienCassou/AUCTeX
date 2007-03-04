@@ -31,7 +31,7 @@
 (eval-when-compile (require 'cl))
 (provide 'reftex-dcr)
 (provide 'reftex-vcr)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 (defun reftex-view-crossref (&optional arg auto-how fail-quietly)

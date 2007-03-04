@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-ref)
-(require 'reftex)
+(require 'reftex-base)
 (require 'reftex-parse)
 ;;;
 

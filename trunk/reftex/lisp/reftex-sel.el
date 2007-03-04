@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-sel)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 (defvar reftex-select-label-map nil

@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-global)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 (defun reftex-create-tags-file ()

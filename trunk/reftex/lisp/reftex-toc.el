@@ -28,7 +28,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-toc)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 (defvar reftex-toc-map (make-sparse-keymap)

@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-index)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 ;; START remove for XEmacs release

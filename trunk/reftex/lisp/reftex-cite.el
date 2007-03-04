@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-cite)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 ;; Variables and constants

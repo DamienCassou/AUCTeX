@@ -29,7 +29,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-auc)
-(require 'reftex)
+(require 'reftex-base)
 ;;;
 
 (defun reftex-plug-flag (which)

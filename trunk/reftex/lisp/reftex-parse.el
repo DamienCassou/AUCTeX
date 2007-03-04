@@ -30,7 +30,7 @@
 
 (eval-when-compile (require 'cl))
 (provide 'reftex-parse)
-(require 'reftex)
+(require 'reftex-base)
 
 (defmacro reftex-with-special-syntax (&rest body)
   `(let ((saved-syntax (syntax-table)))
