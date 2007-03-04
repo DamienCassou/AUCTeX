@@ -1,3 +1,40 @@
+2007-03-04  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex.el: Move original content to reftex-base.el.  Add
+	new header and automatically generated autoloads.
+
+	* lisp/reftex-base.el: New file.  Insert original content of
+	reftex.el.  Remove autoload for `reftex-index-phrases-mode'.
+	Delete trailing whitespace.
+
+	* Makefile (dist): Call `dist' target in lisp subdirectory.
+
+	* lisp/Makefile (LISPFILES): Use reftex-base.el instead of
+	reftex.el.
+	(.PHONY): Add `dist'.
+	(lisp): Depend on reftex.el.
+	(install): Depend on reftex.el.  Copy reftex.el to installation
+	target.
+	(dist, reftex.el): New targets.
+
+	* lisp/reftex-auc.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-cite.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-dcr.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-global.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-index.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-parse.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-ref.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-sel.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-toc.el: Require `reftex-base' instead of `reftex'.
+
 2007-03-03  Ralf Angeli  <angeli@caeruleus.net>
 
 	* Makefile: Remove unnecessary targets left over from original
