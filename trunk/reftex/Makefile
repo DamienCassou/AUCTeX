@@ -116,6 +116,7 @@ dist:
 	cvs export -d reftex-$(TAG) \
           "`echo $(TAG) | sed -e '/^\([-0-9]*[0-9]\)[-a-z]*$$/s//-D \1T2359/' \
                              -e '/[.]/{s/^/-r release_/;s/[.]/_/g}'`" reftex
+	cd reftex-$(TAG)/lisp && make dist
 	cd reftex-$(TAG)/doc && make dist
 	chmod -R go-w+rX reftex-$(TAG)
 	tar -cf - --owner=root --group=root reftex-$(TAG) | \
