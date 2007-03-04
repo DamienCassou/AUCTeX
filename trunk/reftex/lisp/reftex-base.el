@@ -2405,11 +2405,14 @@ IGNORE-WORDS List of words which should be removed from the string."
         (message "\"Ref\"-menu now contains full customization menu"))
     (error "Cannot expand menu (outdated version of cus-edit.el)")))
 
+
+;;; Misc
+
 (defun reftex-show-commentary ()
   "Use the finder to view the file documentation from `reftex.el'."
   (interactive)
   (require 'finder)
-  (finder-commentary "reftex.el"))
+  (finder-commentary "reftex-base.el"))
 
 (defun reftex-info (&optional node)
   "Read documentation for RefTeX in the info system.
@@ -2417,6 +2420,36 @@ With optional NODE, go directly to that node."
   (interactive)
   (require 'info)
   (Info-goto-node (format "(reftex)%s" (or node ""))))
+
+(defun reftex-report-bug ()
+  "Report a bug in RefTeX.
+
+Don't hesitate to report any problems or inaccurate documentation.
+
+If you don't have setup sending mail from (X)Emacs, please copy the
+output buffer into your mail program, as it gives us important
+information about your RefTeX version and configuration."
+  (interactive)
+  (require 'reporter)
+  (let ((reporter-prompt-for-summary-p "Bug report subject: "))
+    (reporter-submit-bug-report
+     "bug-auctex@gnu.org"
+     reftex-version
+     (list 'window-system
+	   'reftex-plug-into-AUCTeX)
+     nil nil
+     "Remember to cover the basics, that is, what you expected to happen and
+what in fact did happen.
+
+Check if the bug is reproducable with an up-to-date version of
+RefTeX available from http://www.gnu.org/software/auctex/.
+
+If the bug is triggered by a specific \(La\)TeX file, you should try
+to produce a minimal sample file showing the problem and include it
+in your report.
+
+Your bug report will be posted to the AUCTeX bug reporting list.
+------------------------------------------------------------------------")))
 
 ;;; Install the kill-buffer and kill-emacs hooks ------------------------------
 
