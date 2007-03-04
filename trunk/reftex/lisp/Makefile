@@ -23,22 +23,31 @@
 
 BATCH=$(EMACS) -batch -q -l lpath.el
 ELC=$(BATCH) -f batch-byte-compile
-LISPFILES=reftex-vars.el reftex.el reftex-auc.el reftex-cite.el\
-	reftex-global.el reftex-parse.el reftex-ref.el\
+LISPFILES=reftex-vars.el reftex-base.el reftex-auc.el \
+	reftex-cite.el reftex-global.el reftex-parse.el reftex-ref.el \
 	reftex-sel.el reftex-toc.el reftex-dcr.el reftex-index.el
 ELCFILES=$(LISPFILES:.el=.elc)
 
-.PHONY: all lisp install clean
+.PHONY: all lisp install clean dist
 
 all: lisp
 
-lisp: $(LISPFILES)
+lisp: reftex.el $(LISPFILES)
 	$(ELC) $(LISPFILES)
 
-install: $(LISPFILES) $(ELCFILES)
+install: reftex.el $(LISPFILES) $(ELCFILES)
 	if [ ! -d $(lispdir) ]; then $(MKDIR) $(lispdir); else true; fi ;
-	$(CP) $(LISPFILES) $(lispdir)
+	$(CP) reftex.el $(LISPFILES) $(lispdir)
 	$(CP) $(ELCFILES)  $(lispdir)
 
 clean:
 	rm -f $(ELCFILES)
+
+dist: reftex.el
+
+reftex.el: $(LISPFILES)
+	emacs -batch --no-site-file -l reftex.el \
+	  -eval "(let ((generated-autoload-file (expand-file-name \"$@\"))) \
+                   (mapcar (function update-file-autoloads) \
+                           command-line-args-left) \
+                   (save-buffers-kill-emacs t))" $(LISPFILES)
