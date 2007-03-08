@@ -28,6 +28,7 @@ MAKEINFO_PLAIN=-D rawfile --no-headers
 TEXI2HTML=makeinfo --no-split --html --number-sections
 DVIPS=dvips
 INSTALL_INFO=install-info
+TEXIFILES=reftex.texi changes.texi install.texi version.texi
 DISTTEXTS=../CHANGES
 
 .PHONY: all info dvi ps pdf html install dist clean maintainer-clean
@@ -44,23 +45,20 @@ pdf: reftex.pdf
 
 html: reftex.html
 
-reftex.info: reftex.texi
+reftex.info: $(TEXIFILES)
 	$(MAKEINFO) --no-split reftex.texi
 
-reftex.dvi: reftex.texi
+reftex.dvi: $(TEXIFILES)
 	$(TEXI2DVI) reftex.texi
 
 reftex.ps: reftex.dvi
 	$(DVIPS) -o reftex.ps reftex.dvi
 
-reftex.pdf: reftex.texi
+reftex.pdf: $(TEXIFILES)
 	$(TEXI2PDF) reftex.texi
 
-reftex.html: reftex.texi
+reftex.html: $(TEXIFILES)
 	$(TEXI2HTML) reftex.texi
-
-../CHANGES: changes.texi
-	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi --output $@
 
 install: reftex.info
 	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
@@ -75,3 +73,18 @@ maintainer-clean: clean
 	rm -f $(DISTTEXTS) reftex.info
 
 dist: $(DISTTEXTS) reftex.info
+
+../CHANGES: changes.texi
+	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi --output $@
+
+../INSTALL: install.texi
+	$(MAKEINFO) $(MAKEINFO_PLAIN) install.texi --output $@
+
+version.texi: ../ChangeLog
+	REFTEXDATE=`sed -n '1s/^\([-0-9][-0-9]*\).*/\1/p' ../ChangeLog` ; \
+	test "X$${REFTEXDATE}" != X || \
+	  { echo "Can't find date in ChangeLog" >&2 ; exit 1; }; \
+	REFTEXVERSION=`sed -n '2,/^[0-9]/s/.*Version \(.*\) released\..*/\1/p' ../ChangeLog`; \
+	test "X$${REFTEXVERSION}" != X || REFTEXVERSION=$${REFTEXDATE}; \
+	echo @set VERSION $${REFTEXVERSION} >version.texi; \
+	echo @set DATE $${REFTEXDATE} >>version.texi
