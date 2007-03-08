@@ -7,23 +7,21 @@
 @syncodeindex fn cp
 
 @c Version and Contact Info
-@set VERSION 4.31
-@set EDITION 4.31
-@set DATE February 2006
-@set AUCTEXSITE @uref{http://www.nongnu.org/auctex/,AUCTeX distribution site}
-@set MAINTAINERSITE @uref{http://www.astro.uva.nl/~dominik/Tools/,maintainers webpage}
-@set MAINTAINER Carsten Dominik
-@set MAINTAINEREMAIL @email{dominik@@science.uva.nl}
-@set MAINTAINERCONTACT @uref{mailto:dominik@@science.uva.nl,contact the maintainer}
-@set XEMACSFTP @uref{ftp://ftp.xemacs.org/pub/xemacs/packages/,XEmacs ftp site}.
+@include macros.texi
+@include version.texi
+@set AUCTEXSITE @uref{http://www.gnu.org/software/auctex/,@AUCTeX{} web site}
+@set MAINTAINERSITE @uref{http://www.gnu.org/software/auctex/,@AUCTeX{} web site}
+@set MAINTAINER the @AUCTeX{} project
+@set SUPPORTADDRESS @AUCTeX{} user mailing list (@email{auctex@@gnu.org})
+@set DEVELADDRESS @AUCTeX{} developer mailing list (@email{auctex-devel@@gnu.org})
+@set BUGADDRESS @AUCTeX{} bug mailing list (@email{bug-auctex@@gnu.org})
+@set XEMACSFTP @uref{ftp://ftp.xemacs.org/pub/xemacs/packages/,XEmacs FTP site}
 @c %**end of header
 
 @copying
-This file documents @b{Ref@TeX{}}, a package to do labels, references,
-citations and indices for LaTeX documents with Emacs.
-
-This is edition @value{EDITION} of the @b{Ref@TeX{}} User Manual for
-@b{Ref@TeX{}} @value{VERSION}
+This manual documents @RefTeX{} (version @value{VERSION} from
+@value{DATE}), a package to do labels, references, citations and indices
+for LaTeX documents with Emacs.
 
 Copyright @copyright{} 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
 2005, 2006, 2007  Free Software Foundation, Inc.
@@ -68,9 +66,9 @@ license to the document, as described in section 6 of the license.
 @end macro
 
 @titlepage
-@title Ref@TeX{} User Manual
-@subtitle Support for LaTeX labels, references, citations and index entries with GNU Emacs
-@subtitle Edition @value{EDITION}, @value{DATE}
+@title @RefTeX{} User Manual
+@subtitle Support for @LaTeX{} labels, references, citations and index entries with GNU Emacs
+@subtitle Version @value{VERSION} from @value{DATE}
 
 @author by Carsten Dominik
 @page
@@ -80,15 +78,18 @@ license to the document, as described in section 6 of the license.
 
 @ifnottex
 @node Top,,,(dir)
+@top @RefTeX{}
 
-@b{Ref@TeX{}} is a package for managing Labels, References,
-Citations and index entries with GNU Emacs.
+@RefTeX{} is a package for managing Labels, References, Citations and
+index entries with GNU Emacs.
 
-Don't be discouraged by the size of this manual, which covers
-@b{Ref@TeX{}} in great depth.  All you need to know to use
-@b{Ref@TeX{}} can be summarized on two pages (@pxref{RefTeX in a
-Nutshell}).  You can go back later to other parts of this document when
-needed.
+This manual documents @RefTeX{} version @value{VERSION} from
+@value{DATE}.
+
+Don't be discouraged by the size of this manual, which covers @RefTeX{}
+in great depth.  All you need to know to use @RefTeX{} can be summarized
+on two pages (@pxref{RefTeX in a Nutshell}).  You can go back later to
+other parts of this document when needed.
 
 @menu
 * Introduction::                     Quick-Start information.
@@ -104,8 +105,8 @@ needed.
 * Faces::                            Fontification of RefTeX's buffers.
 * Multifile Documents::              Document spread over many files.
 * Language Support::                 How to support other languages.
-* Finding Files::                    Included TeX files and BibTeX .bib files.
-* AUCTeX::                           Cooperation with AUCTeX.
+* Finding Files::                    Included @TeX{} files and BibTeX .bib files.
+* AUCTeX::                           Cooperation with @AUCTeX{}.
 * Optimizations::                    When RefTeX is too slow.
 * Problems and Work-Arounds::        First Aid.
 * Imprint::                          Author, Web-site, Thanks
@@ -173,7 +174,7 @@ The Index Phrases File
 AUCTeX
 
 * AUCTeX-RefTeX Interface::          How both packages work together
-* Style Files::                      AUCTeX's style files can support RefTeX
+* Style Files::                      @AUCTeX{}'s style files can support RefTeX
 * Bib-Cite::                         Hypertext reading of a document
 
 Options, Keymaps, Hooks
@@ -199,18 +200,18 @@ Options, Keymaps, Hooks
 @chapter Introduction
 @cindex Introduction
 
-@b{Ref@TeX{}} is a specialized package for support of labels,
-references, citations, and the index in LaTeX.  @b{Ref@TeX{}} wraps
-itself round 4 LaTeX macros: @code{\label}, @code{\ref}, @code{\cite},
+@RefTeX{} is a specialized package for support of labels,
+references, citations, and the index in @LaTeX{}.  @RefTeX{} wraps
+itself round 4 @LaTeX{} macros: @code{\label}, @code{\ref}, @code{\cite},
 and @code{\index}.  Using these macros usually requires looking up
 different parts of the document and searching through BibTeX database
-files.  @b{Ref@TeX{}} automates these time--consuming tasks almost
+files.  @RefTeX{} automates these time--consuming tasks almost
 entirely.  It also provides functions to display the structure of a
 document and to move around in this structure quickly.
 
 @iftex
-Don't be discouraged by the size of this manual, which covers @b{Ref@TeX{}}
-in great depth.  All you need to know to use @b{Ref@TeX{}} can be
+Don't be discouraged by the size of this manual, which covers @RefTeX{}
+in great depth.  All you need to know to use @RefTeX{} can be
 summarized on two pages (@pxref{RefTeX in a Nutshell}).  You can go
 back later to other parts of this document when needed.
 @end iftex
@@ -227,51 +228,23 @@ reports or suggestions.
 @section Installation
 @cindex Installation
 
-@b{Ref@TeX{}} is bundled and pre--installed with Emacs since version
-20.2.  It was also bundled and pre--installed with XEmacs 19.16--20.x.
-XEmacs 21.x users want to install the corresponding plug-in package
-which is available from the @value{XEMACSFTP}.  See the XEmacs 21.x
-documentation on package installation for details.
+@RefTeX{} has been bundled and pre-installed with Emacs since
+version 20.2.  It has also been bundled and pre-installed with XEmacs
+19.16--20.x.  XEmacs 21.x users want to install the corresponding
+plug-in package which is available from the @value{XEMACSFTP}.  See the
+XEmacs 21.x documentation on package installation for details.
 
-Users of earlier Emacs distributions (including Emacs 19) can get a copy
-of the @b{Ref@TeX{}} distribution from the maintainers web-page.
-@xref{Imprint}, for more information.
+Users of earlier Emacs distributions (including Emacs 19) or people
+craving for new features and bugs can get a copy of the @RefTeX{}
+distribution from the maintainer's web page.  @xref{Imprint}, for more
+information.  The following instructions will guide you through the
+process of installing such a distribution.
 
-@section Environment
-@cindex Finding files
-@cindex BibTeX database files, not found
-@cindex TeX files, not found
-@cindex @code{TEXINPUTS}, environment variable
-@cindex @code{BIBINPUTS}, environment variable
-
-@b{Ref@TeX{}} needs to access all files which are part of a multifile
-document, and the BibTeX database files requested by the
-@code{\bibliography} command.  To find these files, @b{Ref@TeX{}} will
-require a search path, i.e. a list of directories to check.  Normally
-this list is stored in the environment variables @code{TEXINPUTS} and
-@code{BIBINPUTS} which are also used by @b{Ref@TeX{}}.  However, on some
-systems these variables do not contain the full search path.  If
-@b{Ref@TeX{}} does not work for you because it cannot find some files,
-read @ref{Finding Files}.
-
-@section Entering @b{Ref@TeX{}} Mode
-
-@findex turn-on-reftex
-@findex reftex-mode
-@vindex LaTeX-mode-hook
-@vindex latex-mode-hook
-To turn @b{Ref@TeX{}} Mode on and off in a particular buffer, use
-@kbd{M-x reftex-mode}.  To turn on @b{Ref@TeX{}} Mode for all LaTeX
-files, add the following lines to your @file{.emacs} file:
-
-@example
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)   ; with AUCTeX LaTeX mode
-(add-hook 'latex-mode-hook 'turn-on-reftex)   ; with Emacs latex mode
-@end example
+@include install.texi
 
 @page
 @node RefTeX in a Nutshell, , Installation, Introduction
-@section @b{Ref@TeX{}} in a Nutshell
+@section @RefTeX{} in a Nutshell
 @cindex Quick-Start
 @cindex Getting Started
 @cindex RefTeX in a Nutshell
@@ -286,7 +259,7 @@ can jump quickly to every part of your document.  Press @kbd{?} to get
 help.
 
 @item
-@b{Labels and References}@* @b{Ref@TeX{}} helps to create unique labels
+@b{Labels and References}@* @RefTeX{} helps to create unique labels
 and to find the correct key for references quickly.  It distinguishes
 labels for different environments, knows about all standard
 environments (and many others), and can be configured to recognize any
@@ -297,7 +270,7 @@ additional labeled environments you have defined yourself (variable
 @item
 @b{Creating Labels}@*
 Type @kbd{C-c (} (@code{reftex-label}) to insert a label at point.
-@b{Ref@TeX{}} will either
+@RefTeX{} will either
 @itemize @minus
 @item
 derive a label from context (default for section labels)
@@ -331,9 +304,9 @@ different macros).
 
 @item
 @b{Index Support}@*
-@b{Ref@TeX{}} helps to enter index entries.  It also compiles all
+@RefTeX{} helps to enter index entries.  It also compiles all
 entries into an alphabetically sorted @file{*Index*} buffer which you
-can use to check and edit the entries.  @b{Ref@TeX{}} knows about the
+can use to check and edit the entries.  @RefTeX{} knows about the
 standard index macros and can be configured to recognize any additional
 macros you have defined (@code{reftex-index-macros}).  Multiple indices
 are supported.
@@ -351,7 +324,7 @@ and enter the arguments with completion.
 @b{The Index Phrases File (Delayed Indexing)}@*
 Type @kbd{C-c \} (@code{reftex-index-phrase-selection-or-word}) to add
 the current word or selection to a special @emph{index phrase file}.
-@b{Ref@TeX{}} can later search the document for occurrences of these
+@RefTeX{} can later search the document for occurrences of these
 phrases and let you interactively index the matches.
 
 @item
@@ -377,12 +350,12 @@ will automatically be displayed in the echo area.
 @b{Multifile Documents}@*
 Multifile Documents are fully supported.  The included files must have a
 file variable @code{TeX-master} or @code{tex-main-file} pointing to the
-master file.  @b{Ref@TeX{}} provides cross-referencing information from
+master file.  @RefTeX{} provides cross-referencing information from
 all parts of the document, and across document borders
 (@file{xr.sty}).
 
 @item
-@b{Document Parsing}@* @b{Ref@TeX{}} needs to parse the document in
+@b{Document Parsing}@* @RefTeX{} needs to parse the document in
 order to find labels and other information.  It does it automatically
 once and updates its list internally when @code{reftex-label} and
 @code{reftex-index} are used.  To enforce reparsing, call any of the
@@ -391,20 +364,20 @@ commands described above with a raw @kbd{C-u} prefix, or press the
 buffer, or the index buffer.
 
 @item
-@b{AUCTeX} @* If your major LaTeX mode is AUCTeX, @b{Ref@TeX{}} can
-cooperate with it (see variable @code{reftex-plug-into-AUCTeX}).  AUCTeX
+@b{@AUCTeX{}} @* If your major @LaTeX{} mode is @AUCTeX{}, @RefTeX{} can
+cooperate with it (see variable @code{reftex-plug-into-AUCTeX}).  @AUCTeX{}
 contains style files which trigger appropriate settings in
-@b{Ref@TeX{}}, so that for many of the popular LaTeX packages no
+@RefTeX{}, so that for many of the popular @LaTeX{} packages no
 additional customizations will be necessary.
 
 @item
 @b{Useful Settings}@*
-To integrate RefTeX with AUCTeX, use
+To integrate RefTeX with @AUCTeX{}, use
 @lisp
 (setq reftex-plug-into-AUCTeX t)
 @end lisp
 
-To make your own LaTeX macro definitions known to @b{Ref@TeX{}},
+To make your own @LaTeX{} macro definitions known to @RefTeX{},
 customize the variables
 @example
 @code{reftex-label-alist}          @r{(for label macros/environments)}
@@ -414,15 +387,15 @@ customize the variables
 @code{reftex-index-default-macro}  @r{(to set the default macro)}
 @end example
 If you have a large number of macros defined, you may want to write
-an AUCTeX style file to support them with both AUCTeX and
-@b{Ref@TeX{}}.
+an @AUCTeX{} style file to support them with both @AUCTeX{} and
+@RefTeX{}.
 
-@item @b{Where Next?}@* Go ahead and use @b{Ref@TeX{}}.  Use its menus
+@item @b{Where Next?}@* Go ahead and use @RefTeX{}.  Use its menus
 until you have picked up the key bindings.  For an overview of what you
 can do in each of the different special buffers, press @kbd{?}.  Read
 the manual if you get stuck, of if you are curious what else might be
 available.  The first part of the manual explains in
-a tutorial way how to use and customize @b{Ref@TeX{}}.  The second
+a tutorial way how to use and customize @RefTeX{}.  The second
 part is a command and variable reference.
 @end enumerate
 
@@ -503,7 +476,7 @@ always show the location corresponding to the line at point in the
 @file{*toc*} buffer.  This is similar to pressing @key{SPC} after each
 cursor motion.  The default for this flag can be set with the variable
 @code{reftex-toc-follow-mode}.  Note that only context in files already
-visited is shown.  @b{Ref@TeX{}} will not visit a file just for follow
+visited is shown.  @RefTeX{} will not visit a file just for follow
 mode.  See, however, the variable
 @code{reftex-revisit-to-follow}.
 
@@ -518,7 +491,7 @@ Show calling point in another window.  This is the point from where
 Promote the current section.  This will convert @code{\section} to
 @code{\chapter}, @code{\subsection} to @code{\section} etc. If there is
 an active region, all sections in the region will be promoted, including
-the one at point.  To avoid mistakes, @b{Ref@TeX{}} requires a fresh
+the one at point.  To avoid mistakes, @RefTeX{} requires a fresh
 document scan before executing this command - if necessary, it will
 automatically do this scan and ask the user to repeat the promotion
 command.
@@ -575,7 +548,7 @@ variable @code{reftex-toc-include-file-boundaries}.
 Toggle the display of labels in the @file{*toc*} buffer.  The default
 for this flag can be set with the variable
 @code{reftex-toc-include-labels}.  When called with a prefix argument,
-@b{Ref@TeX{}} will prompt for a label type and include only labels of
+@RefTeX{} will prompt for a label type and include only labels of
 the selected type in the @file{*toc*} buffer.  The mode line @samp{L<>}
 indicator shows which labels are included.
 
@@ -584,7 +557,7 @@ indicator shows which labels are included.
 Toggle the display of index entries in the @file{*toc*} buffer.  The
 default for this flag can be set with the variable
 @code{reftex-toc-include-index-entries}.  When called with a prefix
-argument, @b{Ref@TeX{}} will prompt for a specific index and include
+argument, @RefTeX{} will prompt for a specific index and include
 only entries in the selected index in the @file{*toc*} buffer.  The mode
 line @samp{I<>} indicator shows which index is used.
 
@@ -602,18 +575,18 @@ document.
 
 @item r
 @vindex reftex-enable-partial-scans
-Reparse the LaTeX document and rebuild the @file{*toc*} buffer.  When
+Reparse the @LaTeX{} document and rebuild the @file{*toc*} buffer.  When
 @code{reftex-enable-partial-scans} is non-@code{nil}, rescan only the file this
 location is defined in, not the entire document.
 
 @item C-u r
-Reparse the @emph{entire} LaTeX document and rebuild the @file{*toc*}
+Reparse the @emph{entire} @LaTeX{} document and rebuild the @file{*toc*}
 buffer.
 
 @item x
 Switch to the @file{*toc*} buffer of an external document.  When the
 current document is using the @code{xr} package (@pxref{xr (LaTeX
-package)}), @b{Ref@TeX{}} will switch to one of the external
+package)}), @RefTeX{} will switch to one of the external
 documents.
 
 
@@ -666,11 +639,11 @@ recentering of the TOC window on the current frame with
 @cindex LaTeX classes, KOMA-Script
 @cindex TOC entries for environments
 @vindex reftex-section-levels
-The section macros recognized by @b{Ref@TeX{}} are all LaTeX section
+The section macros recognized by @RefTeX{} are all @LaTeX{} section
 macros (from @code{\part} to @code{\subsubparagraph}) and the commands
 @code{\addchap} and @code{\addsec} from the KOMA-Script classes.
 Additional macros can be configured with the variable
-@code{reftex-section-levels}.  It is also possible to add certain LaTeX
+@code{reftex-section-levels}.  It is also possible to add certain @LaTeX{}
 environments to the table of contents.  This is probably only useful for
 theorem-like environments. @xref{Defining Label Environments}, for an
 example.
@@ -683,15 +656,15 @@ example.
 @cindex Label environment
 @cindex @code{\label}
 
-LaTeX provides a powerful mechanism to deal with cross--references in a
+@LaTeX{} provides a powerful mechanism to deal with cross--references in a
 document.  When writing a document, any part of it can be marked with a
-label, like @samp{\label@{mark@}}.  LaTeX records the current value of a
+label, like @samp{\label@{mark@}}.  @LaTeX{} records the current value of a
 certain counter when a label is defined.  Later references to this label
 (like @samp{\ref@{mark@}}) will produce the recorded value of the
 counter.
 
 Labels can be used to mark sections, figures, tables, equations,
-footnotes, items in enumerate lists etc.  LaTeX is context sensitive in
+footnotes, items in enumerate lists etc.  @LaTeX{} is context sensitive in
 doing this: A label defined in a figure environment automatically
 records the figure counter, not the section counter.
 
@@ -719,11 +692,11 @@ equation counter.
 @kindex C-c (
 @findex reftex-label
 
-In order to create a label in a LaTeX document, press @kbd{C-c (}
-(@code{reftex-label}).  Just like LaTeX, @b{Ref@TeX{}} is context sensitive
+In order to create a label in a @LaTeX{} document, press @kbd{C-c (}
+(@code{reftex-label}).  Just like @LaTeX{}, @RefTeX{} is context sensitive
 and will figure out the environment it currently is in and adapt the
 label to that environment.  A label usually consists of a short prefix
-indicating the type of the label and a unique mark.  @b{Ref@TeX{}} has
+indicating the type of the label and a unique mark.  @RefTeX{} has
 3 different modes to create this mark.
 
 @enumerate
@@ -732,10 +705,10 @@ indicating the type of the label and a unique mark.  @b{Ref@TeX{}} has
 @vindex reftex-derive-label-parameters
 @vindex reftex-label-illegal-re
 @vindex reftex-abbrev-parameters
-A label can be derived from context.  This means, @b{Ref@TeX{}} takes
+A label can be derived from context.  This means, @RefTeX{} takes
 the context of the label definition and constructs a label from
 that@footnote{Note that the context may contain constructs which are
-invalid in labels.  @b{Ref@TeX{}} will therefore strip the accent from
+invalid in labels.  @RefTeX{} will therefore strip the accent from
 accented Latin-1 characters and remove everything else which is not
 valid in labels.  This mechanism is safe, but may not be satisfactory
 for non-western languages.  Check the following variables if you need to
@@ -743,28 +716,28 @@ change things: @code{reftex-translate-to-ascii-function},
 @code{reftex-derive-label-parameters}, @code{reftex-label-illegal-re},
 @code{reftex-abbrev-parameters}.}.  This works best for section labels,
 where the section heading is used to construct a label.  In fact,
-@b{Ref@TeX{}}'s default settings use this method only for section
+@RefTeX{}'s default settings use this method only for section
 labels.  You will be asked to confirm the derived label, or edit
 it.
 
 @item
 We may also use a simple unique number to identify a label.  This is
 mostly useful for labels where it is difficult to come up with a very
-good descriptive name.  @b{Ref@TeX{}}'s default settings use this method
-for equations, enumerate items and footnotes.  The author of @b{Ref@TeX{}}
+good descriptive name.  @RefTeX{}'s default settings use this method
+for equations, enumerate items and footnotes.  The author of @RefTeX{}
 tends to write documents with many equations and finds it impossible
 to come up with good names for each of them.  These simple labels are
 inserted without query, and are therefore very fast.  Good descriptive
-names are not really necessary as @b{Ref@TeX{}} will provide context to
+names are not really necessary as @RefTeX{} will provide context to
 reference a label (@pxref{Referencing Labels}).
 
 @item
 The third method is to ask the user for a label.  This is most
 useful for things which are easy to describe briefly and do not turn up
-too frequently in a document.  @b{Ref@TeX{}} uses this for figures and
+too frequently in a document.  @RefTeX{} uses this for figures and
 tables.  Of course, one can enter the label directly by typing the full
 @samp{\label@{mark@}}.  The advantage of using @code{reftex-label}
-anyway is that @b{Ref@TeX{}} will know that a new label has been defined.
+anyway is that @RefTeX{} will know that a new label has been defined.
 It will then not be necessary to rescan the document in order to access
 this label later.
 @end enumerate
@@ -774,9 +747,9 @@ If you want to change the way certain labels are created, check out the
 variable @code{reftex-insert-label-flags} (@pxref{Options (Creating
 Labels)}).
 
-If you are using AUCTeX to write your LaTeX documents, you can
+If you are using @AUCTeX{} to write your @LaTeX{} documents, you can
 set it up to delegate the creation of labels to
-@b{Ref@TeX{}}. @xref{AUCTeX}, for more information.
+@RefTeX{}. @xref{AUCTeX}, for more information.
 
 @node Referencing Labels, Builtin Label Environments, Creating Labels, Labels and References
 @section Referencing Labels
@@ -789,7 +762,7 @@ set it up to delegate the creation of labels to
 @findex reftex-reference
 
 @vindex reftex-trust-label-prefix
-@b{Ref@TeX{}} scans the document in order to find all labels.  To make
+@RefTeX{} scans the document in order to find all labels.  To make
 referencing labels easier, it assigns to each label a category, the
 @emph{label type} (for example section, table, figure, equation, etc.).
 In order to determine the label type, RefTeX parses around each label
@@ -797,14 +770,14 @@ to see in what kind of environments it is located.  You can speed up
 the parsing by using type-specific prefixes for labels and configuring
 the variable @code{reftex-trust-label-prefix}.
 
-Referencing Labels is really at the heart of @b{Ref@TeX{}}.  Press @kbd{C-c
+Referencing Labels is really at the heart of @RefTeX{}.  Press @kbd{C-c
 )} in order to reference a label (reftex-reference).  This will start a
 selection process and finally insert the complete @samp{\ref@{label@}}
 into the buffer.
 
-First, @b{Ref@TeX{}} will determine the label category which is required.
+First, @RefTeX{} will determine the label category which is required.
 Often that can be figured out from context.  For example, if you
-write @samp{As shown in eq.} and the press @kbd{C-c )}, @b{Ref@TeX{}} knows
+write @samp{As shown in eq.} and the press @kbd{C-c )}, @RefTeX{} knows
 that an equation label is going to be referenced.  If it cannot figure
 out what label category is needed, it will query for one.
 
@@ -924,8 +897,8 @@ yet exist in the document.
 @cindex @code{\vref}
 @cindex LaTeX packages, @code{varioref}
 Toggle between @code{\ref} and @code{\vref} macro for references.  The
-@code{\vref} macro is defined in the @code{varioref} LaTeX package.
-With this key you can force @b{Ref@TeX{}} to insert a @code{\vref}
+@code{\vref} macro is defined in the @code{varioref} @LaTeX{} package.
+With this key you can force @RefTeX{} to insert a @code{\vref}
 macro.  The current state of this flag is displayed by the @samp{S<>}
 indicator in the mode line of the selection buffer.
 
@@ -936,7 +909,7 @@ indicator in the mode line of the selection buffer.
 @cindex LaTeX packages, @code{fancyref}
 Cycle between @code{\ref}, @code{\fref} and @code{\Fref}.  The
 @code{\fref} and @code{\Fref} macros are defined in the @code{fancyref}
-LaTeX package.  With this key you can force @b{Ref@TeX{}} to insert a
+@LaTeX{} package.  With this key you can force @RefTeX{} to insert a
 @code{\fref} or @code{\Fref} macro.  The current state of this flag is
 displayed by the @samp{S<>} indicator in the mode line of the
 selection buffer.
@@ -971,7 +944,7 @@ Toggle the display of a label counter in the selection buffer.
 @item %
 Toggle the display of labels hidden in comments in the selection
 buffers.  Sometimes, you may have commented out parts of your document.
-If these parts contain label definitions, @b{Ref@TeX{}} can still display
+If these parts contain label definitions, @RefTeX{} can still display
 and reference these labels.
 
 @tablesubheading{Updating the buffer}
@@ -995,7 +968,7 @@ Switch the label category.  After prompting for another label category,
 a menu for that category will be shown.
 
 @item x
-Reference a label from an external document.  With the LaTeX package
+Reference a label from an external document.  With the @LaTeX{} package
 @code{xr} it is possible to reference labels defined in another
 document.  This key will switch to the label menu of an external
 document and let you select a label from there (@pxref{xr (LaTeX
@@ -1015,10 +988,10 @@ keymap @code{reftex-select-label-map} may be used.
 @vindex reftex-label-alist
 @vindex reftex-label-alist-builtin
 
-@b{Ref@TeX{}} needs to be aware of the environments which can be referenced
-with a label (i.e. which carry their own counters).  By default, @b{Ref@TeX{}}
+@RefTeX{} needs to be aware of the environments which can be referenced
+with a label (i.e. which carry their own counters).  By default, @RefTeX{}
 recognizes all labeled environments and macros discussed in @cite{The
-LaTeX Companion by Goossens, Mittelbach & Samarin, Addison-Wesley
+@LaTeX{} Companion by Goossens, Mittelbach & Samarin, Addison-Wesley
 1994.}.  These are:
 
 @itemize @minus
@@ -1035,7 +1008,7 @@ LaTeX Companion by Goossens, Mittelbach & Samarin, Addison-Wesley
 @cindex LaTeX core
 @code{figure}, @code{figure*}, @code{table}, @code{table*}, @code{equation},
 @code{eqnarray}, @code{enumerate}, the @code{\footnote} macro (this is
-the LaTeX core stuff)
+the @LaTeX{} core stuff)
 @item
 @cindex AMS-LaTeX
 @cindex @code{amsmath}, LaTeX package
@@ -1050,7 +1023,7 @@ the LaTeX core stuff)
 @cindex @code{subequations}, AMS-LaTeX environment
 @code{align}, @code{gather}, @code{multline}, @code{flalign},
 @code{alignat}, @code{xalignat}, @code{xxalignat}, @code{subequations}
-(from AMS-LaTeX's @file{amsmath.sty} package)
+(from AMS-@LaTeX{}'s @file{amsmath.sty} package)
 @item
 @cindex @code{endnote}, LaTeX package
 @cindex LaTeX packages, @code{endnote}
@@ -1109,7 +1082,7 @@ the @code{\endnote} macro (from @file{endnotes.sty})
 @end itemize
 
 If you want to use other labeled environments, defined with
-@code{\newtheorem}, @b{Ref@TeX{}} needs to be configured to recognize
+@code{\newtheorem}, @RefTeX{} needs to be configured to recognize
 them (@pxref{Defining Label Environments}).
 
 @node Defining Label Environments, Reference Info, Builtin Label Environments, Labels and References
@@ -1117,7 +1090,7 @@ them (@pxref{Defining Label Environments}).
 @cindex Label environments, defining
 
 @vindex reftex-label-alist
-@b{Ref@TeX{}} can be configured to recognize additional labeled
+@RefTeX{} can be configured to recognize additional labeled
 environments and macros.  This is done with the variable
 @code{reftex-label-alist} (@pxref{Options (Defining Label
 Environments)}).  If you are not familiar with Lisp, you can use the
@@ -1140,7 +1113,7 @@ Environments}).
 * Quick Equation::                   When a macro sets the label type.
 * Figure Wrapper::                   When a macro argument is a label.
 * Adding Magic Words::               Other words for other languages.
-* Using \eqref::                     How to switch to this AMS-LaTeX macro.
+* Using \eqref::                     How to switch to this AMS-@LaTeX{} macro.
 * Non-Standard Environments::        Environments without \begin and \end
 * Putting it Together::              How to combine many entries.
 @end menu
@@ -1151,7 +1124,7 @@ Environments}).
 @cindex @code{axiom}, newtheorem
 @cindex @code{\newtheorem}
 
-Suppose you are using @code{\newtheorem} in LaTeX in order to define two
+Suppose you are using @code{\newtheorem} in @LaTeX{} in order to define two
 new environments, @code{theorem} and @code{axiom}
 
 @example
@@ -1169,7 +1142,7 @@ to be used like this:
 \end@{axiom@}
 @end example
 
-So we need to tell @b{Ref@TeX{}} that @code{theorem} and @code{axiom} are new
+So we need to tell @RefTeX{} that @code{theorem} and @code{axiom} are new
 labeled environments which define their own label categories.  We can
 either use Lisp to do this (e.g. in @file{.emacs}) or use the custom
 library.  With Lisp it would look like this
@@ -1181,7 +1154,7 @@ library.  With Lisp it would look like this
 @end lisp
 
 The type indicator characters @code{?a} and @code{?h} are used for
-prompts when @b{Ref@TeX{}} queries for a label type.  @code{?h}
+prompts when @RefTeX{} queries for a label type.  @code{?h}
 was chosen for @code{theorem} since @code{?t} is already taken by
 @code{table}.  Note that also @code{?s}, @code{?f}, @code{?e},
 @code{?i}, @code{?n} are already used for standard environments.
@@ -1189,9 +1162,9 @@ was chosen for @code{theorem} since @code{?t} is already taken by
 @noindent
 The labels for Axioms and Theorems will have the prefixes @samp{ax:} and
 @samp{thr:}, respectively.  @xref{AUCTeX}, for information on how
-AUCTeX can use RefTeX to automatically create labels when a new environment
+@AUCTeX{} can use RefTeX to automatically create labels when a new environment
 is inserted into a buffer.  Additionally, the following needs to be
-added to one's .emacs file before AUCTeX will automatically create
+added to one's .emacs file before @AUCTeX{} will automatically create
 labels for the new environments.
 
 @lisp
@@ -1225,7 +1198,7 @@ Environments)}).
 The following list of strings is used to guess the correct label type
 from the word before point when creating a reference.  E.g. if you
 write: @samp{As we have shown in Theorem} and then press @kbd{C-c )},
-@b{Ref@TeX{}} will know that you are looking for a theorem label and
+@RefTeX{} will know that you are looking for a theorem label and
 restrict the menu to only these labels without even asking.
 
 The final item in each entry is the level at which the environment
@@ -1296,7 +1269,7 @@ and used like this:
 Einstein's equation is \quickeq@{E=mc^2 \label@{eq:einstein@}@}.
 @end example
 
-We need to tell @b{Ref@TeX{}} that any label defined in the argument of the
+We need to tell @RefTeX{} that any label defined in the argument of the
 @code{\quickeq} is an equation label.  Here is how to do this with lisp:
 
 @lisp
@@ -1349,7 +1322,7 @@ which would be called like
 \myfig[htp]@{filename@}@{caption text@}@{label@}@{1@}
 @end example
 
-Now we need to tell @b{Ref@TeX{}} that the 4th argument of the
+Now we need to tell @RefTeX{} that the 4th argument of the
 @code{\myfig} macro @emph{is itself} a figure label, and where to find
 the context.
 
@@ -1417,7 +1390,7 @@ predefined label categories.
 
 Another case where one only wants to change the information associated
 with the label category is to change the macro which is used for
-referencing the label.  When working with the AMS-LaTeX stuff, you might
+referencing the label.  When working with the AMS-@LaTeX{} stuff, you might
 prefer @code{\eqref} for doing equation references.  Here is how to
 do this:
 
@@ -1425,7 +1398,7 @@ do this:
 (setq reftex-label-alist '((nil ?e nil "~\\eqref@{%s@}" nil nil)))
 @end lisp
 
-@b{Ref@TeX{}} has also a predefined symbol for this special purpose.  The
+@RefTeX{} has also a predefined symbol for this special purpose.  The
 following is equivalent to the line above.
 
 @lisp
@@ -1433,7 +1406,7 @@ following is equivalent to the line above.
 @end lisp
 
 Note that this is automatically done by the @file{amsmath.el} style file
-of AUCTeX (@pxref{Style Files}) - so if you use AUCTeX,
+of @AUCTeX{} (@pxref{Style Files}) - so if you use @AUCTeX{},
 this configuration will not be necessary.
 
 @node Non-Standard Environments, Putting it Together, Using \eqref, Defining Label Environments
@@ -1443,8 +1416,8 @@ this configuration will not be necessary.
 @cindex Special parser functions
 @cindex Parser functions, for special environments
 
-Some LaTeX packages define environment-like structures without using the
-standard @samp{\begin..\end} structure.  @b{Ref@TeX{}} cannot parse
+Some @LaTeX{} packages define environment-like structures without using the
+standard @samp{\begin..\end} structure.  @RefTeX{} cannot parse
 these directly, but you can write your own special-purpose parser and
 use it instead of the name of an environment in an entry for
 @code{reftex-label-alist}.  The function should check if point is
@@ -1503,7 +1476,7 @@ terminated by @samp{\z.} or by an empty line.
 The difficulty is that the @samp{\a.} lists can nest and that an empty
 line terminates all list levels in one go.  So we have to count nesting
 levels between @samp{\a.} and @samp{\z.}.  Here is the implementation
-for @b{Ref@TeX{}}.
+for @RefTeX{}.
 
 @lisp
 (setq reftex-label-alist
@@ -1572,7 +1545,7 @@ information about the label referenced there.  Note that the information
 is only displayed if the echo area is not occupied by a different
 message.
 
-@b{Ref@TeX{}} can also display the label definition corresponding to a
+@RefTeX{} can also display the label definition corresponding to a
 @code{\ref} macro, or all reference locations corresponding to a
 @code{\label} macro.  @xref{Viewing Cross-References}, for more
 information.
@@ -1586,7 +1559,7 @@ information.
 @cindex References to external documents
 @cindex Cross-document references
 
-The LaTeX package @code{xr} makes it possible to create references to
+The @LaTeX{} package @code{xr} makes it possible to create references to
 labels defined in external documents.  The preamble of a document using
 @code{xr} will contain something like this:
 
@@ -1601,11 +1574,11 @@ and we can make references to any labels defined in these
 external documents by using the prefixes @samp{V1-} and @samp{V3-},
 respectively.
 
-@b{Ref@TeX{}} can be used to create such references as well.  Start the
+@RefTeX{} can be used to create such references as well.  Start the
 referencing process normally, by pressing @kbd{C-c )}.  Select a label
 type if necessary.  When you see the label selection buffer, pressing
 @kbd{x} will switch to the label selection buffer of one of the external
-documents.  You may then select a label as before and @b{Ref@TeX{}} will
+documents.  You may then select a label as before and @RefTeX{} will
 insert it along with the required prefix.
 
 For this kind of inter-document cross-references, saving of parsing
@@ -1628,7 +1601,7 @@ always use @code{\vref}, you may want to make it the default by
 customizing the variable @code{reftex-vref-is-default}.  If this
 toggling seems too inconvenient, you can also use the command
 @code{reftex-varioref-vref}@footnote{bind it to @kbd{C-c v}.}.
-Or use AUCTeX to create your macros (@pxref{AUCTeX}).
+Or use @AUCTeX{} to create your macros (@pxref{AUCTeX}).
 
 @node fancyref (LaTeX package), , varioref (LaTeX package), Labels and References
 @section @code{fancyref}: Fancy Cross References
@@ -1637,19 +1610,19 @@ Or use AUCTeX to create your macros (@pxref{AUCTeX}).
 @cindex @code{\Fref}
 @cindex LaTeX packages, @code{fancyref}
 @vindex reftex-fref-is-default
-@code{fancyref} is a LaTeX package where a macro call like
+@code{fancyref} is a @LaTeX{} package where a macro call like
 @code{\fref@{@var{fig:map-of-germany}@}} creates not only the number of
 the referenced counter but also the complete text around it, like
 @samp{Figure 3 on the preceding page}.  In order to make it work you
 need to use label prefixes like @samp{fig:} consistently - something
-@b{Ref@TeX{}} does automatically.  When you want to make a reference
+@RefTeX{} does automatically.  When you want to make a reference
 with the @code{\fref} macro, just press the @kbd{V} key in the selection
 buffer to cycle between @code{\ref}, @code{\fref} and @code{\Fref}
 (@pxref{Referencing Labels}).  The mode line of the selection buffer
 shows the current status of this switch.  If this cycling seems
 inconvenient, you can also use the commands @code{reftex-fancyref-fref}
 and @code{reftex-fancyref-Fref}@footnote{bind them to @kbd{C-c
-f} and @kbd{C-c F}.}.  Or use AUCTeX to create your macros
+f} and @kbd{C-c F}.}.  Or use @AUCTeX{} to create your macros
 (@pxref{AUCTeX}).
 
 @node Citations, Index Support, Labels and References, Top
@@ -1657,10 +1630,10 @@ f} and @kbd{C-c F}.}.  Or use AUCTeX to create your macros
 @cindex Citations
 @cindex @code{\cite}
 
-Citations in LaTeX are done with the @code{\cite} macro or variations of
+Citations in @LaTeX{} are done with the @code{\cite} macro or variations of
 it.  The argument of the macro is a citation key which identifies an
 article or book in either a BibTeX database file or in an explicit
-@code{thebibliography} environment in the document.  @b{Ref@TeX{}}'s
+@code{thebibliography} environment in the document.  @RefTeX{}'s
 support for citations helps to select the correct key quickly.
 
 @menu
@@ -1681,7 +1654,7 @@ support for citations helps to select the correct key quickly.
 @cindex Selection buffer, citations
 @cindex Selection process
 
-In order to create a citation, press @kbd{C-c [}.  @b{Ref@TeX{}} then
+In order to create a citation, press @kbd{C-c [}.  @RefTeX{} then
 prompts for a regular expression which will be used to search through
 the database and present the list of matches to choose from in a
 selection process similar to that for selecting labels
@@ -1701,12 +1674,12 @@ good search key.
 @cindex @code{thebibliography}, LaTeX environment
 @cindex @code{BIBINPUTS}, environment variable
 @cindex @code{TEXBIB}, environment variable
-@b{Ref@TeX{}} prefers to use BibTeX database files specified with a
+@RefTeX{} prefers to use BibTeX database files specified with a
 @code{\bibliography} macro to collect its information.  Just like
 BibTeX, it will search for the specified files in the current directory
 and along the path given in the environment variable @code{BIBINPUTS}.
 If you do not use BibTeX, but the document contains an explicit
-@code{thebibliography} environment, @b{Ref@TeX{}} will collect its
+@code{thebibliography} environment, @RefTeX{} will collect its
 information from there.  Note that in this case the information
 presented in the selection buffer will just be a copy of relevant
 @code{\bibitem} entries, not the structured listing available with
@@ -1824,11 +1797,11 @@ keymap @code{reftex-select-bib-map} may be used.
 @cindex @code{jurabib}, citation style
 
 @vindex reftex-cite-format
-The standard LaTeX macro @code{\cite} works well with numeric or simple
+The standard @LaTeX{} macro @code{\cite} works well with numeric or simple
 key citations.  To deal with the more complex task of author-year
 citations as used in many natural sciences, a variety of packages has
 been developed which define derived forms of the @code{\cite} macro.
-@b{Ref@TeX{}} can be configured to produce these citation macros as well
+@RefTeX{} can be configured to produce these citation macros as well
 by setting the variable @code{reftex-cite-format}.  For the most
 commonly used packages (@code{natbib}, @code{harvard}, @code{chicago},
 @code{jurabib}) this may be done from the menu, under
@@ -1869,7 +1842,7 @@ To make one of these styles the default, customize the variable
 (setq reftex-cite-format 'natbib)
 @end lisp
 
-You can also use AUCTeX style files to automatically set the
+You can also use @AUCTeX{} style files to automatically set the
 citation style based on the @code{usepackage} commands in a given
 document.  @xref{Style Files}, for information on how to set up the style
 files correctly.
@@ -1890,7 +1863,7 @@ argument of a @code{\cite} macro, the echo area will display some
 information about the article cited there.  Note that the information is
 only displayed if the echo area is not occupied by a different message.
 
-@b{Ref@TeX{}} can also display the @code{\bibitem} or BibTeX database
+@RefTeX{} can also display the @code{\bibitem} or BibTeX database
 entry corresponding to a @code{\cite} macro, or all citation locations
 corresponding to a @code{\bibitem} or BibTeX database entry.
 @xref{Viewing Cross-References}.
@@ -1901,21 +1874,21 @@ corresponding to a @code{\bibitem} or BibTeX database entry.
 @cindex @code{bibunits}, LaTeX package
 @cindex Bibliographies, multiple
 
-@code{chapterbib} and @code{bibunits} are two LaTeX packages which
+@code{chapterbib} and @code{bibunits} are two @LaTeX{} packages which
 produce multiple bibliographies in a document.  This is no problem for
-@b{Ref@TeX{}} as long as all bibliographies use the same BibTeX database
+@RefTeX{} as long as all bibliographies use the same BibTeX database
 files.  If they do not, it is best to have each document part in a
 separate file (as it is required for @code{chapterbib} anyway).  Then
-@b{Ref@TeX{}} will still scan the locally relevant databases correctly.  If
+@RefTeX{} will still scan the locally relevant databases correctly.  If
 you have multiple bibliographies within a @emph{single file}, this may
 or may not be the case.
 
 @node Citations Outside LaTeX, BibTeX Database Subsets, Chapterbib and Bibunits, Citations
-@section Citations outside LaTeX
+@section Citations outside @LaTeX{}
 @cindex Citations outside LaTeX
 @vindex reftex-default-bibliography
 
-The command @code{reftex-citation} can also be executed outside a LaTeX
+The command @code{reftex-citation} can also be executed outside a @LaTeX{}
 buffer.  This can be useful to reference articles in the mail buffer and
 other documents.  You should @emph{not} enter @code{reftex-mode} for
 this, just execute the command.  The list of BibTeX files will in this
@@ -1940,7 +1913,7 @@ binding for @code{reftex-cite-format}.
 @cindex BibTeX database subsets
 @findex reftex-create-bibtex-file
 
-@b{Ref@TeX{}} offers two ways to create a new BibTeX database file.
+@RefTeX{} offers two ways to create a new BibTeX database file.
 
 The first option produces a file which contains only the entries
 actually referenced in the current document.  This can be useful if
@@ -1968,15 +1941,15 @@ either the @i{marked} entries (with the @kbd{e} key) or the
 @cindex Index Support
 @cindex @code{\index}
 
-LaTeX has builtin support for creating an Index.  The LaTeX core
+@LaTeX{} has builtin support for creating an Index.  The @LaTeX{} core
 supports two different indices, the standard index and a glossary.  With
-the help of special LaTeX packages (@file{multind.sty} or
+the help of special @LaTeX{} packages (@file{multind.sty} or
 @file{index.sty}), any number of indices can be supported.
 
 Index entries are created with the @code{\index@{@var{entry}@}} macro.
 All entries defined in a document are written out to the @file{.aux}
 file.  A separate tool must be used to convert this information into a
-nicely formatted index.  Tools used with LaTeX include @code{MakeIndex}
+nicely formatted index.  Tools used with @LaTeX{} include @code{MakeIndex}
 and @code{xindy}.
 
 Indexing is a very difficult task.  It must follow strict conventions to
@@ -1993,27 +1966,27 @@ correspond to appropriate index entries.  This part of the index can
 very well be developed along with the document.  Often it is worthwhile
 to define special purpose macros which define an item and at the same
 time make an index entry, possibly with special formatting to make the
-reference page in the index bold or underlined.  To make @b{Ref@TeX{}}
+reference page in the index bold or underlined.  To make @RefTeX{}
 support for indexing possible, these special macros must be added to
-@b{Ref@TeX{}}'s configuration (@pxref{Defining Index Macros}).
+@RefTeX{}'s configuration (@pxref{Defining Index Macros}).
 
 @item
 The rest of the index is often just a collection of where in the
 document certain words or phrases are being used.  This part is
 difficult to develop along with the document, because consistent entries
 for each occurrence are needed and are best selected when the document
-is ready.  @b{Ref@TeX{}} supports this with an @emph{index phrases file}
+is ready.  @RefTeX{} supports this with an @emph{index phrases file}
 which collects phrases and helps indexing the phrases globally.
 @end enumerate
 
-Before you start, you need to make sure that @b{Ref@TeX{}} knows about
-the index style being used in the current document.  @b{Ref@TeX{}} has
+Before you start, you need to make sure that @RefTeX{} knows about
+the index style being used in the current document.  @RefTeX{} has
 builtin support for the default @code{\index} and @code{\glossary}
-macros.  Other LaTeX packages, like the @file{multind} or @file{index}
+macros.  Other @LaTeX{} packages, like the @file{multind} or @file{index}
 package, redefine the @code{\index} macro to have an additional
-argument, and @b{Ref@TeX{}} needs to be configured for those.  A
-sufficiently new version of AUCTeX (9.10c or later) will do this
-automatically.  If you really don't use AUCTeX (you should!), this
+argument, and @RefTeX{} needs to be configured for those.  A
+sufficiently new version of @AUCTeX{} (9.10c or later) will do this
+automatically.  If you really don't use @AUCTeX{} (you should!), this
 configuration needs to be done by hand with the menu (@code{Ref->Index
 Style}), or globally for all your documents with
 
@@ -2054,7 +2027,7 @@ When there is nothing selected and no word at point, this command will
 just call @code{reftex-index}, described below.
 
 In order to create a general index entry, press @kbd{C-c <}
-(@code{reftex-index}).  @b{Ref@TeX{}} will prompt for one of the
+(@code{reftex-index}).  @RefTeX{} will prompt for one of the
 available index macros and for its arguments.  Completion will be
 available for the index entry and, if applicable, the index tag.  The
 index tag is a string identifying one of multiple indices.  With the
@@ -2069,7 +2042,7 @@ to the redefined @code{\index} macro.
 @findex reftex-index-visit-phrases-buffer
 @cindex Macro definition lines, in phrase buffer
 
-@b{Ref@TeX{}} maintains a file in which phrases can be collected for
+@RefTeX{} maintains a file in which phrases can be collected for
 later indexing.  The file is located in the same directory as the master
 file of the document and has the extension @file{.rip} (@b{R}eftex
 @b{I}ndex @b{P}hrases).  You can create or visit the file with @kbd{C-c
@@ -2077,7 +2050,7 @@ file of the document and has the extension @file{.rip} (@b{R}eftex
 is initialized by inserting a file header which contains the definition
 of the available index macros.  This list is initialized from
 @code{reftex-index-macros} (@pxref{Defining Index Macros}).  You can
-edit the header as needed, but if you define new LaTeX indexing macros,
+edit the header as needed, but if you define new @LaTeX{} indexing macros,
 don't forget to add them to @code{reftex-index-macros} as well.  Here is
 a phrase file header example:
 
@@ -2119,7 +2092,7 @@ Phrases for indexing can be collected while writing the document.  The
 command @kbd{C-c \} (@code{reftex-index-phrase-selection-or-word})
 copies the current selection (if active) or the word near point into the
 phrases buffer.  It then selects this buffer, so that the phrase line
-can be edited.  To return to the LaTeX document, press @kbd{C-c C-c}
+can be edited.  To return to the @LaTeX{} document, press @kbd{C-c C-c}
 (@code{reftex-index-phrases-save-and-return}).
 
 You can also prepare the list of index phrases in a different way and
@@ -2128,7 +2101,7 @@ a word list of the document and remove all words which should not be
 indexed.
 
 The phrase lines in the phrase buffer must have a specific format.
-@b{Ref@TeX{}} will use font-lock to indicate if a line has the proper
+@RefTeX{} will use font-lock to indicate if a line has the proper
 format.  A phrase line looks like this:
 
 @example
@@ -2223,7 +2196,7 @@ region and @kbd{C-c C-a} on all phrase lines in the buffer.  It is
 probably good to do indexing in small chunks since your concentration
 may not last long enough to do everything in one go.
 
-@b{Ref@TeX{}} will start at the first phrase line and search the phrase
+@RefTeX{} will start at the first phrase line and search the phrase
 globally in the whole document.  At each match it will stop, compute the
 replacement string and offer you the following choices@footnote{Windows
 users: Restrict yourself to the described keys during indexing.  Pressing
@@ -2272,9 +2245,9 @@ sentence, and even typos.  You can always say @emph{no} at a match you
 do not like.
 @item Wrap Long Lines
 Inserting index macros increases the line length.  Turn this option on
-to allow @b{Ref@TeX{}} to wrap long lines.
+to allow @RefTeX{} to wrap long lines.
 @item Skip Indexed Matches
-When this is on, @b{Ref@TeX{}} will at each match try to figure out if
+When this is on, @RefTeX{} will at each match try to figure out if
 this match is already indexed.  A match is considered indexed if it is
 either the argument of an index macro, or if an index macro is directly
 (without whitespace separation) before or after the match.  Index macros
@@ -2286,7 +2259,7 @@ Even though indexing should be the last thing you do to a document, you
 are bound to make changes afterwards.  Indexing then has to be applied
 to the changed regions.  The command
 @code{reftex-index-phrases-apply-to-region} is designed for this
-purpose.  When called from a LaTeX document with active region, it will
+purpose.  When called from a @LaTeX{} document with active region, it will
 apply @code{reftex-index-all-phrases} to the current region.
 
 @node Displaying and Editing the Index, Builtin Index Macros, The Index Phrases File, Index Support
@@ -2300,7 +2273,7 @@ apply @code{reftex-index-all-phrases} to the current region.
 @findex reftex-display-index
 
 In order to compile and display the index, press @kbd{C-c >}.  If the
-document uses multiple indices, @b{Ref@TeX{}} will ask you to select
+document uses multiple indices, @RefTeX{} will ask you to select
 one.  Then, all index entries will be sorted alphabetically and
 displayed in a special buffer, the @file{*Index*} buffer.  From that
 buffer you can check and edit each entry.
@@ -2314,7 +2287,7 @@ region, make the region active and use a numeric prefix @samp{3} (press
 restriction can be moved from one section to the next by pressing the
 @kbd{<} and @kbd{>} keys.
 
-One caveat: @b{Ref@TeX{}} finds the definition point of an index entry
+One caveat: @RefTeX{} finds the definition point of an index entry
 by searching near the buffer position where it had found to macro during
 scanning.  If you have several identical index entries in the same
 buffer and significant changes have shifted the entries around, you must
@@ -2368,7 +2341,7 @@ always show the location corresponding to the line in the @file{*Index*}
 buffer at point.  This is similar to pressing @key{SPC} after each
 cursor motion.  The default for this flag can be set with the variable
 @code{reftex-index-follow-mode}.  Note that only context in files
-already visited is shown.  @b{Ref@TeX{}} will not visit a file just for
+already visited is shown.  @RefTeX{} will not visit a file just for
 follow mode.  See, however, the variable
 @code{reftex-revisit-to-follow}.
 
@@ -2456,12 +2429,12 @@ will move to the correct position.
 
 @item r
 @vindex reftex-enable-partial-scans
-Reparse the LaTeX document and rebuild the @file{*Index*} buffer.  When
+Reparse the @LaTeX{} document and rebuild the @file{*Index*} buffer.  When
 @code{reftex-enable-partial-scans} is non-@code{nil}, rescan only the file this
 location is defined in, not the entire document.
 
 @item C-u r
-Reparse the @emph{entire} LaTeX document and rebuild the @file{*Index*}
+Reparse the @emph{entire} @LaTeX{} document and rebuild the @file{*Index*}
 buffer.
 
 @item s
@@ -2480,8 +2453,8 @@ indices).
 @cindex LaTeX packages, @code{multind}
 @cindex LaTeX packages, @code{index}
 
-@b{Ref@TeX{}} by default recognizes the @code{\index} and
-@code{\glossary} macros which are defined in the LaTeX core.  It has
+@RefTeX{} by default recognizes the @code{\index} and
+@code{\glossary} macros which are defined in the @LaTeX{} core.  It has
 also builtin support for the re-implementations of @code{\index}
 in the @file{multind} and @file{index} packages.  However, since
 the different definitions of the @code{\index} macro are incompatible,
@@ -2510,7 +2483,7 @@ argument in the text and places it into a separate index with the tag
 @samp{name}@footnote{We are using the syntax of the @file{index} package
 here.}.  The last macro also places its argument into the index, but as
 subitems under the main index entry @samp{Astronomical Objects}.  Here
-is how to make @b{Ref@TeX{}} recognize and correctly interpret these
+is how to make @RefTeX{} recognize and correctly interpret these
 macros, first with Emacs Lisp.
 
 @lisp
@@ -2525,7 +2498,7 @@ Note that the index tag is @samp{idx} for the main index, and
 for the default index and for the glossary.
 
 The character arguments @code{?x}, @code{?n}, and @code{?o} are for
-quick identification of these macros when @b{Ref@TeX{}} inserts new
+quick identification of these macros when @RefTeX{} inserts new
 index entries with @code{reftex-index}.  These codes need to be
 unique. @code{?i}, @code{?I}, and @code{?g} are reserved for the
 @code{\index}, @code{\index*}, and @code{\glossary} macros,
@@ -2592,8 +2565,8 @@ The index tag is "idx".
 @kindex C-c &
 @kindex S-mouse-2
 
-@b{Ref@TeX{}} can display cross--referencing information.  This means,
-if two document locations are linked, @b{Ref@TeX{}} can display the
+@RefTeX{} can display cross--referencing information.  This means,
+if two document locations are linked, @RefTeX{} can display the
 matching location(s) in another window.  The @code{\label} and @code{\ref}
 macros are one way of establishing such a link.  Also, a @code{\cite}
 macro is linked to the corresponding @code{\bibitem} macro or a BibTeX
@@ -2643,7 +2616,7 @@ all locations.
 @cindex Viewing cite locations from BibTeX buffer
 @kbd{C-c &} is also active in BibTeX buffers.  All locations in a
 document where the database entry at point is cited will be displayed.
-On first use, @b{Ref@TeX{}} will prompt for a buffer which belongs to
+On first use, @RefTeX{} will prompt for a buffer which belongs to
 the document you want to search.  Subsequent calls will use the same
 document, until you break this link with a prefix argument to @kbd{C-c
 &}.
@@ -2666,14 +2639,14 @@ in the variable @code{reftex-view-crossref-extra}.
 @end iftex
 
 @node RefTeXs Menu, Key Bindings, Viewing Cross-References, Top
-@section @b{Ref@TeX{}}'s Menu
+@section @RefTeX{}'s Menu
 @cindex RefTeXs Menu
 @cindex Menu, in the menu bar
 
-@b{Ref@TeX{}} installs a @code{Ref} menu in the menu bar on systems
+@RefTeX{} installs a @code{Ref} menu in the menu bar on systems
 which support this.  From this menu you can access all of
-@b{Ref@TeX{}}'s commands and a few of its options.  There is also a
-@code{Customize} submenu which can be used to access @b{Ref@TeX{}}'s
+@RefTeX{}'s commands and a few of its options.  There is also a
+@code{Customize} submenu which can be used to access @RefTeX{}'s
 entire set of options.
 
 @node Key Bindings, Faces, RefTeXs Menu, Top
@@ -2710,7 +2683,7 @@ Here is a summary of the available key bindings.
 @end example
 
 Note that the @kbd{S-mouse-2} binding is only provided if this key is
-not already used by some other package.  @b{Ref@TeX{}} will not override an
+not already used by some other package.  @RefTeX{} will not override an
 existing binding to @kbd{S-mouse-2}.
 
 Personally, I also bind some functions in the users @kbd{C-c} map for
@@ -2746,7 +2719,7 @@ default.  If you want to have these key bindings available, set in your
 @end lisp
 
 @vindex reftex-load-hook
-Changing and adding to @b{Ref@TeX{}}'s key bindings is best done in the hook
+Changing and adding to @RefTeX{}'s key bindings is best done in the hook
 @code{reftex-load-hook}.  For information on the keymaps
 which should be used to add keys, see @ref{Keymaps and Hooks}.
 
@@ -2754,9 +2727,9 @@ which should be used to add keys, see @ref{Keymaps and Hooks}.
 @section Faces
 @cindex Faces
 
-@b{Ref@TeX{}} uses faces when available to structure the selection and
+@RefTeX{} uses faces when available to structure the selection and
 table of contents buffers.  It does not create its own faces, but uses
-the ones defined in @file{font-lock.el}.  Therefore, @b{Ref@TeX{}} will
+the ones defined in @file{font-lock.el}.  Therefore, @RefTeX{} will
 use faces only when @code{font-lock} is loaded.  This seems to be
 reasonable because people who like faces will very likely have it
 loaded.  If you wish to turn off fontification or change the involved
@@ -2772,9 +2745,9 @@ files:
 
 @itemize @bullet
 @item
-@b{Ref@TeX{}} has full support for multifile documents.  You can edit parts of
+@RefTeX{} has full support for multifile documents.  You can edit parts of
 several (multifile) documents at the same time without conflicts.
-@b{Ref@TeX{}} provides functions to run @code{grep}, @code{search} and
+@RefTeX{} provides functions to run @code{grep}, @code{search} and
 @code{query-replace} on all files which are part of a multifile
 document.
 
@@ -2782,10 +2755,10 @@ document.
 @vindex tex-main-file
 @vindex TeX-master
 All files belonging to a multifile document should define a File
-Variable (@code{TeX-master} for AUCTeX or @code{tex-main-file} for the
-standard Emacs LaTeX mode) containing the name of the master file.  For
+Variable (@code{TeX-master} for @AUCTeX{} or @code{tex-main-file} for the
+standard Emacs @LaTeX{} mode) containing the name of the master file.  For
 example, to set the file variable @code{TeX-master}, include something
-like the following at the end of each TeX file:
+like the following at the end of each @TeX{} file:
 
 @example
 %%% Local Variables: ***
@@ -2794,7 +2767,7 @@ like the following at the end of each TeX file:
 %%% End: ***
 @end example
 
-AUCTeX with the setting
+@AUCTeX{} with the setting
 
 @lisp
 (setq-default TeX-master nil)
@@ -2802,14 +2775,14 @@ AUCTeX with the setting
 
 will actually ask you for each new file about the master file and insert
 this comment automatically.  For more details see the documentation of
-the AUCTeX (@pxref{Multifile,,,auctex, The AUC TeX User Manual}), the
+the @AUCTeX{} (@pxref{Multifile,,,auctex, The AUCTeX User Manual}), the
 documentation about the Emacs (La)TeX mode (@pxref{TeX Print,,,emacs,
 The GNU Emacs Manual}) and the Emacs documentation on File Variables
 (@pxref{File Variables,,,emacs, The GNU Emacs Manual}).
 
 @item
 The context of a label definition must be found in the same file as the
-label itself in order to be processed correctly by @b{Ref@TeX{}}.  The only
+label itself in order to be processed correctly by @RefTeX{}.  The only
 exception is that section labels referring to a section statement
 outside the current file can still use that section title as
 context.
@@ -2819,7 +2792,7 @@ context.
 @section Language Support
 @cindex Language support
 
-Some parts of @b{Ref@TeX{}} are language dependent.  The default
+Some parts of @RefTeX{} are language dependent.  The default
 settings work well for English.  If you are writing in a different
 language, the following hints may be useful:
 
@@ -2835,7 +2808,7 @@ to be changed for other languages.  See the variables
 @item
 @vindex reftex-translate-to-ascii-function
 @vindex reftex-label-illegal-re
-Also, when a label is derived from context, @b{Ref@TeX{}} clears the
+Also, when a label is derived from context, @RefTeX{} clears the
 context string from non-ASCII characters in order to make a valid label.
 If there should ever be a version of @TeX{} which allows extended
 characters @emph{in labels}, then we will have to look at the
@@ -2843,7 +2816,7 @@ variables @code{reftex-translate-to-ascii-function} and
 @code{reftex-label-illegal-re}.
 
 @item
-When a label is referenced, @b{Ref@TeX{}} looks at the word before point
+When a label is referenced, @RefTeX{} looks at the word before point
 to guess which label type is required.  These @emph{magic words} are
 different in every language.  For an example of how to add magic words,
 see @ref{Adding Magic Words}.
@@ -2851,7 +2824,7 @@ see @ref{Adding Magic Words}.
 @vindex reftex-multiref-punctuation
 @vindex reftex-cite-punctuation
 @item
-@b{Ref@TeX{}} inserts ``punctuation'' for multiple references and
+@RefTeX{} inserts ``punctuation'' for multiple references and
 for the author list in citations.  Some of this may be language
 dependent.  See the variables @code{reftex-multiref-punctuation} and
 @code{reftex-cite-punctuation}.
@@ -2862,25 +2835,25 @@ dependent.  See the variables @code{reftex-multiref-punctuation} and
 @cindex Finding files
 
 In order to find files included in a document via @code{\input} or
-@code{\include}, @b{Ref@TeX{}} searches all directories specified in the
+@code{\include}, @RefTeX{} searches all directories specified in the
 environment variable @code{TEXINPUTS}.  Similarly, it will search the
 path specified in the variables @code{BIBINPUTS} and @code{TEXBIB} for
 BibTeX database files.
 
-When searching, @b{Ref@TeX{}} will also expand recursive path
+When searching, @RefTeX{} will also expand recursive path
 definitions (directories ending in @samp{//} or @samp{!!}).  But it will
 only search and expand directories @emph{explicitly} given in these
 variables. This may cause problems under the following circumstances:
 
 @itemize @bullet
 @item
-Most TeX system have a default search path for both TeX files and BibTeX
+Most @TeX{} system have a default search path for both @TeX{} files and BibTeX
 files which is defined in some setup file.  Usually this default path is
-for system files which @b{Ref@TeX{}} does not need to see.  But if your
-document needs TeX files or BibTeX database files in a directory only
-given in the default search path, @b{Ref@TeX{}} will fail to find them.
+for system files which @RefTeX{} does not need to see.  But if your
+document needs @TeX{} files or BibTeX database files in a directory only
+given in the default search path, @RefTeX{} will fail to find them.
 @item
-Some TeX systems do not use environment variables at all in order to
+Some @TeX{} systems do not use environment variables at all in order to
 specify the search path.  Both default and user search path are then
 defined in setup files.
 @end itemize
@@ -2893,7 +2866,7 @@ There are three ways to solve this problem:
 Specify all relevant directories explicitly in the environment
 variables.  If for some reason you don't want to mess with the default
 variables @code{TEXINPUTS} and @code{BIBINPUTS}, define your own
-variables and configure @b{Ref@TeX{}} to use them instead:
+variables and configure @RefTeX{} to use them instead:
 
 @lisp
 (setq reftex-texpath-environment-variables '("MYTEXINPUTS"))
@@ -2901,7 +2874,7 @@ variables and configure @b{Ref@TeX{}} to use them instead:
 @end lisp
 
 @item
-Specify the full search path directly in @b{Ref@TeX{}}'s variables.
+Specify the full search path directly in @RefTeX{}'s variables.
 
 @lisp
 (setq reftex-texpath-environment-variables
@@ -2911,10 +2884,10 @@ Specify the full search path directly in @b{Ref@TeX{}}'s variables.
 @end lisp
 
 @item
-Some TeX systems provide stand--alone programs to do the file search just
-like TeX and BibTeX.  E.g. Thomas Esser's @code{teTeX} uses the
+Some @TeX{} systems provide stand--alone programs to do the file search just
+like @TeX{} and BibTeX.  E.g. Thomas Esser's @code{teTeX} uses the
 @code{kpathsearch} library which provides the command @code{kpsewhich}
-to search for files.  @b{Ref@TeX{}} can be configured to use this
+to search for files.  @RefTeX{} can be configured to use this
 program.  Note that the exact syntax of the @code{kpsewhich}
 command depends upon the version of that program.
 
@@ -2932,8 +2905,8 @@ command depends upon the version of that program.
 Some people like to use RefTeX with noweb files, which usually have the
 extension @file{.nw}.  In order to deal with such files, the new
 extension must be added to the list of valid extensions in the variable
-@code{reftex-file-extensions}.  When working with AUCTeX as major mode,
-the new extension must also be known to AUCTeX via the variable
+@code{reftex-file-extensions}.  When working with @AUCTeX{} as major mode,
+the new extension must also be known to @AUCTeX{} via the variable
 @code{TeX-file-extension}.  For example:
 
 @lisp
@@ -2953,15 +2926,15 @@ am leaving this stuff in the manual for people who want to write thick
 books, where some of it still might be useful.}
 
 Implementing the principle of least surprises, the default settings of
-@b{Ref@TeX{}} ensure a safe ride for beginners and casual users.  However,
-when using @b{Ref@TeX{}} for a large project and/or on a small computer,
+@RefTeX{} ensure a safe ride for beginners and casual users.  However,
+when using @RefTeX{} for a large project and/or on a small computer,
 there are ways to improve speed or memory usage.
 
 @itemize @bullet
 @item
 @b{Removing Lookup Buffers}@*
 @cindex Removing lookup buffers
-@b{Ref@TeX{}} will load other parts of a multifile document as well as BibTeX
+@RefTeX{} will load other parts of a multifile document as well as BibTeX
 database files for lookup purposes.  These buffers are kept, so that
 subsequent use of the same files is fast.  If you can't afford keeping
 these buffers around, and if you can live with a speed penalty, try
@@ -2975,13 +2948,13 @@ these buffers around, and if you can live with a speed penalty, try
 @b{Partial Document Scans}@*
 @cindex Partial documents scans
 @cindex Document scanning, partial
-A @kbd{C-u} prefix on the major @b{Ref@TeX{}} commands @code{reftex-label}
+A @kbd{C-u} prefix on the major @RefTeX{} commands @code{reftex-label}
 (@kbd{C-u C-c (}), @code{reftex-reference} (@kbd{C-u C-c )}),
 @code{reftex-citation} (@kbd{C-u C-c [}), @code{reftex-toc} (@kbd{C-u C-c
 =}), and @code{reftex-view-crossref} (@kbd{C-u C-c &}) initiates
 re-parsing of the entire document in order to update the parsing
 information.  For a large document this can be unnecessary, in
-particular if only one file has changed.  @b{Ref@TeX{}} can be configured
+particular if only one file has changed.  @RefTeX{} can be configured
 to do partial scans instead of full ones.  @kbd{C-u} re-parsing then
 does apply only to the current buffer and files included from it.
 Likewise, the @kbd{r} key in both the label selection buffer and the
@@ -3001,7 +2974,7 @@ try
 @cindex Saving parser information
 @cindex Parse information, saving to a file
 @vindex reftex-parse-file-extension
-Even with partial scans enabled, @b{Ref@TeX{}} still has to make one full
+Even with partial scans enabled, @RefTeX{} still has to make one full
 scan, when you start working with a document.  To avoid this, parsing
 information can be stored in a file.  The file @file{MASTER.rel} is used
 for storing information about a document with master file
@@ -3019,11 +2992,11 @@ session.  To use this feature, put into @file{.emacs}:
 @b{Identifying label types by prefix}@*
 @cindex Parse information, saving to a file
 @vindex reftex-trust-label-prefix
-@b{Ref@TeX{}} normally parses around each label to check in which
+@RefTeX{} normally parses around each label to check in which
 environment this label is located, in order to assign a label type to
 the label.  If your document contains thousands of labels, document
 parsing will take considerable time.  If you have been using label prefixes
-like tab: and fn: consistently, you can tell @b{Ref@TeX{}} to get the
+like tab: and fn: consistently, you can tell @RefTeX{} to get the
 label type directly from the prefix, without additional parsing.  This
 will be faster and also allow labels to end up in the correct category
 if for some reason it is not possible to derive the correct type from
@@ -3038,7 +3011,7 @@ equation labels, use
 @b{Automatic Document Scans}@*
 @cindex Automatic document scans
 @cindex Document scanning, automatic
-At rare occasions, @b{Ref@TeX{}} will automatically rescan a part of the
+At rare occasions, @RefTeX{} will automatically rescan a part of the
 document.  If this gets into your way, it can be turned off with
 
 @vindex reftex-allow-automatic-rescan
@@ -3046,7 +3019,7 @@ document.  If this gets into your way, it can be turned off with
 (setq reftex-allow-automatic-rescan nil)
 @end lisp
 
-@b{Ref@TeX{}} will then occasionally annotate new labels in the selection
+@RefTeX{} will then occasionally annotate new labels in the selection
 buffer, saying that their position in the label list in uncertain.  A
 manual document scan will fix this.
 
@@ -3056,7 +3029,7 @@ manual document scan will fix this.
 @cindex Selection buffers, multiple
 Normally, the selection buffer @file{*RefTeX Select*} is re-created for
 every selection process.  In documents with very many labels this can
-take several seconds.  @b{Ref@TeX{}} provides an option to create a
+take several seconds.  @RefTeX{} provides an option to create a
 separate selection buffer for each label type and to keep this buffer
 from one selection to the next.  These buffers are updated automatically
 only when a new label has been added in the buffers category with
@@ -3086,7 +3059,7 @@ with the @kbd{g} key.  To get this behavior, use instead
 @need 2000
 @noindent
 @b{As a summary}, here are the settings I recommend for heavy use of
-@b{Ref@TeX{}} with large documents:
+@RefTeX{} with large documents:
 
 @lisp
 @group
@@ -3101,26 +3074,26 @@ with the @kbd{g} key.  To get this behavior, use instead
 @cindex @code{AUCTeX}, Emacs package
 @cindex Emacs packages, @code{AUCTeX}
 
-AUCTeX is without doubt the best major mode for editing TeX and LaTeX
+@AUCTeX{} is without doubt the best major mode for editing @TeX{} and @LaTeX{}
 files with Emacs (@pxref{Top,AUCTeX,,auctex, The AUCTeX User Manual}).
-If AUCTeX is not part of your Emacs distribution, you can get
+If @AUCTeX{} is not part of your Emacs distribution, you can get
 it@footnote{XEmacs 21.x users may want to install the corresponding
-XEmacs package.} by ftp from the @value{AUCTEXSITE}.
+XEmacs package.} by FTP from the @value{AUCTEXSITE}.
 
 @menu
 * AUCTeX-RefTeX Interface::          How both packages work together
-* Style Files::                      AUCTeX's style files can support RefTeX
+* Style Files::                      @AUCTeX{}'s style files can support RefTeX
 * Bib-Cite::                         Hypertext reading of a document
 @end menu
 
 @node AUCTeX-RefTeX Interface, Style Files, , AUCTeX
-@subsection The AUC@TeX{}-@b{Ref@TeX{}} Interface
+@subsection The AUC@TeX{}-@RefTeX{} Interface
 
-@b{Ref@TeX{}} contains code to interface with AUCTeX.  When this
+@RefTeX{} contains code to interface with @AUCTeX{}.  When this
 interface is turned on, both packages will interact closely.  Instead of
-using @b{Ref@TeX{}}'s commands directly, you can then also use them
-indirectly as part of the AUCTeX
-environment@footnote{@b{Ref@TeX{}} 4.0 and AUCTeX 9.10c will be
+using @RefTeX{}'s commands directly, you can then also use them
+indirectly as part of the @AUCTeX{}
+environment@footnote{@RefTeX{} 4.0 and @AUCTeX{} 9.10c will be
 needed for all of this to work.  Parts of it work also with earlier
 versions.}.  The interface is turned on with
 
@@ -3143,12 +3116,12 @@ The following list describes the individual parts of the interface.
 @kindex C-c C-s
 @findex LaTeX-section, @r{AUCTeX}
 @findex TeX-insert-macro, @r{AUCTeX}
-@b{AUCTeX calls @code{reftex-label} to insert labels}@*
+@b{@AUCTeX{} calls @code{reftex-label} to insert labels}@*
 When a new section is created with @kbd{C-c C-s}, or a new environment
-is inserted with @kbd{C-c C-e}, AUCTeX normally prompts for a label to
+is inserted with @kbd{C-c C-e}, @AUCTeX{} normally prompts for a label to
 go with it.  With the interface, @code{reftex-label} is called instead.
-For example, if you type @kbd{C-c C-e equation @key{RET}}, AUCTeX and
-@b{Ref@TeX{}} will insert
+For example, if you type @kbd{C-c C-e equation @key{RET}}, @AUCTeX{} and
+@RefTeX{} will insert
 
 @example
 \begin@{equation@}
@@ -3160,12 +3133,12 @@ For example, if you type @kbd{C-c C-e equation @key{RET}}, AUCTeX and
 @noindent
 without further prompts.
 
-Similarly, when you type @kbd{C-c C-s section @key{RET}}, @b{Ref@TeX{}}
+Similarly, when you type @kbd{C-c C-s section @key{RET}}, @RefTeX{}
 will offer its default label which is derived from the section title.
 
 @item
-@b{AUCTeX tells @b{Ref@TeX{}} about new sections}@*
-When creating a new section with @kbd{C-c C-s}, @b{Ref@TeX{}} will not
+@b{@AUCTeX{} tells @RefTeX{} about new sections}@*
+When creating a new section with @kbd{C-c C-s}, @RefTeX{} will not
 have to rescan the buffer in order to see it.
 
 @item
@@ -3179,44 +3152,44 @@ have to rescan the buffer in order to see it.
 @findex TeX-arg-index, @r{AUCTeX function}
 @findex TeX-insert-macro, @r{AUCTeX function}
 @kindex C-c @key{RET}
-@b{@b{Ref@TeX{}} supplies macro arguments}@* When you insert a macro
-interactively with @kbd{C-c @key{RET}}, AUCTeX normally prompts for
+@b{@RefTeX{} supplies macro arguments}@* When you insert a macro
+interactively with @kbd{C-c @key{RET}}, @AUCTeX{} normally prompts for
 macro arguments.  Internally, it uses the functions
 @code{TeX-arg-label}, @code{TeX-arg-cite}, and @code{TeX-arg-index} to
 prompt for arguments which are labels, citation keys and index entries.
 The interface takes over these functions@footnote{@code{fset} is used to
-do this, which is not reversible.  However, @b{Ref@TeX{}} implements the
+do this, which is not reversible.  However, @RefTeX{} implements the
 old functionality when you later decide to turn off the interface.} and
 supplies the macro arguments with @b{Ref@TeX{}'s} mechanisms.  For
-example, when you type @kbd{C-c @key{RET} ref @key{RET}}, @b{Ref@TeX{}}
+example, when you type @kbd{C-c @key{RET} ref @key{RET}}, @RefTeX{}
 will supply its label selection process (@pxref{Referencing
 Labels}).
 
 @item
-@b{@b{Ref@TeX{}} tells AUCTeX about new labels, citation-- and index keys}@*
-@b{Ref@TeX{}} will add all newly created labels to AUCTeX's completion list.
+@b{@RefTeX{} tells @AUCTeX{} about new labels, citation-- and index keys}@*
+@RefTeX{} will add all newly created labels to @AUCTeX{}'s completion list.
 @end itemize
 
 @node Style Files, Bib-Cite, AUCTeX-RefTeX Interface, AUCTeX
 @subsection Style Files
 @cindex Style files, AUCTeX
 @findex TeX-add-style-hook, @r{AUCTeX}
-Style files are Emacs Lisp files which are evaluated by AUCTeX in
+Style files are Emacs Lisp files which are evaluated by @AUCTeX{} in
 association with the @code{\documentclass} and @code{\usepackage}
 commands of a document (@pxref{Style Files,,,auctex}). Support for
-@b{Ref@TeX{}} in such a style file is useful when the LaTeX style
+@RefTeX{} in such a style file is useful when the @LaTeX{} style
 defines macros or environments connected with labels, citations, or the
 index.  Many style files (e.g. @file{amsmath.el} or @file{natbib.el})
-distributed with AUCTeX already support @b{Ref@TeX{}} in this
+distributed with @AUCTeX{} already support @RefTeX{} in this
 way.
 
-Before calling a @b{Ref@TeX{}} function, the style hook should always
+Before calling a @RefTeX{} function, the style hook should always
 test for the availability of the function, so that the style file will
-also work for people who do not use @b{Ref@TeX{}}. 
+also work for people who do not use @RefTeX{}. 
 
 Additions made with style files in the way described below remain local
 to the current document.  For example, if one package uses AMSTeX, the
-style file will make @b{Ref@TeX{}} switch over to @code{\eqref}, but
+style file will make @RefTeX{} switch over to @code{\eqref}, but
 this will not affect other documents.
 
 @findex reftex-add-label-environments
@@ -3227,7 +3200,7 @@ function @code{reftex-add-to-label-alist} which is still available as an
 alias for compatibility.}  which defines additions to
 @code{reftex-label-alist}.  The argument taken by this function must have
 the same format as @code{reftex-label-alist}.  The @file{amsmath.el}
-style file of AUCTeX for example contains the following:
+style file of @AUCTeX{} for example contains the following:
 
 @lisp
 @group
@@ -3259,7 +3232,7 @@ with @code{\newtheorem} might use
 Similarly, a style hook may contain a call to
 @code{reftex-set-cite-format} to set the citation format.  The style
 file @file{natbib.el} for the Natbib citation style does switch
-@b{Ref@TeX{}}'s citation format like this:
+@RefTeX{}'s citation format like this:
 
 @lisp
 (TeX-add-style-hook "natbib"
@@ -3283,7 +3256,7 @@ the style @file{multind.el} contains
 @end lisp
 
 If you have your own package @file{myindex} which defines the
-following macros to be used with the LaTeX @file{index.sty} file
+following macros to be used with the @LaTeX{} @file{index.sty} file
 @example
 \newcommand@{\molec@}[1]@{#1\index@{Molecules!#1@}@}
 \newcommand@{\aindex@}[1]@{#1\index[author]@{#1@}
@@ -3307,7 +3280,7 @@ you could write this in the style file @file{myindex.el}:
 Finally the hook may contain a call to @code{reftex-add-section-levels}
 to define additional section statements.  For example, the FoilTeX class
 has just two headers, @code{\foilhead} and @code{\rotatefoilhead}.  Here
-is a style file @file{foils.el} that will inform @b{Ref@TeX{}} about these:
+is a style file @file{foils.el} that will inform @RefTeX{} about these:
 
 @lisp
 (TeX-add-style-hook "foils"
@@ -3323,20 +3296,20 @@ is a style file @file{foils.el} that will inform @b{Ref@TeX{}} about these:
 @cindex Emacs packages, @code{bib-cite}
 
 Once you have written a document with labels, references and citations,
-it can be nice to read it like a hypertext document.  @b{Ref@TeX{}} has
+it can be nice to read it like a hypertext document.  @RefTeX{} has
 support for that: @code{reftex-view-crossref} (bound to @kbd{C-c
 &}), @code{reftex-mouse-view-crossref} (bound to @kbd{S-mouse-2}), and
 @code{reftex-search-document}.  A somewhat fancier interface with mouse
 highlighting is provided (among other things) by Peter S. Galbraith's
 @file{bib-cite.el}.  There is some overlap in the functionalities of
-Bib-cite and @b{Ref@TeX{}}.  Bib-cite.el comes bundled with
-AUCTeX.
+Bib-cite and @RefTeX{}.  Bib-cite.el comes bundled with
+@AUCTeX{}.
 
 Bib-cite version 3.06 and later can be configured so that bib-cite's
-mouse functions use @b{Ref@TeX{}} for displaying references and citations.
-This can be useful in particular when working with the LaTeX @code{xr}
+mouse functions use @RefTeX{} for displaying references and citations.
+This can be useful in particular when working with the @LaTeX{} @code{xr}
 package or with an explicit @code{thebibliography} environment (rather
-than BibTeX).  Bib-cite cannot handle those, but @b{Ref@TeX{}} does.  To
+than BibTeX).  Bib-cite cannot handle those, but @RefTeX{} does.  To
 make use of this feature, try
 
 @vindex bib-cite-use-reftex-view-crossref
@@ -3351,7 +3324,7 @@ make use of this feature, try
 
 @itemize @bullet
 @item
-@b{LaTeX commands}@*
+@b{@LaTeX{} commands}@*
 @cindex LaTeX commands, not found
 @code{\input}, @code{\include}, and @code{\section} (etc.) statements
 have to be first on a line (except for white space).
@@ -3359,7 +3332,7 @@ have to be first on a line (except for white space).
 @item
 @b{Commented regions}@*
 @cindex Labels, commented out
-@b{Ref@TeX{}} sees also labels in regions commented out and will refuse to
+@RefTeX{} sees also labels in regions commented out and will refuse to
 make duplicates of such labels.  This is considered to be a feature.
 
 @item
@@ -3379,7 +3352,7 @@ scan will fix this.
 The label environment definitions in @code{reftex-label-alist} are
 global and apply to all documents.  If you need to make definitions
 local to a document, because they would interfere with settings in other
-documents, you should use AUCTeX and set up style files with calls to
+documents, you should use @AUCTeX{} and set up style files with calls to
 @code{reftex-add-label-environments}, @code{reftex-set-cite-format},
 @code{reftex-add-index-macros}, and @code{reftex-add-section-levels}.
 Settings made with these functions remain local to the current
@@ -3395,9 +3368,9 @@ document. @xref{AUCTeX}.
 @cindex Emacs packages, @code{iso-cvt}
 When using packages which make the buffer representation of a file
 different from its disk representation (e.g. x-symbol, isotex,
-iso-cvt) you may find that @b{Ref@TeX{}}'s parsing information sometimes
+iso-cvt) you may find that @RefTeX{}'s parsing information sometimes
 reflects the disk state of a file.  This happens only in @emph{unvisited}
-parts of a multifile document, because @b{Ref@TeX{}} visits these files
+parts of a multifile document, because @RefTeX{} visits these files
 literally for speed reasons.  Then both short context and section
 headings may look different from what you usually see on your screen.
 In rare cases @code{reftex-toc} may have problems to jump to an affected
@@ -3407,7 +3380,7 @@ this:
 @item
 @vindex reftex-keep-temporary-buffers
 @code{(setq reftex-keep-temporary-buffers t)}@*
-This implies that @b{Ref@TeX{}} will load all parts of a multifile
+This implies that @RefTeX{} will load all parts of a multifile
 document into Emacs (i.e. there won't be any temporary buffers).
 @item
 @vindex reftex-initialize-temporary-buffers
@@ -3434,7 +3407,7 @@ to specify a label.  E.g. Lamport's @file{pf.sty} uses both
 @end example
 
 @noindent
-We need to trick @b{Ref@TeX{}} into swallowing this:
+We need to trick @RefTeX{} into swallowing this:
 
 @lisp
 @group
@@ -3447,7 +3420,7 @@ We need to trick @b{Ref@TeX{}} into swallowing this:
 
 @noindent
 The first line is just a normal configuration for a macro.  For the
-@code{step+} environment we actually tell @b{Ref@TeX{}} to look for the
+@code{step+} environment we actually tell @RefTeX{} to look for the
 @emph{macro} @samp{\begin@{step+@}} and interpret the @emph{first}
 argument (which really is a second argument to the macro @code{\begin})
 as a label of type @code{?p}.  Argument count for this macro starts only
@@ -3459,7 +3432,7 @@ context.
 @cindex Idle timer restart
 @vindex reftex-use-itimer-in-xemacs
 In XEmacs, idle timer restart does not work reliably after fast
-keystrokes.  Therefore @b{Ref@TeX{}} currently uses the post command
+keystrokes.  Therefore @RefTeX{} currently uses the post command
 hook to start the timer used for automatic crossref information.  When
 this bug gets fixed, a real idle timer can be requested with
 @lisp
@@ -3472,7 +3445,7 @@ this bug gets fixed, a real idle timer can be requested with
 @cindex Key bindings, problems with Viper mode
 @findex viper-harness-minor-mode
 With @i{Viper} mode prior to Vipers version 3.01, you need to protect
-@b{Ref@TeX{}}'s keymaps with
+@RefTeX{}'s keymaps with
 
 @lisp
 (viper-harness-minor-mode "reftex")
@@ -3488,41 +3461,28 @@ With @i{Viper} mode prior to Vipers version 3.01, you need to protect
 @cindex Acknowledgments
 @cindex Thanks
 @cindex Bug reports
-@cindex @code{http}, @b{Ref@TeX{}} home page
-@cindex @code{ftp}, @b{Ref@TeX{}} site
+@cindex @code{http}, @RefTeX{} home page
+@cindex @code{ftp}, @RefTeX{} site
 
-@b{Ref@TeX{}} was written by @i{Carsten Dominik}
+@RefTeX{} was written by @i{Carsten Dominik}
 @email{dominik@@science.uva.nl}, with contributions by @i{Stephen
-Eglen}.  @b{Ref@TeX{}} is currently maintained by 
+Eglen}.  @RefTeX{} is currently maintained by @value{MAINTAINER}, see
+the @value{MAINTAINERSITE} for detailed information.
 
-@noindent
-Carsten Dominik <dominik@@science.uva.nl>
+If you have questions about @RefTeX{}, you can send email to the
+@value{SUPPORTADDRESS}.  If you want to contribute code or ideas, write
+to the @value{DEVELADDRESS}.  And in the rare case of finding a bug,
+please use @kbd{M-x reftex-report-bug @key{RET}} which will prepare a
+bug report with useful information about your setup.  Remember to add
+essential information like a recipe for reproducing the bug, what you
+expected to happen, and what actually happened.  Send the bug report to
+the @value{BUGADDRESS}.
 
-If you have questions about @b{Ref@TeX{}}, there are several Usenet
-groups which have competent readers: @code{comp.emacs},
-@code{gnu.emacs.help}, @code{comp.emacs.xemacs}, @code{comp.text.tex},
-@code{de.comp.text.tex}.  You can also write directly to the
-maintainer.
+There are also several Usenet groups which have competent readers who
+might be able to help: @code{comp.emacs}, @code{gnu.emacs.help},
+@code{comp.emacs.xemacs}, and @code{comp.text.tex}.
 
-If you find a bug in @b{Ref@TeX{}} or its documentation, or if you want
-to contribute code or ideas, please @value{MAINTAINERCONTACT}.  Remember
-to provide all necessary information such as version numbers of Emacs
-and @b{Ref@TeX{}}, and the relevant part of your configuration in
-@file{.emacs}.  When reporting a bug which throws an exception, please
-include a backtrace if you know how to produce one.
-
-@b{Ref@TeX{}} is bundled and pre-installed with Emacs since version 20.2.
-It was also bundled and pre-installed with XEmacs 19.16--20.x.  XEmacs
-21.x users want to install the corresponding plugin package which is
-available from the @value{XEMACSFTP}.  See the XEmacs 21.x
-documentation on package installation for details.
-
-Users of earlier Emacs distributions (including Emacs 19) can get a
-@b{Ref@TeX{}} distribution from the @value{MAINTAINERSITE}.  Note that
-the Emacs 19 version supports many but not all features described in
-this manual.
-
-Thanks to the people on the Net who have used @b{Ref@TeX{}} and helped
+Thanks to the people on the Net who have used @RefTeX{} and helped
 developing it with their reports.  In particular thanks to @i{Ralf
 Angeli, Fran Burstall, Alastair Burt, Lars Clausen, Soren Dayton,
 Stephen Eglen, Karl Eichwalder, Erik Frisk, Peter Galbraith, Kai
@@ -3533,20 +3493,19 @@ Nicolaescu, Sudeep Kumar Palat, Daniel Polani, Alan Shutko, Robin Socha,
 Richard Stanton, Allan Strand, Jan Vroonhof, Christoph Wedler, Alan
 Williams, Roland Winkler, Hans-Christoph Wirth, Eli Zaretskii}.
 
-
 The @code{view-crossref} feature was inspired by @i{Peter Galbraith's}
 @file{bib-cite.el}.
 
 Finally thanks to @i{Uwe Bolick} who first got me interested in
-supporting LaTeX labels and references with an editor (which was
+supporting @LaTeX{} labels and references with an editor (which was
 MicroEmacs at the time).
 
 @node Commands, Options, Imprint, Top
 @chapter Commands
 @cindex Commands, list of
 
-Here is a summary of @b{Ref@TeX{}}'s commands which can be executed from
-LaTeX files.  Command which are executed from the special buffers are
+Here is a summary of @RefTeX{}'s commands which can be executed from
+@LaTeX{} files.  Command which are executed from the special buffers are
 not described here.  All commands are available from the @code{Ref}
 menu.  See @xref{Key Bindings}.
 
@@ -3587,8 +3546,8 @@ expression to match all entries in all files.
 @deffn Command reftex-index
 Query for an index macro and insert it along with its arguments.  The
 index macros available are those defined in @code{reftex-index-macro} or
-by a call to @code{reftex-add-index-macros}, typically from an AUCTeX
-style file.  @b{Ref@TeX{}} provides completion for the index tag and the
+by a call to @code{reftex-add-index-macros}, typically from an @AUCTeX{}
+style file.  @RefTeX{} provides completion for the index tag and the
 index key, and will prompt for other arguments.
 @end deffn
 
@@ -3599,8 +3558,8 @@ to make an index entry.  The phrase indexed is the current selection or
 the word near point.  When called with one @kbd{C-u} prefix, let the
 user have a chance to edit the index entry.  When called with 2
 @kbd{C-u} as prefix, also ask for the index macro and other stuff.  When
-called inside TeX math mode as determined by the @file{texmathp.el}
-library which is part of AUCTeX, the string is first processed with the
+called inside @TeX{} math mode as determined by the @file{texmathp.el}
+library which is part of @AUCTeX{}, the string is first processed with the
 @code{reftex-index-math-format}, which see.
 @end deffn
 
@@ -3609,7 +3568,7 @@ Add current selection or the word at point to the phrases buffer.
 When you are in transient-mark-mode and the region is active, the
 selection will be used - otherwise the word at point.
 You get a chance to edit the entry in the phrases buffer - to save the
-buffer and return to the LaTeX document, finish with @kbd{C-c C-c}.
+buffer and return to the @LaTeX{} document, finish with @kbd{C-c C-c}.
 @end deffn
 
 @deffn Command reftex-index-visit-phrases-buffer
@@ -3643,9 +3602,9 @@ the command @code{reftex-view-crossref-from-bibtex}.  With one or two
 @end deffn
 
 @deffn Command reftex-view-crossref-from-bibtex
-View location in a LaTeX document which cites the BibTeX entry at point.
-Since BibTeX files can be used by many LaTeX documents, this function
-prompts upon first use for a buffer in @b{Ref@TeX{}} mode.  To reset this
+View location in a @LaTeX{} document which cites the BibTeX entry at point.
+Since BibTeX files can be used by many @LaTeX{} documents, this function
+prompts upon first use for a buffer in @RefTeX{} mode.  To reset this
 link to a document, call the function with a prefix arg.  Calling
 this function several times find successive citation locations.
 @end deffn
@@ -3698,7 +3657,7 @@ Renumber all simple labels in the document to make them sequentially.
 Simple labels are the ones created by RefTeX, consisting only of the
 prefix and a number.  After the command completes, all these labels will
 have sequential numbers throughout the document.  Any references to the
-labels will be changed as well.  For this, @b{Ref@TeX{}} looks at the
+labels will be changed as well.  For this, @RefTeX{} looks at the
 arguments of any macros which either start or end with the string
 @samp{ref}.  This command should be used with care, in particular in
 multifile documents.  You should not use it if another document refers
@@ -3718,13 +3677,13 @@ The sequence in the new file is the same as it was in the old database.
 @end deffn
 
 @deffn Command reftex-customize
-Run the customize browser on the @b{Ref@TeX{}} group.
+Run the customize browser on the @RefTeX{} group.
 @end deffn
 @deffn Command reftex-show-commentary
 Show the commentary section from @file{reftex.el}.
 @end deffn
 @deffn Command reftex-info
-Run info on the top @b{Ref@TeX{}} node.
+Run info on the top @RefTeX{} node.
 @end deffn
 @deffn Command reftex-parse-document
 Parse the entire document in order to update the parsing information.
@@ -3738,7 +3697,7 @@ removes the parse file associated with the current document.
 @chapter Options, Keymaps, Hooks
 @cindex Options, list of
 
-Here is a complete list of @b{Ref@TeX{}}'s configuration variables.  All
+Here is a complete list of @RefTeX{}'s configuration variables.  All
 variables have customize support - so if you are not familiar with Emacs
 Lisp (and even if you are) you might find it more comfortable to use
 @code{customize} to look at and change these variables. @kbd{M-x
@@ -3764,14 +3723,14 @@ reftex-customize} will get you there.
 @cindex Table of contents, options
 
 @defopt reftex-include-file-commands
-List of LaTeX commands which input another file.
+List of @LaTeX{} commands which input another file.
 The file name is expected after the command, either in braces or separated
 by whitespace.
 @end defopt
 
 @defopt reftex-max-section-depth
 Maximum depth of section levels in document structure.
-Standard LaTeX needs 7, default is 12.
+Standard @LaTeX{} needs 7, default is 12.
 @end defopt
 
 @defopt reftex-section-levels
@@ -3909,7 +3868,7 @@ itself and has the following structure:
 @end example
 
 Each list entry describes either an environment carrying a counter for
-use with @code{\label} and @code{\ref}, or a LaTeX macro defining a
+use with @code{\label} and @code{\ref}, or a @LaTeX{} macro defining a
 label as (or inside) one of its arguments.  The elements of each list
 entry are:
 
@@ -4020,7 +3979,7 @@ context:
 @end example
 @end itemize
 
-Label context is used in two ways by @b{Ref@TeX{}}: For display in the label
+Label context is used in two ways by @RefTeX{}: For display in the label
 menu, and to derive a label string.  If you want to use a different
 method for each of these, specify them as a dotted pair.
 E.g. @code{(nil . t)} uses the text after the label (@code{nil}) for
@@ -4046,7 +4005,7 @@ made.
 @end table
 
 If the type indicator characters of two or more entries are the same,
-@b{Ref@TeX{}} will use
+@RefTeX{} will use
 @itemize @minus
 @item
 the first non-@code{nil} format and prefix
@@ -4080,7 +4039,7 @@ replaced with the environment or macro.
 @defopt reftex-trust-label-prefix
 Non-@code{nil} means, trust the label prefix when determining label type.
 It is customary to use special label prefixes to distinguish different label
-types.  The label prefixes have no syntactic meaning in LaTeX (unless
+types.  The label prefixes have no syntactic meaning in @LaTeX{} (unless
 special packages like fancyref) are being used.  RefTeX can and by
 default does parse around each label to detect the correct label type,
 but this process can be slow when a document contains thousands of
@@ -4121,7 +4080,7 @@ Flags governing label insertion.  The value has the form
 (@var{derive} @var{prompt})
 @end example
 
-If @var{derive}is @code{t}, @b{Ref@TeX{}} will try to derive a sensible
+If @var{derive}is @code{t}, @RefTeX{} will try to derive a sensible
 label from context.  A section label for example will be derived from
 the section heading.  The conversion of the context to a valid label is
 governed by the specifications given in
@@ -4170,7 +4129,7 @@ buffer.
 
 @deffn Hook reftex-string-to-label-function
 Function to turn an arbitrary string into a valid label.
-@b{Ref@TeX{}}'s default function uses the variable
+@RefTeX{}'s default function uses the variable
 @code{reftex-derive-label-parameters}.
 @end deffn
 
@@ -4314,11 +4273,11 @@ Number of spaces to be used for indentation per section level.
 
 @defopt reftex-guess-label-type
 Non-@code{nil} means, @code{reftex-reference} will try to guess the
-label type.  To do that, @b{Ref@TeX{}} will look at the word before the
+label type.  To do that, @RefTeX{} will look at the word before the
 cursor and compare it with the magic words given in
-@code{reftex-label-alist}.  When it finds a match, @b{Ref@TeX{}} will
+@code{reftex-label-alist}.  When it finds a match, @RefTeX{} will
 immediately offer the correct label menu - otherwise it will prompt you
-for a label type.  If you set this variable to @code{nil}, @b{Ref@TeX{}}
+for a label type.  If you set this variable to @code{nil}, @RefTeX{}
 will always prompt for a label type.
 @end defopt
 
@@ -4350,7 +4309,7 @@ The keymap which is active in the labels selection process
 @cindex Creating citations, options
 
 @defopt reftex-bibliography-commands
-LaTeX commands which specify the BibTeX databases to use with the document.
+@LaTeX{} commands which specify the BibTeX databases to use with the document.
 @end defopt
 
 @defopt reftex-bibfile-ignore-regexps
@@ -4358,15 +4317,15 @@ List of regular expressions to exclude files in
 @code{\\bibliography@{..@}}.  File names matched by any of these regexps
 will not be parsed.  Intended for files which contain only
 @code{@@string} macro definitions and the like, which are ignored by
-@b{Ref@TeX{}} anyway.
+@RefTeX{} anyway.
 @end defopt
 
 @defopt reftex-default-bibliography
 List of BibTeX database files which should be used if none are specified.
 When @code{reftex-citation} is called from a document with neither
 a @samp{\bibliography@{...@}} statement nor a @code{thebibliography}
-environment, @b{Ref@TeX{}} will scan these files instead.  Intended for
-using @code{reftex-citation} in non-LaTeX files.  The files will be
+environment, @RefTeX{} will scan these files instead.  Intended for
+using @code{reftex-citation} in non-@LaTeX{} files.  The files will be
 searched along the BIBINPUTS or TEXBIB path.
 @end defopt
 
@@ -4560,7 +4519,7 @@ should be @samp{Molecules!}.
 @var{exclude} can be a function.  If this function exists and returns a
 non-@code{nil} value, the index entry at point is ignored.  This was
 implemented to support the (deprecated) @samp{^} and @samp{_} shortcuts
-in the LaTeX2e @code{index} package.
+in the @LaTeX{}2e @code{index} package.
 
 @var{repeat}, if non-@code{nil}, means the index macro does not typeset
 the entry in the text, so that the text has to be repeated outside the
@@ -4571,14 +4530,14 @@ The final entry may also be a symbol.  It must have an association in
 the variable @code{reftex-index-macros-builtin} to specify the main
 indexing package you are using.  Valid values are currently
 @example
-default         @r{The LaTeX default - unnecessary to specify this one}
+default         @r{The @LaTeX{} default - unnecessary to specify this one}
 multind         @r{The multind.sty package}
 index           @r{The index.sty package}
 index-shortcut  @r{The index.sty packages with the ^ and _ shortcuts.}
                 @r{Should not be used - only for old documents}
 @end example
-Note that AUCTeX sets these things internally for @b{Ref@TeX{}} as well,
-so with a sufficiently new version of AUCTeX, you should not set the
+Note that @AUCTeX{} sets these things internally for @RefTeX{} as well,
+so with a sufficiently new version of @AUCTeX{}, you should not set the
 package here.
 @end defopt
 
@@ -4591,7 +4550,7 @@ This is a list with @code{(@var{macro-key} @var{default-tag})}.
 
 @var{default-tag} is the tag to be used if the macro requires a
 @var{tag} argument.  When this is @code{nil} and a @var{tag} is needed,
-@b{Ref@TeX{}} will ask for it.  When this is the empty string and the
+@RefTeX{} will ask for it.  When this is the empty string and the
 TAG argument of the index macro is optional, the TAG argument will be
 omitted.
 @end defopt
@@ -4611,11 +4570,11 @@ last       @r{The last used index tag will be offered as default}
 
 @defopt reftex-index-math-format
 Format of index entries when copied from inside math mode.  When
-@code{reftex-index-selection-or-word} is executed inside TeX math mode,
+@code{reftex-index-selection-or-word} is executed inside @TeX{} math mode,
 the index key copied from the buffer is processed with this format
 string through the @code{format} function.  This can be used to add the
 math delimiters (e.g. @samp{$}) to the string.  Requires the
-@file{texmathp.el} library which is part of AUCTeX.
+@file{texmathp.el} library which is part of @AUCTeX{}.
 @end defopt
 
 @defopt reftex-index-phrase-file-extension
@@ -4667,7 +4626,7 @@ When doing global indexing from the phrases buffer, searches for some
 phrases may match at places where that phrase was already indexed.  In
 particular when indexing an already processed document again, this
 will even be the norm.  When this variable is non-@code{nil},
-@b{Ref@TeX{}} checks if the match is an index macro argument, or if an
+@RefTeX{} checks if the match is an index macro argument, or if an
 index macro is directly before or after the phrase.  If that is the
 case, that match will be ignored.
 @end defopt
@@ -4708,7 +4667,7 @@ Normal hook which is run when a buffer is put into
 The letters which denote sections in the index.  Usually these are all
 capital letters.  Don't use any downcase letters.  Order is not
 significant, the index will be sorted by whatever the sort function
-thinks is correct.  In addition to these letters, @b{Ref@TeX{}} will
+thinks is correct.  In addition to these letters, @RefTeX{} will
 create a group @samp{!} which contains all entries sorted below the
 lowest specified letter.  In the @file{*Index*} buffer, pressing any of
 these capital letters or @kbd{!} will jump to that section.
@@ -4797,7 +4756,7 @@ scans.  In order to clear it, use @kbd{M-x reftex-reset-mode}.
 @cindex Finding files, options
 
 @defopt reftex-texpath-environment-variables
-List of specifications how to retrieve the search path for TeX files.
+List of specifications how to retrieve the search path for @TeX{} files.
 Several entries are possible.
 @itemize @minus
 @item
@@ -4854,14 +4813,14 @@ then @samp{/tex/}, and then all subdirectories of @samp{./}.  If this
 option is @code{nil}, the subdirectories of @samp{./} are searched
 before @samp{/tex/}.  This is mainly for speed - most of the time the
 recursive path is for the system files and not for the user files.  Set
-this to @code{nil} if the default makes @b{Ref@TeX{}} finding files with
+this to @code{nil} if the default makes @RefTeX{} finding files with
 equal names in wrong sequence.
 @end defopt
 
 @defopt reftex-use-external-file-finders
 Non-@code{nil} means, use external programs to find files.  Normally,
-@b{Ref@TeX{}} searches the paths given in the environment variables
-@code{TEXINPUTS} and @code{BIBINPUTS} to find TeX files and BibTeX
+@RefTeX{} searches the paths given in the environment variables
+@code{TEXINPUTS} and @code{BIBINPUTS} to find @TeX{} files and BibTeX
 database files.  With this option turned on, it calls an external
 program specified in the option @code{reftex-external-file-finders}
 instead.  As a side effect, the variables
@@ -4888,14 +4847,14 @@ non-@code{nil}.
 
 @defopt reftex-keep-temporary-buffers
 Non-@code{nil} means, keep buffers created for parsing and lookup.
-@b{Ref@TeX{}} sometimes needs to visit files related to the current
+@RefTeX{} sometimes needs to visit files related to the current
 document.  We distinguish files visited for
 @table @asis
 @item PARSING
 Parts of a multifile document loaded when (re)-parsing the
 document.
 @item LOOKUP
-BibTeX database files and TeX files loaded to find a reference, to
+BibTeX database files and @TeX{} files loaded to find a reference, to
 display label context, etc.
 @end table
 The created buffers can be kept for later use, or be thrown away
@@ -4919,7 +4878,7 @@ away, the initialization of the buffer depends upon the variable
 
 @defopt reftex-initialize-temporary-buffers
 Non-@code{nil} means do initializations even when visiting file
-temporarily.  When @code{nil}, @b{Ref@TeX{}} may turn off find-file hooks and
+temporarily.  When @code{nil}, @RefTeX{} may turn off find-file hooks and
 other stuff to briefly visit a file. When @code{t}, the full default
 initializations are done (@code{find-file-hook} etc.).  Instead of
 @code{t} or @code{nil}, this variable may also be a list of hook
@@ -4930,12 +4889,12 @@ functions to do a minimal initialization.
 List of regular expressions to exclude certain input files from parsing.
 If the name of a file included via @code{\include} or @code{\input} is
 matched by any of the regular expressions in this list, that file is not
-parsed by @b{Ref@TeX{}}.
+parsed by @RefTeX{}.
 @end defopt
 
 @defopt reftex-enable-partial-scans
 Non-@code{nil} means, re-parse only 1 file when asked to re-parse.
-Re-parsing is normally requested with a @kbd{C-u} prefix to many @b{Ref@TeX{}}
+Re-parsing is normally requested with a @kbd{C-u} prefix to many @RefTeX{}
 commands, or with the @kbd{r} key in menus.  When this option is
 @code{t} in a multifile document, we will only parse the current buffer,
 or the file associated with the label or section heading near point in a
@@ -4965,7 +4924,7 @@ This extension is added to the base name of the master file.
 @end defopt
 
 @defopt reftex-allow-automatic-rescan
-Non-@code{nil} means, @b{Ref@TeX{}} may rescan the document when this seems
+Non-@code{nil} means, @RefTeX{} may rescan the document when this seems
 necessary.  Applies (currently) only in rare cases, when a new label
 cannot be placed with certainty into the internal label list.
 @end defopt
@@ -5099,8 +5058,8 @@ map.  @xref{Key Bindings}.
 @end defopt
 
 @defopt reftex-plug-into-AUCTeX
-Plug-in flags for AUCTeX interface.  This variable is a list of
-5 boolean flags.  When a flag is non-@code{nil}, @b{Ref@TeX{}}
+Plug-in flags for @AUCTeX{} interface.  This variable is a list of
+5 boolean flags.  When a flag is non-@code{nil}, @RefTeX{}
 will
 
 @example
@@ -5117,7 +5076,7 @@ Supplying labels in new sections and environments applies when creating
 sections with @kbd{C-c C-s} and environments with @kbd{C-c C-e}.@*
 Supplying macro arguments applies when you insert such a macro
 interactively with @kbd{C-c @key{RET}}.@*
-See the AUCTeX documentation for more information.
+See the @AUCTeX{} documentation for more information.
 @end defopt
 
 @defopt reftex-revisit-to-follow
@@ -5137,10 +5096,10 @@ argument.
 @section Keymaps and Hooks
 @cindex Keymaps
 
-@b{Ref@TeX{}} has the usual general keymap and load-- and mode-hook.
+@RefTeX{} has the usual general keymap and load-- and mode-hook.
 
 @deffn Keymap reftex-mode-map
-The keymap for @b{Ref@TeX{}} mode.
+The keymap for @RefTeX{} mode.
 @end deffn
 
 @deffn {Normal Hook} reftex-load-hook
@@ -5148,14 +5107,14 @@ Normal hook which is being run when loading @file{reftex.el}.
 @end deffn
 
 @deffn {Normal Hook} reftex-mode-hook
-Normal hook which is being run when turning on @b{Ref@TeX{}} mode.
+Normal hook which is being run when turning on @RefTeX{} mode.
 @end deffn
 
 Furthermore, the 4 modes used for referencing labels, creating
 citations, the table of contents buffer and the phrases buffer have
 their own keymaps and mode hooks.  See the respective sections.  There
 are many more hooks which are described in the relevant sections about
-options for a specific part of @b{Ref@TeX{}}.
+options for a specific part of @RefTeX{}.
 
 @node Changes, , Keymaps and Hooks, Top
 @chapter Changes
