@@ -1,3 +1,6 @@
+@c This is part of the RefTeX manual.
+@c Copyright (C) 2007 Free Software Foundation, Inc.
+@c See file reftex.texi for copying conditions.
 @ifset rawfile
 @include macros.texi
 @raisesections
@@ -121,5 +124,5 @@ see the section Finding Files in the manual.
 
 @c Local Variables: 
 @c mode: texinfo
-@c TeX-master: t
+@c TeX-master: "reftex"
 @c End: 
