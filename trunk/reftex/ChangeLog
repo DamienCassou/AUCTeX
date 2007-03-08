@@ -1,5 +1,9 @@
 2007-03-08  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/install.texi: Add copyright notice.
+
+	* doc/macros.texi: Add copyright notice.
+
 	* doc/Makefile (TEXIFILES): New variable.  Let relevant targets
 	depend on it instead of doc/reftex.texi.
 	(version.texi, ../INSTALL): New targets.
