@@ -1,3 +1,22 @@
+2007-03-08  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/Makefile (TEXIFILES): New variable.  Let relevant targets
+	depend on it instead of doc/reftex.texi.
+	(version.texi, ../INSTALL): New targets.
+
+	* INSTALL: Remove.  Now generated from doc/install.texi.
+
+	* doc/macros.texi: New file.
+
+	* doc/install.texi: New file.
+
+	* doc/reftex.texi: Include macros.texi and version.texi.  Change
+	maintainer and version information.  Express TeX, LaTeX, AUCTeX
+	and RefTeX with macros.
+	(Imprint): Change maintainer information.
+	(Installation): Include doc/install.texi and adapt rest remaining
+	in doc/reftex.texi accordingly.
+
 2007-03-04  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex.el: Update.
