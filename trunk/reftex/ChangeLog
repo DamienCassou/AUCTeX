@@ -1,5 +1,18 @@
 2007-03-10  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/Makefile (reftex.el): Generate from reftex.el.in.  Set
+	value of `reftex-version'.
+
+	* lisp/reftex-base.el: Remove information in comment already in
+	imprint or cluttering output of `finder-commentary'.
+	Require reftex.el.
+
+	* doc/.cvsignore: New file.
+
+	* lisp/reftex.el.in: New file.
+
+	* lisp/reftex.el: Remove.  Now generated from reftex.el.in.
+
 	* README: Rewrite most of it.
 
 	* doc/Makefile (DISTTEXTS): Add ../INSTALL.
