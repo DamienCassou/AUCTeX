@@ -45,7 +45,13 @@ clean:
 
 dist: reftex.el
 
-reftex.el: $(LISPFILES)
+reftex.el: $(LISPFILES) reftex.el.in
+	REFTEXDATE=`sed -n '1s/^\([-0-9][-0-9]*\).*/\1/p' ../ChangeLog` ; \
+	test "X$${REFTEXDATE}" != X || \
+	  { echo "Can't find date in ChangeLog" >&2 ; exit 1; }; \
+	REFTEXVERSION=`sed -n '2,/^[0-9]/s/.*Version \(.*\) released\..*/\1/p' ../ChangeLog`; \
+	test "X$${REFTEXVERSION}" != X || REFTEXVERSION=$${REFTEXDATE}; \
+	sed -e "s/@REFTEXVERSION@/$${REFTEXVERSION}/" reftex.el.in >reftex.el
 	emacs -batch --no-site-file -l reftex.el \
 	  -eval "(let ((generated-autoload-file (expand-file-name \"$@\"))) \
                    (mapcar (function update-file-autoloads) \
