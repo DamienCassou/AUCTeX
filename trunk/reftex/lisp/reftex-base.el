@@ -51,23 +51,6 @@
 ;; RefTeX was written by Carsten Dominik <dominik@science.uva.nl> with
 ;; contributions from Stephen Eglen.  It is currently maintained by
 ;; the AUCTeX project.
-;;
-;; Thanks to the people on the Net who have used RefTeX and helped
-;; developing it with their reports.  In particular thanks to
-;;
-;;    Fran Burstall, Alastair Burt, Soren Dayton, Stephen Eglen,
-;;    Karl Eichwalder, Peter Galbraith, Dieter Kraft, Kai Grossjohann,
-;;    Frank Harrell, Adrian Lanz, Rory Molinari, Stefan Monnier,
-;;    Laurent Mugnier, Sudeep Kumar Palat, Daniel Polani, Robin Socha,
-;;    Richard Stanton, Allan Strand, Jan Vroonhof, Christoph Wedler,
-;;    Alan Williams.
-;;
-;; Finally thanks to Uwe Bolick who first got me (some years ago) into
-;; supporting LaTeX labels and references with an editor (which was
-;; MicroEmacs at the time).
-
-;; This file includes basic definitions (functions, variables, etc.)
-;; for RefTeX.
 
 ;;; Code:
 
@@ -84,11 +67,9 @@
     (setq reftex-tables-dirty t)
     (set symbol value)))
 
-
-;;; =========================================================================
-;;;
-;;; Configuration variables
-
+;; Generated code
+(require 'reftex)
+;; Configuration variables
 (require 'reftex-vars)
 
 
@@ -96,9 +77,6 @@
 ;;;
 ;;; Define the formal stuff for a minor mode named RefTeX.
 ;;;
-
-(defconst reftex-version "RefTeX version 4.31"
-  "Version string for RefTeX.")
 
 (defvar reftex-mode nil
   "Determines if RefTeX mode is active.")
