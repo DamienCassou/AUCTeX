@@ -29,7 +29,13 @@ TEXI2HTML=makeinfo --no-split --html --number-sections
 DVIPS=dvips
 INSTALL_INFO=install-info
 TEXIFILES=reftex.texi changes.texi install.texi version.texi
-DISTTEXTS=../CHANGES
+DISTTEXTS=../CHANGES ../INSTALL
+MAKEDISTTEXTHEADER="echo -e \"This is the `echo $@ | tr -d ./` \
+file for the RefTeX distribution.\n\n\
+`sed -n 's/@c \(Copyright (C).*\)/ \1/p' $<`\n\n  Copying\
+and distribution of this file, with or without modification,\n  are\
+permitted in any medium without royalty provided the copyright\n  notice\
+and this notice are preserved.\n\" >$@"
 
 .PHONY: all info dvi ps pdf html install dist clean maintainer-clean
 
@@ -75,10 +81,12 @@ maintainer-clean: clean
 dist: $(DISTTEXTS) reftex.info
 
 ../CHANGES: changes.texi
-	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi --output $@
+	eval $(MAKEDISTTEXTHEADER)
+	$(MAKEINFO) $(MAKEINFO_PLAIN) changes.texi >>$@
 
 ../INSTALL: install.texi
-	$(MAKEINFO) $(MAKEINFO_PLAIN) install.texi --output $@
+	eval $(MAKEDISTTEXTHEADER)
+	$(MAKEINFO) $(MAKEINFO_PLAIN) install.texi >>$@
 
 version.texi: ../ChangeLog
 	REFTEXDATE=`sed -n '1s/^\([-0-9][-0-9]*\).*/\1/p' ../ChangeLog` ; \
