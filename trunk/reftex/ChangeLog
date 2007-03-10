@@ -1,3 +1,37 @@
+2007-03-10  Ralf Angeli  <angeli@caeruleus.net>
+
+	* README: Rewrite most of it.
+
+	* doc/Makefile (DISTTEXTS): Add ../INSTALL.
+	(MAKEDISTTEXTHEADER): New variable.
+	(../CHANGES, ../INSTALL): Use it.
+
+	* doc/changes.texi: Add copyright notice.
+
+	* lisp/reftex-dcr.el: Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-global.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-index.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-parse.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-ref.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-sel.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-toc.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-vars.el Remove version info in header.  Add
+	maintainer info.
+
 2007-03-08  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/install.texi: Add copyright notice.
