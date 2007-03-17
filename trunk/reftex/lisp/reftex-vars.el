@@ -989,7 +989,7 @@ The function will be called with two arguments, the LABEL and the DEFAULT
 FORMAT, which normally is `~\\ref{%s}'.  The function should return the
 string to insert into the buffer."
   :group 'reftex-referencing-labels
-  :type 'function)
+  :type '(choice (const nil) function))
 
 (defcustom reftex-select-label-mode-hook nil
   "Mode hook for reftex-select-label-mode."
@@ -1182,7 +1182,7 @@ The function will be called with two arguments, the CITATION KEY and the
 DEFAULT FORMAT, which is taken from `reftex-cite-format'.  The function
 should return the string to insert into the buffer."
   :group 'reftex-citation-support
-  :type 'function)
+  :type '(choice (const nil) function))
 
 (defcustom reftex-select-bib-mode-hook nil
   "Mode hook for reftex-select-bib-mode."
