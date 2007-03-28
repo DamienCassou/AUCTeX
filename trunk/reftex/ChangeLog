@@ -1,3 +1,18 @@
+2007-03-28  Ralf Angeli  <angeli@caeruleus.net>
+
+	* RELEASE: New file.
+
+	* doc/changes.texi: Include macros.texi.  Add changes for version
+	4.32.
+
+	* doc/install.texi: Note that installation procedure does not
+	support XEmacs.
+
+	* doc/macros.texi: Define macro for BibTeX.
+
+	* doc/reftex.texi: Replace BibTeX by @BibTeX{} throughout the
+	file.
+
 2007-03-12  John Paul Wallington  <jpw@pobox.com>
 
 	* lisp/reftex-vars.el (reftex-format-ref-function)
