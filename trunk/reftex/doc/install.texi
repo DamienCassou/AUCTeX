@@ -9,6 +9,10 @@
 
 @subsection Building and Installing
 
+Note: Currently installation is supported for Emacs only.  XEmacs users
+might want to refer to the @RefTeX{} package available through the
+package system of XEmacs.
+
 @subsubheading Installation with make
 
 In order to install RefTeX, unpack the distribution and edit the header
