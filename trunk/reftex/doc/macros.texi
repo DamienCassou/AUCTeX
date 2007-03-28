@@ -13,11 +13,15 @@ Ref@TeX{}
 @macro AUCTeX {}
 AUC@TeX{}
 @end macro
+@macro BibTeX {}
+Bib@TeX{}
+@end macro
 @end ifnottex
 @tex
 \gdef\LaTeX{L\kern-.36em\raise.3ex\hbox{\sc{a}}\kern-.15em\TeX}
 \gdef\RefTeX{Ref\TeX}
 \gdef\AUCTeX{AUC\TeX}
+\gdef\BibTeX{Bib\TeX}
 @end tex
 @end ifclear
 
