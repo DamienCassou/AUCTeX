@@ -131,8 +131,8 @@
   (let* ((re
           (if item 
               (concat "\\\\bibitem\\(\\[[^]]*\\]\\)?{" (regexp-quote key) "}")
-            (concat "@[a-zA-Z]+[ \t\n\r]*[{(][ \t\n\r]*" (regexp-quote key)
-                    "[, \t\r\n}]")))
+            (concat "@\\(?:\\w\\|\\s_\\)+[ \t\n\r]*[{(][ \t\n\r]*"
+		    (regexp-quote key) "[, \t\r\n}]")))
          (buffer-conf (current-buffer))
          file buf pos oldpos)
 
@@ -239,8 +239,8 @@
              (while (re-search-forward first-re nil t)
                (catch 'search-again
                  (setq key-point (point))
-                 (unless (re-search-backward
-                          "\\(\\`\\|[\n\r]\\)[ \t]*@\\([a-zA-Z]+\\)[ \t\n\r]*[{(]" nil t)
+                 (unless (re-search-backward "\\(\\`\\|[\n\r]\\)[ \t]*\
+@\\(\\(?:\\w\\|\\s_\\)+\\)[ \t\n\r]*[{(]" nil t)
                    (throw 'search-again nil))
                  (setq start-point (point))
                  (goto-char (match-end 0))
@@ -465,8 +465,8 @@
           (narrow-to-region from to))
         (goto-char (point-min))
 
-        (if (re-search-forward
-             "@\\(\\w+\\)[ \t\n\r]*[{(][ \t\n\r]*\\([^ \t\n\r,]+\\)" nil t)
+        (if (re-search-forward "@\\(\\(?:\\w\\|\\s_\\)+\\)[ \t\n\r]*\
+\[{(][ \t\n\r]*\\([^ \t\n\r,]+\\)" nil t)
             (setq alist
                   (list
                    (cons "&type" (downcase (reftex-match-string 1)))
@@ -1154,7 +1154,7 @@ The sequence in the new file is the same as it was in the old database."
              (widen)
              (goto-char (point-min))
              (while (re-search-forward 
-                     "^[ \t]*@[a-zA-Z]+[ \t]*{\\([^ \t\r\n]+\\),"
+                     "^[ \t]*@\\(?:\\w\\|\\s_\\)+[ \t]*{\\([^ \t\r\n]+\\),"
                      nil t)
                (setq key (match-string 1)
                      beg (match-beginning 0)
