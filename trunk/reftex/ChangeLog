@@ -1,3 +1,10 @@
+2007-04-03  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el (reftex-pop-to-bibtex-entry)
+	(reftex-extract-bib-entries, reftex-parse-bibtex-entry)
+	(reftex-create-bibtex-file): Match entries containing numbers and
+	symbol constituents.
+
 2007-03-28  Ralf Angeli  <angeli@caeruleus.net>
 
 	* RELEASE: New file.
