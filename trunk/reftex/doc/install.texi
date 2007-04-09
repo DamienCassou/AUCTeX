@@ -47,7 +47,7 @@ installation.  Stefan Monnier has written this neat little file for
 installing all sorts of Emacs extensions as a package.  You can get it
 from @uref{http://www.iro.umontreal.ca/~monnier/elisp/install.el}.
 Follow the instructions in the file in order to install @RefTeX{} with
-it.
+it.  Note that the file is still experimental, so handle with caution.
 
 @subsubheading Installation by Hand
 
