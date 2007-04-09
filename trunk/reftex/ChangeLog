@@ -1,12 +1,10 @@
 2007-04-09  Ralf Angeli  <angeli@caeruleus.net>
 
-	* Version 4.32 released.
-
-2007-04-09  Ralf Angeli  <angeli@caeruleus.net>
-
 	* Makefile (.PHONY): Add new targets.
 	(release, release-check, release-commit, release-sign)
 	(release-upload): New targets.
+	(dist): Remove space after -r option of cvs export.  Otherwise the
+	release tag is not found on export.
 
 	* README: Reference license.
 
