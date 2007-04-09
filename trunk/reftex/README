@@ -37,3 +37,6 @@ useful information about your setup.  Remember to add essential
 information like a recipe for reproducing the bug, what you expected
 to happen, and what actually happened.  Send the bug report to
 <bug-auctex@gnu.org>.
+
+For copying conditions please refer to the file COPYING contained in
+the distribution.
