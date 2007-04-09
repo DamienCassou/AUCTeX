@@ -29,7 +29,8 @@
 # generate documentation as PDF, HTML, or DVI file.
 
 ##----------------------------------------------------------------------
-##  YOU MUST EDIT THE FOLLOWING LINES 
+##  YOU MIGHT HAVE TO EDIT THE FOLLOWING LINES
+##  (or pass your own values for them to make)
 ##----------------------------------------------------------------------
 
 # Where local software is found
@@ -44,14 +45,10 @@ lispdir=$(prefix)/share/emacs/site-lisp/reftex
 # Name of your emacs binary
 EMACS=emacs
 
-##----------------------------------------------------------------------
-## YOU MAY NEED TO EDIT THESE
-##----------------------------------------------------------------------
-
 # How to create directories
 MKDIR=mkdir -p
 
-# How to move the byte compiled files to their destination.  
+# How to move the byte compiled files to their destination.
 MV=mv
 
 # How to copy the lisp files to their distination.
@@ -65,7 +62,8 @@ SHELL=/bin/sh
 
 .SUFFIXES: .el .elc .texi
 
-.PHONY: all install lisp info dvi ps pdf html dist clean maintainer-clean
+.PHONY: all install lisp info dvi ps pdf html dist clean maintainer-clean \
+	release release-check release-commit release-sign release-upload
 
 all: lisp
 
@@ -121,3 +119,46 @@ dist:
 	chmod -R go-w+rX reftex-$(TAG)
 	tar -cf - --owner=root --group=root reftex-$(TAG) | \
 	  gzip --best > reftex-$(TAG).tar.gz
+
+# Release
+
+COMMITTER="Ralf Angeli  <angeli@caeruleus.net>"
+
+release: release-check release-commit dist release-sign release-upload
+
+release-check:
+	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
+	@echo "Making release of RefTeX $(TAG)"
+	@echo ""
+	@echo "This involves the creation of a tag in the CVS repository, "
+	@echo "creation of the distribution tar ball as well as signing and"
+	@echo "uploading it."
+	@echo ""
+	@echo "IF YOU DO NOT WANT TO DO THIS, EXIT NOW!"
+	@sleep 20
+
+release-commit:
+	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
+	mv ChangeLog ChangeLog.old
+	echo `date "+%Y-%m-%d "`" "${COMMITTER} > ChangeLog
+	echo >> ChangeLog
+	echo "	* Version" $(TAG) released. >> ChangeLog
+	echo >> ChangeLog
+	cat ChangeLog.old >> ChangeLog
+	cvs commit -m 'release_$(TAG)' ChangeLog
+	cvs tag release_`echo $(TAG) | sed -e 's/[.]/_/g'`
+
+release-sign:
+	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
+	read -sp "Enter pass phrase: " phrase ; \
+	echo "$$phrase" | \
+	  gpg --passphrase-fd 0 --detach-sign reftex-$(TAG).tar.gz ; \
+	echo "version: 1.1\ndirectory: reftex\nfilename: reftex-$(TAG).tar.gz" \
+	  >reftex-$(TAG).tar.gz.directive; \
+	echo "$$phrase" | \
+	  gpg --passphrase-fd 0 --clearsign reftex-$(TAG).tar.gz.directive ; \
+	rm reftex-$(TAG).tar.gz.directive
+
+release-upload:
+	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
+	ncftpput ftp-upload.gnu.org /incoming/ftp reftex-$(TAG).tar.gz*
