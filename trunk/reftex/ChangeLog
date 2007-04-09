@@ -1,3 +1,16 @@
+2007-04-09  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile (.PHONY): Add new targets.
+	(release, release-check, release-commit, release-sign)
+	(release-upload): New targets.
+
+	* README: Reference license.
+
+	* RELEASE: Set version and date.
+
+	* doc/install.texi: Point out experimental character of
+	install.el.
+
 2007-04-03  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-cite.el: Delete trailing whitespace.
