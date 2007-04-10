@@ -6,6 +6,7 @@
 
 	* Makefile (.PHONY): Remove release and release-check targets.
 	(release, release-check): Remove.
+	(release-sign): Call echo with -e for escape sequence evaluation.
 
 2007-04-09  Ralf Angeli  <angeli@caeruleus.net>
 
