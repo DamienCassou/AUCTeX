@@ -63,7 +63,7 @@ SHELL=/bin/sh
 .SUFFIXES: .el .elc .texi
 
 .PHONY: all install lisp info dvi ps pdf html dist clean maintainer-clean \
-	release release-check release-commit release-sign release-upload
+	release-commit release-sign release-upload
 
 all: lisp
 
@@ -120,22 +120,17 @@ dist:
 	tar -cf - --owner=root --group=root reftex-$(TAG) | \
 	  gzip --best > reftex-$(TAG).tar.gz
 
-# Release
+##----------------------------------------------------------------------
+##  RELEASE
+##----------------------------------------------------------------------
+
+# Steps for making a release:
+# 1) release-commit: Tag the release.
+# 2) dist: Create the tar ball.
+# 3) release-sign: Sign the tar ball and create directive files for upload.
+# 4) release-upload: Upload tar ball, signature, and directive file.
 
 COMMITTER="Ralf Angeli  <angeli@caeruleus.net>"
-
-release: release-check release-commit dist release-sign release-upload
-
-release-check:
-	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
-	@echo "Making release of RefTeX $(TAG)"
-	@echo ""
-	@echo "This involves the creation of a tag in the CVS repository, "
-	@echo "creation of the distribution tar ball as well as signing and"
-	@echo "uploading it."
-	@echo ""
-	@echo "IF YOU DO NOT WANT TO DO THIS, EXIT NOW!"
-	@sleep 20
 
 release-commit:
 	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
