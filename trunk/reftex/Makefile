@@ -148,8 +148,8 @@ release-sign:
 	read -sp "Enter pass phrase: " phrase ; \
 	echo "$$phrase" | \
 	  gpg --passphrase-fd 0 --detach-sign reftex-$(TAG).tar.gz ; \
-	echo "version: 1.1\ndirectory: reftex\nfilename: reftex-$(TAG).tar.gz" \
-	  >reftex-$(TAG).tar.gz.directive; \
+	echo -e "version: 1.1\ndirectory: reftex\n\
+filename: reftex-$(TAG).tar.gz" >reftex-$(TAG).tar.gz.directive; \
 	echo "$$phrase" | \
 	  gpg --passphrase-fd 0 --clearsign reftex-$(TAG).tar.gz.directive ; \
 	rm reftex-$(TAG).tar.gz.directive
