@@ -1,5 +1,9 @@
 2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
 
+	* Version 4.32 released.
+
+2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
+
 	* Makefile (.PHONY): Remove release and release-check targets.
 	(release, release-check): Remove.
 
