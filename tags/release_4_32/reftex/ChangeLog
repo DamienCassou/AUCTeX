@@ -1,0 +1,327 @@
+2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Version 4.32 released.
+
+2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
+
+	* RELEASE: Update date.
+
+	* Makefile (.PHONY): Remove release and release-check targets.
+	(release, release-check): Remove.
+	(release-sign): Call echo with -e for escape sequence evaluation.
+
+2007-04-09  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile (.PHONY): Add new targets.
+	(release, release-check, release-commit, release-sign)
+	(release-upload): New targets.
+	(dist): Remove space after -r option of cvs export.  Otherwise the
+	release tag is not found on export.
+
+	* README: Reference license.
+
+	* RELEASE: Set version and date.
+
+	* doc/install.texi: Point out experimental character of
+	install.el.
+
+2007-04-03  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el: Delete trailing whitespace.
+	(reftex-pop-to-bibtex-entry, reftex-extract-bib-entries)
+	(reftex-parse-bibtex-entry, reftex-create-bibtex-file): Match
+	entries containing numbers and symbol constituents.
+
+2007-03-28  Ralf Angeli  <angeli@caeruleus.net>
+
+	* RELEASE: New file.
+
+	* doc/changes.texi: Include macros.texi.  Add changes for version
+	4.32.
+
+	* doc/install.texi: Note that installation procedure does not
+	support XEmacs.
+
+	* doc/macros.texi: Define macro for BibTeX.
+
+	* doc/reftex.texi: Replace BibTeX by @BibTeX{} throughout the
+	file.
+
+2007-03-12  John Paul Wallington  <jpw@pobox.com>
+
+	* lisp/reftex-vars.el (reftex-format-ref-function)
+	(reftex-format-cite-function): Fix custom type.
+
+2007-03-10  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/Makefile (reftex.el): Generate from reftex.el.in.  Set
+	value of `reftex-version'.
+
+	* lisp/reftex-base.el: Remove information in comment already in
+	imprint or cluttering output of `finder-commentary'.
+	Require reftex.el.
+
+	* doc/.cvsignore: New file.
+
+	* lisp/reftex.el.in: New file.
+
+	* lisp/reftex.el: Remove.  Now generated from reftex.el.in.
+
+	* README: Rewrite most of it.
+
+	* doc/Makefile (DISTTEXTS): Add ../INSTALL.
+	(MAKEDISTTEXTHEADER): New variable.
+	(../CHANGES, ../INSTALL): Use it.
+
+	* doc/changes.texi: Add copyright notice.
+
+	* lisp/reftex-dcr.el: Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-global.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-index.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-parse.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-ref.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-sel.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-toc.el Remove version info in header.  Add
+	maintainer info.
+
+	* lisp/reftex-vars.el Remove version info in header.  Add
+	maintainer info.
+
+2007-03-08  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/install.texi: Add copyright notice.
+
+	* doc/macros.texi: Add copyright notice.
+
+	* doc/Makefile (TEXIFILES): New variable.  Let relevant targets
+	depend on it instead of doc/reftex.texi.
+	(version.texi, ../INSTALL): New targets.
+
+	* INSTALL: Remove.  Now generated from doc/install.texi.
+
+	* doc/macros.texi: New file.
+
+	* doc/install.texi: New file.
+
+	* doc/reftex.texi: Include macros.texi and version.texi.  Change
+	maintainer and version information.  Express TeX, LaTeX, AUCTeX
+	and RefTeX with macros.
+	(Imprint): Change maintainer information.
+	(Installation): Include doc/install.texi and adapt rest remaining
+	in doc/reftex.texi accordingly.
+
+2007-03-04  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex.el: Update.
+
+	* lisp/reftex-base.el (reftex-show-commentary): Look in
+	reftex-base.el.
+	(reftex-report-bug): New function.
+
+	* lisp/reftex.el: Move original content to reftex-base.el.  Add
+	new header and automatically generated autoloads.
+
+	* lisp/reftex-base.el: New file.  Insert original content of
+	reftex.el.  Remove autoload for `reftex-index-phrases-mode'.
+	Delete trailing whitespace.
+
+	* Makefile (dist): Call `dist' target in lisp subdirectory.
+
+	* lisp/Makefile (LISPFILES): Use reftex-base.el instead of
+	reftex.el.
+	(.PHONY): Add `dist'.
+	(lisp): Depend on reftex.el.
+	(install): Depend on reftex.el.  Copy reftex.el to installation
+	target.
+	(dist, reftex.el): New targets.
+
+	* lisp/reftex-auc.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-cite.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-dcr.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-global.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-index.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-parse.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-ref.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-sel.el: Require `reftex-base' instead of `reftex'.
+
+	* lisp/reftex-toc.el: Require `reftex-base' instead of `reftex'.
+
+2007-03-03  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile: Remove unnecessary targets left over from original
+	import.
+	(maintainer-clean): Add explanatory text.
+
+	* Makefile (.PHONY): Add `clean' and `maintainer-clean'.
+	(html): Call `html' target in `doc' directory.
+	(clean): Adapt to new directory structure.
+	(maintainer-clean): New target.
+	(veryclean, linkelc, unlinkelc, .el.elc): Remove targets.
+
+	* doc/Makefile (.PHONY): Add `clean' and `maintainer-clean'.
+	(clean, maintainer-clean): New targets.
+
+	* lisp/Makefile (.PHONY): Add `clean'.
+	(clean): New target.
+
+	* Makefile (.PHONY): Add `dist' target.
+	(dist): New implementation.
+
+	* doc/Makefile (dist): Generate info file.
+
+2007-03-01  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/Makefile (MAKEINFO_PLAIN, DISTTEXTS): New variables.
+	(.PHONY): Add `dist' target.
+	(../CHANGES, dist): New targets.
+
+	* doc/reftex.texi (Changes): Merge content of section with content
+	of CHANGES files and move to doc/changes.texi.
+
+	* doc/changes.texi: New file.
+
+	* CHANGES: Remove.  Now generated from doc/changes.texi.
+
+2007-02-26  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-index.el (reftex-index-visit-phrases-buffer): Set
+	marker when visiting buffer.  This allows for returning from the
+	phrases file to the file one was just editing instead of the file
+	where the last phrases was added from.
+
+2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-index.el (reftex-index-phrases-syntax-table): New
+	variable.  Give ?\" punctuation syntax as it usually is not used
+	as string quote in TeX-related modes and may occur unmatched.  The
+	change also prevents fontification of quoted content.
+	(reftex-index-phrases-mode): Use it.
+
+	* lisp/reftex-cite.el (reftex-parse-bibtex-entry): Match fields
+	containing hyphens (besides word constituents).
+
+	* COPYING: Update to current incarnation.
+
+2007-02-25  David Kastrup  <dak@gnu.org>
+
+	* lisp/reftex.el (reftex-uniquify, reftex-uniquify-by-car):
+	Replace O(n^2) algorithms with O(n log n).  Introduce optional
+	argument SORT (not yet used).  TODO: figure out callers that can
+	specify SORT, in order to further speed this up.
+
+2007-02-25  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el (reftex-cite-key-separator): New variable.
+
+	* lisp/reftex-auc.el (reftex-arg-cite): Use
+	`reftex-cite-key-separator'.
+
+	* lisp/reftex-cite.el (reftex-do-citation)
+	(reftex-figure-out-cite-format): Use `reftex-cite-key-separator'.
+
+	* doc/reftex.texi (Options (Creating Citations)): Document
+	`reftex-cite-key-separator'.
+
+	* lisp/reftex-cite.el (reftex-do-citation): Return all keys, not
+	just the first one.
+
+	* lisp/reftex-auc.el (reftex-arg-cite): Correctly handle new
+	value type returned by `reftex-citation'.
+
+2007-02-24  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/Makefile (.PHONY): Add `lisp' target.
+
+	* Makefile: Make building and installing possible.  (Necessary due
+	to different directory and file layout in repository compared to
+	original tar ball.)
+
+	* lisp/Makefile: New file.
+
+	* doc/Makefile: New file.
+
+	* doc/reftex.texi: Set correct filename for standalone
+	distribution.
+
+2007-02-17  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-auc.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-cite.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-dcr.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-global.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-index.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-parse.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex-ref.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-sel.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-toc.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* lisp/reftex-vars.el: New file.  Copied (including change
+	history) from Emacs repository by Savannah admin.
+
+	* lisp/reftex.el: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+	* doc/reftex.texi: New file.  Copied (including change history)
+	from Emacs repository by Savannah admin.
+
+2007-02-07  Ralf Angeli  <angeli@caeruleus.net>
+
+	Create `reftex' module.
+
+	* CHANGES: New file.  Taken from RefTeX 4.31.
+
+	* COPYING: New file.  Taken from RefTeX 4.31.
+
+	* INSTALL: New file.  Taken from RefTeX 4.31.
+
+	* Makefile: New file.  Taken from RefTeX 4.31.
+
+	* README: New file.  Taken from RefTeX 4.31.
+
+	* lisp/lpath.el: New file.  Taken from RefTeX 4.31.
+
+	* ChangeLog: New file.
+
+;; Local Variables:
+;; coding: iso-8859-1
+;; End:
+
+    Copyright (C) 2007 Free Software Foundation, Inc.
+  Copying and distribution of this file, with or without modification,
+  are permitted provided the copyright notice and this notice are preserved.
