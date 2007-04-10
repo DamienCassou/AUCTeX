@@ -4,6 +4,8 @@
 
 2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
 
+	* RELEASE: Update date.
+
 	* Makefile (.PHONY): Remove release and release-check targets.
 	(release, release-check): Remove.
 	(release-sign): Call echo with -e for escape sequence evaluation.
