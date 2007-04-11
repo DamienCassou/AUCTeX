@@ -1,3 +1,8 @@
+2007-04-11  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile (.PHONY): Add www-doc target.
+	(www-doc): New target.
+
 2007-04-10  Ralf Angeli  <angeli@caeruleus.net>
 
 	* Version 4.32 released.
