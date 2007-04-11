@@ -63,7 +63,7 @@ SHELL=/bin/sh
 .SUFFIXES: .el .elc .texi
 
 .PHONY: all install lisp info dvi ps pdf html dist clean maintainer-clean \
-	release-commit release-sign release-upload
+	release-commit release-sign release-upload www-doc
 
 all: lisp
 
@@ -157,3 +157,17 @@ filename: reftex-$(TAG).tar.gz" >reftex-$(TAG).tar.gz.directive; \
 release-upload:
 	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
 	ncftpput ftp-upload.gnu.org /incoming/ftp reftex-$(TAG).tar.gz*
+
+www-doc: dist
+	rm -rf www-doc
+	mkdir -p www-doc
+	$(CP) reftex-$(TAG)/doc/*.texi www-doc
+	cd www-doc \
+	&& wget -O gendocs.sh 'http://savannah.gnu.org/cgi-bin/viewcvs/%2acheckout%2a/texinfo/texinfo/util/gendocs.sh?rev=HEAD' \
+	&& patch <$(GENDOCSPATCH) \
+	&& chmod u+x gendocs.sh \
+	&& wget -O gendocs_template 'http://savannah.gnu.org/cgi-bin/viewcvs/%2acheckout%2a/texinfo/texinfo/util/gendocs_template?rev=HEAD' \
+	&& sed -i -e 's/html_node\/index\.html/%%PACKAGE%%\/index.html/' gendocs_template \
+	&& mkdir .texinfo \
+	&& echo -e "emacs split http://www.gnu.org/software/emacs/manual/html_node/\nemacs mono http://www.gnu.org/software/emacs/manual/emacs.html\nauctex mono http://www.gnu.org/software/auctex/manual/auctex.html\nauctex split http://www.gnu.org/software/auctex/manual/auctex/\n" > .texinfo/htmlxref.cnf \
+	&& ./gendocs.sh reftex "RefTeX Manual"
