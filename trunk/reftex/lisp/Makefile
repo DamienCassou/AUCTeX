@@ -53,7 +53,8 @@ reftex.el: $(LISPFILES) reftex.el.in
 	test "X$${REFTEXVERSION}" != X || REFTEXVERSION=$${REFTEXDATE}; \
 	sed -e "s/@REFTEXVERSION@/$${REFTEXVERSION}/" reftex.el.in >reftex.el
 	emacs -batch --no-site-file -l reftex.el \
-	  -eval "(let ((generated-autoload-file (expand-file-name \"$@\"))) \
+	  -eval "(let ((generated-autoload-file (expand-file-name \"$@\")) \
+                       (make-backup-files nil)) \
                    (mapcar (function update-file-autoloads) \
                            command-line-args-left) \
                    (save-buffers-kill-emacs t))" $(LISPFILES)
