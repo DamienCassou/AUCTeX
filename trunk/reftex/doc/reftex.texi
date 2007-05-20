@@ -1826,7 +1826,7 @@ SELECT A CITATION FORMAT
 @end example
 
 @vindex reftex-cite-prompt-optional-args
-If cite formats contain empty paris of square brackets, RefTeX can
+If citation formats contain empty pairs of square brackets, @RefTeX{}
 will prompt for values of these optional arguments if you call the
 @code{reftex-citation} command with a @kbd{C-u} prefix.
 Following the most generic of these packages, @code{natbib}, the builtin
