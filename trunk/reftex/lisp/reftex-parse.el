@@ -931,9 +931,7 @@ of master file."
             (incf cnt))
           (when (< cnt n)
             (unless (and (condition-case nil
-                             (prog1
-				 (or (forward-list 1) t)
-			       (while (forward-comment 1)))
+			     (or (forward-list 1) t)
                            (error nil))
                          (reftex-move-to-next-arg)
                          (incf cnt))
