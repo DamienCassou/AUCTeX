@@ -1,3 +1,9 @@
+2007-07-07  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-parse.el (reftex-nth-arg): Use `forward-comment'
+	instead of `comment-forward'.  The latter is not always available
+	and the former is sufficient for LaTeX.
+
 2007-05-20  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/reftex.texi (Citation Styles): Correct some mistakes.
