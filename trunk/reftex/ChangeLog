@@ -3,6 +3,8 @@
 	* lisp/reftex-parse.el (reftex-nth-arg): Use `forward-comment'
 	instead of `comment-forward'.  The latter is not always available
 	and the former is sufficient for LaTeX.
+	(reftex-nth-arg): Revert last change since moving over whitespace
+	and comments is done by `reftex-move-to-next-arg'.
 
 2007-05-20  Ralf Angeli  <angeli@caeruleus.net>
 
