@@ -361,6 +361,7 @@ on the menu bar.
         (nth 1 entry)
       t)))
 
+;;;###autoload
 (defun reftex-set-cite-format (value)
   "Set the document-local value of `reftex-cite-format'.
 When such a value exists, it overwrites the setting given with
@@ -1106,7 +1107,7 @@ Valid actions are: readable, restore, read, kill, write."
         (if (file-writable-p file)
             (progn
               (message "Writing parse file %s" (abbreviate-file-name file))
-              (find-file file)
+	      (set-buffer (get-buffer-create file))
               (erase-buffer)
               (insert (format ";; RefTeX parse info file\n"))
               (insert (format ";; File: %s\n" master))
@@ -1131,7 +1132,7 @@ Valid actions are: readable, restore, read, kill, write."
                          (t (print x))))
                  list))
               (insert "))\n\n")
-              (save-buffer 0)
+	      (write-region (point-min) (point-max) file nil 'silent)
               (kill-buffer (current-buffer)))
           (error "Cannot write to file %s" file)))
       t))))
