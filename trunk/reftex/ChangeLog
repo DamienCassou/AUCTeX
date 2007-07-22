@@ -1,3 +1,9 @@
+2007-07-22  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-base.el (reftex-set-cite-format): Autoload.
+	(reftex-access-parse-file): Create parse file in a way that does
+	not interfere with recentf mode.
+
 2007-07-07  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-parse.el (reftex-nth-arg): Use `forward-comment'
