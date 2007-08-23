@@ -10,7 +10,7 @@
 
 ;; GNU Emacs is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; GNU Emacs is distributed in the hope that it will be useful,
@@ -164,6 +164,7 @@ argument identify one of multiple indices."
       (message "RefTeX has been plugged into AUCTeX.")
     (message "RefTeX no longer interacts with AUCTeX.")))
 
+;;;###autoload
 (defun reftex-add-label-environments (entry-list)
   "Add label environment descriptions to `reftex-label-alist-style'.
 The format of ENTRY-LIST is exactly like `reftex-label-alist'.  See there
@@ -188,6 +189,7 @@ the label information is recompiled on next use."
           (push entry list)))
       (when changed
         (put reftex-docstruct-symbol 'reftex-label-alist-style list)))))
+;;;###autoload
 (defalias 'reftex-add-to-label-alist 'reftex-add-label-environments)
 
 (defun reftex-add-section-levels (entry-list)
