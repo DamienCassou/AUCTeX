@@ -3905,7 +3905,7 @@ list, to cover cases in which different environments carry the same
 label type (like @code{equation} and @code{eqnarray}).  If the type
 indicator is @code{nil} and the macro has a label argument @samp{@{*@}},
 the macro defines neutral labels just like @code{\label}.  In this case
-the reminder of this entry is ignored.
+the remainder of this entry is ignored.
 
 @item @var{label-prefix}
 Label prefix string, like @samp{tab:}.  The prefix is a short string
