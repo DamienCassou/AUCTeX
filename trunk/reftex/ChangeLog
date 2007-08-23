@@ -1,3 +1,12 @@
+2007-08-23  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Relicence all relevant files to GPLv3 or later.
+
+	* COPYING: Switch to GPLv3.
+
+	* doc/reftex.texi (Options (Defining Label Environments)): Fix
+	typo.
+
 2007-07-22  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-base.el (reftex-set-cite-format): Autoload.
