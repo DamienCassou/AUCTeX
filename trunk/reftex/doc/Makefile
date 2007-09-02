@@ -79,6 +79,7 @@ maintainer-clean: clean
 	rm -f $(DISTTEXTS) reftex.info
 
 dist: $(DISTTEXTS) reftex.info
+	rm .cvsignore
 
 ../CHANGES: changes.texi
 	eval $(MAKEDISTTEXTHEADER)

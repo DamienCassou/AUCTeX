@@ -44,6 +44,7 @@ clean:
 	rm -f $(ELCFILES)
 
 dist: reftex.el
+	rm .cvsignore
 
 reftex.el: $(LISPFILES) reftex.el.in
 	REFTEXDATE=`sed -n '1s/^\([-0-9][-0-9]*\).*/\1/p' ../ChangeLog` ; \
