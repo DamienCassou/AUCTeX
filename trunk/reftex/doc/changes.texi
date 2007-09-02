@@ -6,7 +6,7 @@
 @end ifset
 Here is a list of recent changes to @RefTeX{}.
 
-@noindent @b{Version 4.32}
+@noindent @b{Version 4.33}
 
 @itemize @bullet
 @item
