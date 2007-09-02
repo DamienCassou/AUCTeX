@@ -10,6 +10,16 @@ Here is a list of recent changes to @RefTeX{}.
 
 @itemize @bullet
 @item
+Update to GPLv3.
+@item
+Parse files are created in a way that does not interfere with recentf
+mode.
+@end itemize
+
+@noindent @b{Version 4.32}
+
+@itemize @bullet
+@item
 First release by @AUCTeX{} project.
 @item
 Installation routine rewritten after structure of source package
