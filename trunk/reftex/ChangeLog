@@ -1,5 +1,7 @@
 2007-09-02  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/changes.texi: Update for 4.33.
+
 	* RELEASE (http): Update for 4.33.
 
 	* doc/Makefile (dist): Delete .cvsignore.
