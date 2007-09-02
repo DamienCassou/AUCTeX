@@ -6,7 +6,7 @@ This is the RELEASE file for the RefTeX distribution.
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-Release Notes for RefTeX 4.32 (2007-04-10)
+Release Notes for RefTeX 4.33 (2007-09-02)
 ==========================================
 
 RefTeX is a specialized package for support of labels, references,
@@ -21,16 +21,9 @@ structure quickly.
 New Features and Bug Fixes
 --------------------------
 
-This is the first release of RefTeX after the AUCTeX project took over
-maintainership from Carsten Dominik which involved rearranging source
-code and putting it under version control.
-
-The installation procedure was reimplemented and the way to activate
-RefTeX changed.  So be sure to check out the installation instructions
-in the INSTALL file when upgrading because you might have to remove or
-replace old commands related to RefTeX from your init file.
-
-Some minor bugs were fixed.  Check the CHANGES file for details.
+The principal change of this release is an update to GPLv3 (see
+http://www.gnu.org/licenses/gpl.html).  See the CHANGES file for a
+description of other changes.
 
 Availability
 ------------
