@@ -1,3 +1,15 @@
+2007-09-02  Ralf Angeli  <angeli@caeruleus.net>
+
+	* RELEASE (http): Update for 4.33.
+
+	* doc/Makefile (dist): Delete .cvsignore.
+
+	* doc/install.texi: Do not refer to install.el anymore.
+
+	* list/.cvsignore: New file.
+
+	* lisp/Makefile (dist): Delete .cvsignore.
+
 2007-08-23  Ralf Angeli  <angeli@caeruleus.net>
 
 	* Relicence all relevant files to GPLv3 or later.
