@@ -1791,20 +1791,22 @@ keymap @code{reftex-select-bib-map} may be used.
 @cindex Citation styles, @code{harvard}
 @cindex Citation styles, @code{chicago}
 @cindex Citation styles, @code{jurabib}
+@cindex Citation styles, @ConTeXt{}
 @cindex @code{natbib}, citation style
 @cindex @code{harvard}, citation style
 @cindex @code{chicago}, citation style
 @cindex @code{jurabib}, citation style
+@cindex @ConTeXt{}, citation style
 
 @vindex reftex-cite-format
-The standard @LaTeX{} macro @code{\cite} works well with numeric or simple
-key citations.  To deal with the more complex task of author-year
+The standard @LaTeX{} macro @code{\cite} works well with numeric or
+simple key citations.  To deal with the more complex task of author-year
 citations as used in many natural sciences, a variety of packages has
 been developed which define derived forms of the @code{\cite} macro.
-@RefTeX{} can be configured to produce these citation macros as well
-by setting the variable @code{reftex-cite-format}.  For the most
-commonly used packages (@code{natbib}, @code{harvard}, @code{chicago},
-@code{jurabib}) this may be done from the menu, under
+@RefTeX{} can be configured to produce these citation macros as well by
+setting the variable @code{reftex-cite-format}.  For the most commonly
+used @LaTeX{} packages (@code{natbib}, @code{harvard}, @code{chicago},
+@code{jurabib}) and for @ConTeXt{} this may be done from the menu, under
 @code{Ref->Citation Styles}.  Since there are usually several macros to
 create the citations, executing @code{reftex-citation} (@kbd{C-c [})
 starts by prompting for the correct macro.  For the Natbib style, this
