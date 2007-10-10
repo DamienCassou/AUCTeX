@@ -201,6 +201,11 @@ distribution.  Mixed-case symbols are convenience aliases.")
       (?p    . "(%2a %y\\nocite{%l})")))
     (locally     "Full info in parenthesis"
      "(%2a %y, %j %v, %P, %e: %b, %u, %s %<)")
+    (context
+     "ConTeXt bib module"
+     ((?\C-m . "\\cite[%l]")
+      (?s    . "\\cite[][%l]")
+      (?n    . "\\nocite[%l]")))
     )
   "Builtin versions of the citation format.
 The following conventions are valid for all alist entries:
@@ -1002,7 +1007,8 @@ string to insert into the buffer."
   "Support for referencing bibliographic data with BibTeX."
   :group 'reftex)
 
-(defcustom reftex-bibliography-commands '("bibliography" "nobibliography")
+(defcustom reftex-bibliography-commands
+  '("bibliography" "nobibliography" "setupbibtex\\[.*?database=")
   "LaTeX commands which specify the BibTeX databases to use with the document."
   :group 'reftex-citation-support
   :type '(repeat string))
