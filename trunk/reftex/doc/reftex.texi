@@ -48,7 +48,7 @@ license to the document, as described in section 6 of the license.
 
 @dircategory Emacs
 @direntry
-* RefTeX: (reftex).	Emacs support for LaTeX cross-references and citations.
+* RefTeX: (reftex.info).	Emacs support for LaTeX cross-references and citations.
 @end direntry
 
 @finalout
