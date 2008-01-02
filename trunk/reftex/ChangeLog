@@ -4,6 +4,10 @@
 	(INSTALL_DATA): Define.
 	(install): Use `INSTALL_DATA' instead of `CP'.
 
+	* lisp/Makefile (install): Use `INSTALL_DATA' instead of `CP'.
+	(reftex.el): Use `EMACS' variable instead of hard-coded call of
+	emacs binary.
+
 	* doc/Makefile (install): Use `INSTALL_DATA' instead of `CP'.
 
 	* doc/reftex.texi: Set file name in directory entry to
