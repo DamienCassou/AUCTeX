@@ -1,3 +1,14 @@
+2008-01-02  Ralf Angeli  <angeli@caeruleus.net>
+
+	* Makefile (INSTALL): Define.
+	(INSTALL_DATA): Define.
+	(install): Use `INSTALL_DATA' instead of `CP'.
+
+	* doc/Makefile (install): Use `INSTALL_DATA' instead of `CP'.
+
+	* doc/reftex.texi: Set file name in directory entry to
+	reftex.info.
+
 2007-10-10  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-cite-format-builtin)
