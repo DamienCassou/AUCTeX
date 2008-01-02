@@ -37,8 +37,8 @@ lisp: reftex.el $(LISPFILES)
 
 install: reftex.el $(LISPFILES) $(ELCFILES)
 	if [ ! -d $(lispdir) ]; then $(MKDIR) $(lispdir); else true; fi ;
-	$(CP) reftex.el $(LISPFILES) $(lispdir)
-	$(CP) $(ELCFILES)  $(lispdir)
+	$(INSTALL_DATA) reftex.el $(LISPFILES) $(lispdir)
+	$(INSTALL_DATA) $(ELCFILES)  $(lispdir)
 
 clean:
 	rm -f $(ELCFILES)
@@ -53,7 +53,7 @@ reftex.el: $(LISPFILES) reftex.el.in
 	REFTEXVERSION=`sed -n '2,/^[0-9]/s/.*Version \(.*\) released\..*/\1/p' ../ChangeLog`; \
 	test "X$${REFTEXVERSION}" != X || REFTEXVERSION=$${REFTEXDATE}; \
 	sed -e "s/@REFTEXVERSION@/$${REFTEXVERSION}/" reftex.el.in >reftex.el
-	emacs -batch --no-site-file -l reftex.el \
+	"$(EMACS)" -batch --no-site-file -l reftex.el \
 	  -eval "(let ((generated-autoload-file (expand-file-name \"$@\")) \
                        (make-backup-files nil)) \
                    (mapcar (function update-file-autoloads) \
