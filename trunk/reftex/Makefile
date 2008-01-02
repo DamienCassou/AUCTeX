@@ -52,11 +52,14 @@ MKDIR=mkdir -p
 MV=mv
 
 # How to copy the lisp files to their distination.
-CP=cp -p
+INSTALL=install -c
+INSTALL_DATA=${INSTALL} -m 644
 
 ##----------------------------------------------------------------------
 ##  BELOW THIS LINE ON YOUR OWN RISK!
 ##----------------------------------------------------------------------
+
+CP=cp -p
 
 SHELL=/bin/sh
 
@@ -71,8 +74,10 @@ lisp:
 	cd lisp && make EMACS="$(EMACS)" lisp
 
 install:
-	cd lisp && make CP="$(CP)" MKDIR="$(MKDIR)" lispdir="$(lispdir)" install
-	cd doc && make CP="$(CP)" MKDIR="$(MKDIR)" infodir="$(infodir)" install
+	cd lisp && make INSTALL_DATA="$(INSTALL_DATA)" MKDIR="$(MKDIR)" \
+		lispdir="$(lispdir)" install
+	cd doc && make INSTALL_DATA="$(INSTALL_DATA)" MKDIR="$(MKDIR)" \
+		infodir="$(infodir)" install
 
 info:
 	cd doc && make info
