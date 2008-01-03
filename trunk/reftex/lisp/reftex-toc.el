@@ -617,7 +617,7 @@ point."
                 nil              ; we have permission, do nothing
               (error "Abort"))   ; abort, we don't have permission
             ;; Do the changes
-            (mapcar 'reftex-toc-promote-action entries)
+            (mapc 'reftex-toc-promote-action entries)
             ;; Rescan the document and rebuilt the toc buffer
             (save-window-excursion
               (reftex-toc-Rescan))
@@ -944,7 +944,7 @@ section."
             (delete-itimer reftex-toc-auto-recenter-timer)
           (cancel-timer reftex-toc-auto-recenter-timer))
         (setq reftex-toc-auto-recenter-timer nil)
-        (message "Automatic recentering of toc windwo was turned off"))
+        (message "Automatic recentering of toc window was turned off"))
     (setq reftex-toc-auto-recenter-timer
           (if (featurep 'xemacs)
               (start-itimer "RefTeX Idle Timer for recenter"
