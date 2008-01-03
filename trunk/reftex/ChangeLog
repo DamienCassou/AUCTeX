@@ -1,5 +1,8 @@
 2008-01-03  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-dcr.el (reftex-mouse-view-crossref): Explain why
+	point is set.
+
 	* lisp/reftex-toc.el (reftex-toc-do-promote): Use `mapc' instead
 	of `mapcar' because return value is not used.
 	(reftex-toggle-auto-toc-recenter): Fix typo.
