@@ -710,9 +710,9 @@ While entering the regexp, completion on knows citation keys is possible.
 
       ;; Produce the cite-view strings
       (when (and reftex-mode reftex-cache-cite-echo cite-view)
-        (mapcar (lambda (entry)
-                  (reftex-make-cite-echo-string entry docstruct-symbol))
-                selected-entries))
+        (mapc (lambda (entry)
+		(reftex-make-cite-echo-string entry docstruct-symbol))
+	      selected-entries))
 
       (message ""))
 
