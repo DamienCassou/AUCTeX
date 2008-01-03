@@ -230,6 +230,7 @@ If it is a \\cite, show the BibTeX database entry.
 If there is no such macro at point, search forward to find one.
 With argument, actually select the window showing the cross reference."
   (interactive "e")
+  ;; Make sure the referencing macro stays visible in the original window.
   (mouse-set-point ev)
   (reftex-view-crossref current-prefix-arg))
 
