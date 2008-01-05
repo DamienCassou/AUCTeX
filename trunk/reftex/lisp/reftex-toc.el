@@ -994,8 +994,11 @@ always show the current section in connection with the option
       (select-frame current-toc-frame)
       (switch-to-buffer "*toc*")
       (select-frame current-frame)
-      (if (fboundp 'focus-frame) (focus-frame current-frame)
-        (if (fboundp 'x-focus-frame) (x-focus-frame current-frame)))
+      (cond ((fboundp 'x-focus-frame)
+	     (x-focus-frame current-frame))
+	    ((and (featurep 'xemacs) ; `focus-frame' is a nop in Emacs.
+		  (fboundp 'focus-frame))
+	     (focus-frame current-frame)))
       (select-window current-window)
       (when (eq reftex-auto-recenter-toc 'frame)
         (unless reftex-toc-auto-recenter-timer
