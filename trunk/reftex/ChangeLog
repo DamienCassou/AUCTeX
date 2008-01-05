@@ -1,3 +1,9 @@
+2008-01-05  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-toc.el (reftex-make-separate-toc-frame): Hide
+	non-operational call to `focus-frame' in Emacs for the compilers's
+	sake.
+
 2008-01-03  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-dcr.el (reftex-mouse-view-crossref): Explain why
