@@ -130,7 +130,8 @@
 
   (let* ((re
           (if item
-              (concat "\\\\bibitem\\(\\[[^]]*\\]\\)?{" (regexp-quote key) "}")
+              (concat "\\\\bibitem[ \t]*\\(\\[[^]]*\\]\\)?[ \t]*{"
+		      (regexp-quote key) "}")
             (concat "@\\(?:\\w\\|\\s_\\)+[ \t\n\r]*[{(][ \t\n\r]*"
 		    (regexp-quote key) "[, \t\r\n}]")))
          (buffer-conf (current-buffer))
@@ -378,7 +379,8 @@
                         (delete ""
                                 (split-string
                                  (buffer-substring-no-properties start end)
-                                 "[ \t\n\r]*\\\\bibitem\\(\\[[^]]*]\\)*"))))))
+                                 "[ \t\n\r]*\\\\bibitem[ \t]*\\(\\[[^]]*]\\)*\
+\[ \t]*"))))))
             (goto-char end)))))
     (unless entries
       (error "No bibitems found"))
@@ -959,7 +961,7 @@ While entering the regexp, completion on knows citation keys is possible.
              reftex-mouse-selected-face
            nil))
         tmp len)
-    (mapcar
+    (mapc
      (lambda (x)
        (setq tmp (cdr (assoc "&formatted" x))
              len (length tmp))
