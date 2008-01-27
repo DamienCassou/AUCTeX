@@ -1,7 +1,7 @@
 ;;; reftex-base.el --- Basic definitions for RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -2300,21 +2300,23 @@ IGNORE-WORDS List of words which should be removed from the string."
      :style radio :selected (eq reftex-auto-view-crossref 'window)]
     "--"
     "MISC"
-    ["AUC TeX Interface" reftex-toggle-plug-into-AUCTeX
+    ["AUCTeX Interface" reftex-toggle-plug-into-AUCTeX
      :style toggle :selected reftex-plug-into-AUCTeX]
     ["isearch whole document" reftex-isearch-minor-mode
      :style toggle :selected reftex-isearch-minor-mode])
    ("Reference Style"
-    ["Default" (setq reftex-vref-is-default nil
-                     reftex-fref-is-default nil)
-     :style radio :selected (not (or reftex-vref-is-default
-                                     reftex-fref-is-default))]
-    ["Varioref" (setq reftex-vref-is-default t
-                      reftex-fref-is-default nil)
-     :style radio :selected reftex-vref-is-default]
-    ["Fancyref" (setq reftex-fref-is-default t
-                      reftex-vref-is-default nil)
-     :style radio :selected reftex-fref-is-default])
+    ,@(delete-dups
+       (mapcar (lambda (elt)
+		 (let ((elt (nth 1 elt)))
+		   (vector
+		    elt
+		    `(if (member ,elt reftex-ref-style-active-list)
+			 (setq reftex-ref-style-active-list
+			       (delete ,elt reftex-ref-style-active-list))
+		       (add-to-list 'reftex-ref-style-active-list ,elt))
+		    :style 'toggle
+		    :selected `(member ,elt reftex-ref-style-active-list))))
+	       reftex-ref-style-alist)))
    ("Citation Style"
     ,@(mapcar
        (lambda (x)
