@@ -1,5 +1,7 @@
 2008-01-27  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-vars.el (reftex-ref-style-active-list): Doc fix.
+
 	* lisp/reftex-base.el (reftex-erase-all-selection-and-index-buffers)
 	(reftex-access-parse-file): Use `mapc' instead of `mapcar' where
 	return value is not used.
