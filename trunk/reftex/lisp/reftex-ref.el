@@ -1,7 +1,7 @@
 ;;; reftex-ref.el --- code to create labels and references with RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -431,10 +431,18 @@ When called with 2 C-u prefix args, disable magic word recognition."
               type (car type))
       (setq type (reftex-query-label-type))))
 
-  (let* ((refstyle 
-          (cond ((reftex-typekey-check type reftex-vref-is-default) "\\vref")
-                ((reftex-typekey-check type reftex-fref-is-default) "\\fref")
-                (t "\\ref")))
+  (let* ((refstyle (if (and (boundp 'refstyle) refstyle)
+		       refstyle
+		     ;; Get the first macro from
+		     ;; `reftex-ref-style-alist' which matches the
+		     ;; first entry in `reftex-ref-style-active-list'.
+		     (catch 'found
+		       (dolist (elt reftex-ref-style-alist)
+			 (when (equal (nth 1 elt)
+				      (car reftex-ref-style-active-list))
+			   (throw 'found (car elt))))
+		       ;; Use the first entry in r-r-s-a as a last resort.
+		       (caar reftex-ref-style-alist))))
          (reftex-format-ref-function reftex-format-ref-function)
          (form "\\ref{%s}")
          label labels sep sep1)
@@ -476,12 +484,8 @@ When called with 2 C-u prefix args, disable magic word recognition."
                    (member (preceding-char) '(?\ ?\t ?\n ?~)))
           (setq form (substring form 1)))
         ;; do we have a special format?
-        (setq reftex-format-ref-function
-              (cond
-               ((string= refstyle "\\vref") 'reftex-format-vref)
-               ((string= refstyle "\\fref") 'reftex-format-fref)
-               ((string= refstyle "\\Fref") 'reftex-format-Fref)
-               (t reftex-format-ref-function)))
+	(unless (string= refstyle "\\ref")
+	  (setq reftex-format-ref-function 'reftex-format-special))
         ;; ok, insert the reference
         (if sep1 (insert sep1))
         (insert
@@ -797,34 +801,29 @@ When called with 2 C-u prefix args, disable magic word recognition."
         (run-hooks 'reftex-display-copied-context-hook)
         (setq buffer-read-only t))))))
 
-(defun reftex-varioref-vref ()
-  "Insert a reference using the `\\vref' macro from the varioref package."
-  (interactive)
-  (let ((reftex-format-ref-function 'reftex-format-vref))
-    (reftex-reference)))
-(defun reftex-fancyref-fref ()
-  "Insert a reference using the `\\fref' macro from the fancyref package."
-  (interactive)
-  (let ((reftex-format-ref-function 'reftex-format-fref)
-        ;;(reftex-guess-label-type nil) ;FIXME do we want this????
-        )
-    (reftex-reference)))
-(defun reftex-fancyref-Fref ()
-  "Insert a reference using the `\\Fref' macro from the fancyref package."
-  (interactive)
-  (let ((reftex-format-ref-function 'reftex-format-Fref)
-        ;;(reftex-guess-label-type nil) ;FIXME do we want this????
-        )
-    (reftex-reference)))
+;; Generate functions for direct insertion of specific referencing
+;; macros.  The functions are named `reftex-<package>-<macro>',
+;; e.g. `reftex-varioref-vref'.
+(dolist (elt reftex-ref-style-alist)
+  (when (stringp (nth 2 elt))
+    (let ((macro (car elt))
+	  (package (nth 2 elt)))
+      (eval `(defun ,(intern (format "reftex-%s-%s" package
+				     (substring macro 1 (length macro)))) ()
+	       ,(format "Insert a reference using the `%s' macro from the %s \
+package.\n\nThis is a generated function."
+		      macro package)
+	       (interactive)
+	       (let ((refstyle ,macro))
+		 (reftex-reference)))))))
 
-(defun reftex-format-vref (label fmt)
-  (while (string-match "\\\\ref{" fmt)
-    (setq fmt (replace-match "\\vref{" t t fmt)))
-  (format fmt label label))
-(defun reftex-format-Fref (label def-fmt)
-  (format "\\Fref{%s}" label))
-(defun reftex-format-fref (label def-fmt)
-  (format "\\fref{%s}" label))
+(defun reftex-format-special (label fmt)
+  "Apply selected reference style to format FMT and add LABEL."
+  ;; Replace instances of \ref in `fmt' with the special reference
+  ;; style selected by the user.
+  (while (string-match "\\(\\\\ref\\)[ \t]*{" fmt)
+    (setq fmt (replace-match refstyle t t fmt 1)))
+  (format fmt label))
 
 (defun reftex-goto-label (&optional other-window)
   "Prompt for a label (with completion) and jump to the location of this label.
