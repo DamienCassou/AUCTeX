@@ -1,3 +1,35 @@
+2008-01-27  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el (reftex-ref-style-alist)
+	(reftex-ref-style-active-list): New variables.
+	(reftex-vref-is-default, reftex-fref-is-default): Adapt doc string
+	to new implementation.  Mark as obsolete.  Add compatibility code
+	for honoring the variable values in case they are set.
+
+	* lisp/reftex-base.el (reftex-mode-menu): Reference styles are now
+	computed from `reftex-ref-style-alist'.  Fix typo.
+
+	* lisp/reftex-ref.el (reftex-reference): Determine reference macro
+	by looking at `reftex-ref-style-active-list' and
+	`reftex-ref-style-alist'.  Use only one special format function.
+	(reftex-varioref-vref, reftex-fancyref-fref)
+	(reftex-fancyref-Fref): Remove definitions.  The functions are now
+	generated from `reftex-ref-style-alist'.
+	(reftex-format-vref, reftex-format-Fref, reftex-format-fref):
+	Remove.
+	(reftex-format-special): New function.
+
+	* lisp/reftex-sel.el (reftex-select-toggle-varioref)
+	(reftex-select-toggle-fancyref): Remove.
+	(reftex-select-cycle-active-ref-styles)
+	(reftex-select-cycle-ref-style-internal)
+	(reftex-select-cycle-ref-style-forward)
+	(reftex-select-cycle-ref-style-backward)
+	(reftex-select-toggle-numref-pageref): New functions.
+	(reftex-select-label-map): Use `v' and `V' for general cycling
+	through reference styles.  Add `p' for switching between number
+	and page reference types.
+
 2008-01-06  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-cite.el (reftex-pop-to-bibtex-entry)
