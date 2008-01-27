@@ -1,7 +1,7 @@
 ;;; reftex-vars.el --- configuration variables for RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -945,27 +945,72 @@ This is used to string together whole reference sets, like
   :group 'reftex-referencing-labels
   :type '(repeat (cons (character) (string))))
 
+(defcustom reftex-ref-style-alist
+  '(("\\ref" "Default" t num)
+    ("\\pageref" "Default" t page)
+    ("\\vref" "Varioref" "varioref" num)
+    ("\\vpageref" "Varioref" "varioref" page)
+    ("\\Vref" "Varioref" "varioref" num)
+    ("\\Ref" "Varioref" "varioref" num)
+    ("\\fref" "Fancyref" "fancyref" num)
+    ("\\Fref" "Fancyref" "fancyref" num)
+    ("\\autoref" "Hyperref" "hyperref" num)
+    ("\\autopageref" "Hyperref" "hyperref" page))
+  "Alist of reference styles.
+Each element is a list of the string to be inserted as reference
+macro, the style name, the LaTeX package providing the macro (the
+package name as a string or t for no specific package) and the
+reference type (the symbol `num' for a number reference or `page'
+for a page reference macro)."
+  :group 'reftex-referencing-labels
+  :type '(alist :key-type (string :tag "Macro")
+		:value-type (group (string :tag "Style name")
+				   (choice :tag "Package"
+					   (const :tag "Any package" t)
+					   (string :tag "Name"))
+				   (choice :tag "Reference type"
+					   (const :tag "Number" num)
+					   (const :tag "Page" page)))))
+
 (defcustom reftex-vref-is-default nil
-  "*Non-nil means, the varioref macro \\vref is used as default.
-In the selection buffer, the `v' key toggles the reference macro between 
-`\\ref' and `\\vref'.  The value of this variable determines the default
-which is active when entering the selection process.
-Instead of nil or t, this may also be a string of type letters indicating
-the label types for which it should be true."
+  "Non-nil means, the varioref reference style is used as default.
+The value of this variable determines the default which is active
+when entering the selection process.  Instead of nil or t, this
+may also be a string of type letters indicating the label types
+for which it should be true.
+
+This variable is obsolete, use `reftex-ref-style-active-list'
+instead."
   :group  'reftex-referencing-labels
   :type `(choice :tag "\\vref is default macro" ,@reftex-tmp))
 ;;;###autoload(put 'reftex-vref-is-default 'safe-local-variable (lambda (x) (or (stringp x) (symbolp x))))
 
 (defcustom reftex-fref-is-default nil
-  "*Non-nil means, the fancyref macro \\fref is used as default.
-In the selection buffer, the `V' key toggles the reference macro between 
-`\\ref', `\\fref' and `\\Fref'.  The value of this variable determines
-the default which is active when entering the selection process.
-Instead of nil or t, this may also be a string of type letters indicating
-the label types for which it should be true."
+  "Non-nil means, the fancyref reference style is used as default.
+The value of this variable determines the default which is active
+when entering the selection process.  Instead of nil or t, this
+may also be a string of type letters indicating the label types
+for which it should be true.
+
+This variable is obsolete, use `reftex-ref-style-active-list'
+instead."
   :group  'reftex-referencing-labels
   :type `(choice :tag "\\fref is default macro" ,@reftex-tmp))
 ;;;###autoload(put 'reftex-fref-is-default 'safe-local-variable (lambda (x) (or (stringp x) (symbolp x))))
+
+(defcustom reftex-ref-style-active-list '("Default")
+  "List of active reference styles.
+The names names have to match the respective reference style
+names used in the variable `reftex-ref-style-alist'."
+  :group 'reftex-referencing-labels
+  :type `(repeat (choice ,@(delete-dups (mapcar (lambda (elt)
+						  (list 'const (nth 1 elt)))
+						reftex-ref-style-alist)))))
+;; Compatibility with obsolote variables.
+(when reftex-vref-is-default
+  (add-to-list 'reftex-ref-style-active-list "Varioref"))
+(when reftex-fref-is-default
+  (add-to-list 'reftex-ref-style-active-list "Fancyref"))
 
 (defcustom reftex-level-indent 2
   "*Number of spaces to be used for indentation per section level."
