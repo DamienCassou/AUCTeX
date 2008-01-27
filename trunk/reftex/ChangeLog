@@ -1,5 +1,15 @@
 2008-01-27  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-base.el (reftex-erase-all-selection-and-index-buffers)
+	(reftex-access-parse-file): Use `mapc' instead of `mapcar' where
+	return value is not used.
+
+	* lisp/reftex-ref.el (reftex-offer-label-menu): Use `mapc' instead
+	of `mapcar' where return value is not used.
+
+	* lisp/reftex-sel.el (reftex-select-item, reftex-select-unmark):
+	Use `mapc' instead of `mapcar' where return value is not used.
+
 	* lisp/reftex-vars.el (reftex-ref-style-alist)
 	(reftex-ref-style-active-list): New variables.
 	(reftex-vref-is-default, reftex-fref-is-default): Adapt doc string
