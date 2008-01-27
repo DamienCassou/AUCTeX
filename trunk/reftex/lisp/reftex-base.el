@@ -633,12 +633,12 @@ This enforces rescanning the buffer on next use."
 
 (defun reftex-erase-all-selection-and-index-buffers ()
   ;; Remove all selection buffers associated with current document.
-  (mapcar
+  (mapc
    (lambda (type)
      (reftex-erase-buffer (reftex-make-selection-buffer-name type)))
    reftex-typekey-list)
   ;; Kill all index buffers
-  (mapcar
+  (mapc
    (lambda (tag)
      (reftex-kill-buffer (reftex-make-index-buffer-name tag)))
    (cdr (assoc 'index-tags (symbol-value reftex-docstruct-symbol)))))
@@ -1113,7 +1113,7 @@ Valid actions are: readable, restore, read, kill, write."
                               (user-login-name) (user-full-name)))
               (insert "(set reftex-docstruct-symbol '(\n\n")
               (let ((standard-output (current-buffer)))
-                (mapcar
+                (mapc
                  (lambda (x)
                    (cond ((eq (car x) 'toc)
                           ;; A toc entry. Do not save the marker.
