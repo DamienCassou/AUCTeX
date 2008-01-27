@@ -1000,8 +1000,10 @@ instead."
 
 (defcustom reftex-ref-style-active-list '("Default")
   "List of active reference styles.
-The names names have to match the respective reference style
-names used in the variable `reftex-ref-style-alist'."
+The order is significant and controls the order in which macros
+can be cycled in the buffer for selecting a label.  The entries
+in the list have to match the respective reference style names
+used in the variable `reftex-ref-style-alist'."
   :group 'reftex-referencing-labels
   :type `(repeat (choice ,@(delete-dups (mapcar (lambda (elt)
 						  (list 'const (nth 1 elt)))
