@@ -1,7 +1,7 @@
 ;;; reftex-sel.el --- the selection modes for RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -533,21 +533,59 @@ Useful for large TOC's."
   (interactive)
   (setq reftex-last-follow-point -1)
   (setq cb-flag (not cb-flag)))
-(defun reftex-select-toggle-varioref ()
-  "Toggle the macro used for referencing the label between \\ref and \\vref."
-  (interactive)
-  (if (string= refstyle "\\ref")
-      (setq refstyle "\\vref")
-    (setq refstyle "\\ref"))
+
+(defun reftex-select-cycle-active-ref-styles ()
+  "Return ordered alist of active reference styles."
+  (let (list)
+    (dolist (style reftex-ref-style-active-list)
+      (dolist (spec reftex-ref-style-alist)
+	(when (string= (nth 1 spec) style)
+	  (add-to-list 'list spec t))))
+    list))
+
+(defun reftex-select-cycle-ref-style-internal (&optional reverse)
+  "Cycle through macros used for referencing.
+Reverse list if optional argument REVERSE is non-nil."
+  ;; First build a list containing only active styles, then reassemble
+  ;; the list so that the current entry is at the beginning, then
+  ;; traverse the list and find the next entry with the currently
+  ;; selected reference type.  (XXX: Possible optimizations: Walk
+  ;; through `reftex-ref-style-alist' for each active style in the
+  ;; order given in `reftex-ref-style-active-list' instead of building
+  ;; an ordered list each time or cache the ordered list somehow.)
+  (let* ((orig (reftex-select-cycle-active-ref-styles))
+	 (orig (if reverse (reverse orig) orig))
+	 (list (member (assoc refstyle orig) orig))
+	 (list (append list (butlast orig (length list))))
+	 (cur-type (nth 3 (assoc refstyle reftex-ref-style-alist))))
+    (catch 'found
+      (dolist (elt (cdr list))
+	(when (eq (nth 3 elt) cur-type)
+	  (setq refstyle (car elt))
+	  (throw 'found nil)))))
   (force-mode-line-update))
-(defun reftex-select-toggle-fancyref ()
-  "Toggle the macro used for referencing the label between \\ref and \\vref."
+
+(defun reftex-select-cycle-ref-style-forward ()
+  "Cycle forward through macros used for referencing."
   (interactive)
-  (setq refstyle
-        (cond ((string= refstyle "\\ref") "\\fref")
-              ((string= refstyle "\\fref") "\\Fref")
-              (t "\\ref")))
+  (reftex-select-cycle-ref-style-internal))
+
+(defun reftex-select-cycle-ref-style-backward ()
+  "Cycle backward through macros used for referencing."
+  (interactive)
+  (reftex-select-cycle-ref-style-internal t))
+
+(defun reftex-select-toggle-numref-pageref ()
+  "Toggle between number and page reference types."
+  (interactive)
+  (let ((cur-type (nth 3 (assoc refstyle reftex-ref-style-alist))))
+    (catch 'found
+      (dolist (elt reftex-ref-style-alist)
+	(unless (eq (nth 3 elt) cur-type)
+	  (setq refstyle (car elt))
+	  (throw 'found nil)))))
   (force-mode-line-update))
+
 (defun reftex-select-show-insertion-point ()
   "Show the point from where selection was started in another window."
   (interactive)
@@ -709,8 +747,9 @@ Useful for large TOC's."
 (loop for x in
       '(("b"        . reftex-select-jump-to-previous)
         ("z"        . reftex-select-jump)
-        ("v"        . reftex-select-toggle-varioref)
-        ("V"        . reftex-select-toggle-fancyref)
+	("p"        . reftex-select-toggle-numref-pageref)
+        ("v"        . reftex-select-cycle-ref-style-forward)
+        ("V"        . reftex-select-cycle-ref-style-backward)
         ("m"        . reftex-select-mark)
         ("u"        . reftex-select-unmark)
         (","        . reftex-select-mark-comma)
