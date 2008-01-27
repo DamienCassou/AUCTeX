@@ -670,7 +670,7 @@ When called with 2 C-u prefix args, disable magic word recognition."
           (set-buffer (car (car reftex-buffers-with-changed-invisibility)))
           (setq buffer-invisibility-spec 
                 (cdr (pop reftex-buffers-with-changed-invisibility)))))
-      (mapcar (lambda (buf) (and (buffer-live-p buf) (bury-buffer buf)))
+      (mapc (lambda (buf) (and (buffer-live-p buf) (bury-buffer buf)))
               selection-buffers)
       (reftex-kill-temporary-buffers))
     ;; Add the prefixes, put together the relevant information in the form
