@@ -490,7 +490,7 @@ When called with 2 C-u prefix args, disable magic word recognition."
         (if sep1 (insert sep1))
         (insert
          (if reftex-format-ref-function
-             (funcall reftex-format-ref-function label form)
+             (funcall reftex-format-ref-function label form refstyle)
            (format form label label)))
         ;; take out the initial ~ for good
         (and (= ?~ (string-to-char form))
@@ -817,8 +817,9 @@ package.\n\nThis is a generated function."
 	       (let ((refstyle ,macro))
 		 (reftex-reference)))))))
 
-(defun reftex-format-special (label fmt)
-  "Apply selected reference style to format FMT and add LABEL."
+(defun reftex-format-special (label fmt refstyle)
+  "Apply selected reference style to format FMT and add LABEL.
+Replace any occurrences of \"\\ref\" with REFSTYLE."
   ;; Replace instances of \ref in `fmt' with the special reference
   ;; style selected by the user.
   (while (string-match "\\(\\\\ref\\)[ \t]*{" fmt)
