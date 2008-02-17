@@ -2305,18 +2305,20 @@ IGNORE-WORDS List of words which should be removed from the string."
     ["isearch whole document" reftex-isearch-minor-mode
      :style toggle :selected reftex-isearch-minor-mode])
    ("Reference Style"
-    ,@(delete-dups
-       (mapcar (lambda (elt)
-		 (let ((elt (nth 1 elt)))
-		   (vector
-		    elt
-		    `(if (member ,elt reftex-ref-style-active-list)
-			 (setq reftex-ref-style-active-list
-			       (delete ,elt reftex-ref-style-active-list))
-		       (add-to-list 'reftex-ref-style-active-list ,elt))
-		    :style 'toggle
-		    :selected `(member ,elt reftex-ref-style-active-list))))
-	       reftex-ref-style-alist)))
+    ,@(let (list item)
+	(dolist (elt reftex-ref-style-alist)
+	  (setq elt (nth 1 elt)
+		item (vector
+		      elt
+		      `(if (member ,elt reftex-ref-style-active-list)
+			   (setq reftex-ref-style-active-list
+				 (delete ,elt reftex-ref-style-active-list))
+			 (add-to-list 'reftex-ref-style-active-list ,elt))
+		      :style 'toggle
+		      :selected `(member ,elt reftex-ref-style-active-list)))
+	  (unless (member item list)
+	    (add-to-list 'list item t)))
+	list))
    ("Citation Style"
     ,@(mapcar
        (lambda (x)
