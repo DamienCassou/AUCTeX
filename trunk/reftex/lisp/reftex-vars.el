@@ -1005,9 +1005,13 @@ can be cycled in the buffer for selecting a label.  The entries
 in the list have to match the respective reference style names
 used in the variable `reftex-ref-style-alist'."
   :group 'reftex-referencing-labels
-  :type `(repeat (choice ,@(delete-dups (mapcar (lambda (elt)
-						  (list 'const (nth 1 elt)))
-						reftex-ref-style-alist)))))
+  :type `(repeat (choice ,@(let (list item)
+			     (dolist (elt reftex-ref-style-alist)
+			       (setq item (list 'const (nth 1 elt))) 
+			       (unless (member item list)
+				 (add-to-list 'list item t)))
+			     list))))
+
 ;; Compatibility with obsolote variables.
 (when reftex-vref-is-default
   (add-to-list 'reftex-ref-style-active-list "Varioref"))
@@ -1032,14 +1036,17 @@ a label type.  If you set this variable to nil, RefTeX will always prompt."
 
 (defcustom reftex-format-ref-function nil
   "Function which produces the string to insert as a reference.
-Normally should be nil, because the format to insert a reference can 
-already be specified in `reftex-label-alist'.
-This hook also is used by the special commands to insert `\\vref' and `\\fref'
-references, so even if you set this, your setting will be ignored by
-the special commands.
-The function will be called with two arguments, the LABEL and the DEFAULT
-FORMAT, which normally is `~\\ref{%s}'.  The function should return the
-string to insert into the buffer."
+Normally should be nil, because the format to insert a reference
+can already be specified in `reftex-label-alist'.
+
+This hook also is used by the special commands to insert
+e.g. `\\vref' and `\\fref' references, so even if you set this,
+your setting will be ignored by the special commands.
+
+The function will be called with three arguments, the LABEL, the
+DEFAULT FORMAT, which normally is `~\\ref{%s}' and the REFERENCE
+STYLE.  The function should return the string to insert into the
+buffer."
   :group 'reftex-referencing-labels
   :type '(choice (const nil) function))
 
