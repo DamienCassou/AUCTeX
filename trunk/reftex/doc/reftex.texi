@@ -200,14 +200,14 @@ Options, Keymaps, Hooks
 @chapter Introduction
 @cindex Introduction
 
-@RefTeX{} is a specialized package for support of labels,
-references, citations, and the index in @LaTeX{}.  @RefTeX{} wraps
-itself round 4 @LaTeX{} macros: @code{\label}, @code{\ref}, @code{\cite},
-and @code{\index}.  Using these macros usually requires looking up
-different parts of the document and searching through @BibTeX{} database
-files.  @RefTeX{} automates these time--consuming tasks almost
-entirely.  It also provides functions to display the structure of a
-document and to move around in this structure quickly.
+@RefTeX{} is a specialized package for support of labels, references,
+citations, and the index in @LaTeX{}.  @RefTeX{} wraps itself round four
+@LaTeX{} macros: @code{\label}, @code{\ref}, @code{\cite}, and
+@code{\index}.  Using these macros usually requires looking up different
+parts of the document and searching through @BibTeX{} database files.
+@RefTeX{} automates these time-consuming tasks almost entirely.  It also
+provides functions to display the structure of a document and to move
+around in this structure quickly.
 
 @iftex
 Don't be discouraged by the size of this manual, which covers @RefTeX{}
@@ -336,7 +336,7 @@ all entries.
 
 @page
 @item @b{Viewing Cross-References}@*
-When point is on the @var{key} argument of a cross--referencing macro
+When point is on the @var{key} argument of a cross-referencing macro
 (@code{\label}, @code{\ref}, @code{\cite}, @code{\bibitem},
 @code{\index}, and variations) or inside a @BibTeX{} database entry, you
 can press @kbd{C-c &} (@code{reftex-view-crossref}) to display
@@ -393,7 +393,7 @@ an @AUCTeX{} style file to support them with both @AUCTeX{} and
 @item @b{Where Next?}@* Go ahead and use @RefTeX{}.  Use its menus
 until you have picked up the key bindings.  For an overview of what you
 can do in each of the different special buffers, press @kbd{?}.  Read
-the manual if you get stuck, of if you are curious what else might be
+the manual if you get stuck, or if you are curious what else might be
 available.  The first part of the manual explains in
 a tutorial way how to use and customize @RefTeX{}.  The second
 part is a command and variable reference.
@@ -433,10 +433,10 @@ Prefix argument.
 
 @tablesubheading{Moving around}
 @item n
-Goto next entry in the table of context.
+Goto next entry in the table of contents.
 
 @item p
-Goto previous entry in the table of context.
+Goto previous entry in the table of contents.
 
 @item C-c C-n
 Goto next section heading.  Useful when many labels and index entries
@@ -492,7 +492,7 @@ Promote the current section.  This will convert @code{\section} to
 @code{\chapter}, @code{\subsection} to @code{\section} etc. If there is
 an active region, all sections in the region will be promoted, including
 the one at point.  To avoid mistakes, @RefTeX{} requires a fresh
-document scan before executing this command - if necessary, it will
+document scan before executing this command -- if necessary, it will
 automatically do this scan and ask the user to repeat the promotion
 command.
 
@@ -656,7 +656,7 @@ example.
 @cindex Label environment
 @cindex @code{\label}
 
-@LaTeX{} provides a powerful mechanism to deal with cross--references in a
+@LaTeX{} provides a powerful mechanism to deal with cross-references in a
 document.  When writing a document, any part of it can be marked with a
 label, like @samp{\label@{mark@}}.  @LaTeX{} records the current value of a
 certain counter when a label is defined.  Later references to this label
@@ -670,7 +670,7 @@ records the figure counter, not the section counter.
 
 Several different environments can share a common counter and therefore
 a common label category.  E.g.  labels in both @code{equation} and
-@code{eqnarray} environments record the value of the same counter - the
+@code{eqnarray} environments record the value of the same counter -- the
 equation counter.
 
 @menu
@@ -697,7 +697,7 @@ In order to create a label in a @LaTeX{} document, press @kbd{C-c (}
 and will figure out the environment it currently is in and adapt the
 label to that environment.  A label usually consists of a short prefix
 indicating the type of the label and a unique mark.  @RefTeX{} has
-3 different modes to create this mark.
+three different modes to create this mark.
 
 @enumerate
 @item
@@ -1592,7 +1592,7 @@ speed-up (@pxref{Optimizations}).
 @cindex LaTeX packages, @code{varioref}
 @vindex reftex-vref-is-default
 @code{varioref} is a frequently used LaTeX package to create
-cross--references with page information.  When you want to make a
+cross-references with page information.  When you want to make a
 reference with the @code{\vref} macro, just press the @kbd{v} key in the
 selection buffer to toggle between @code{\ref} and @code{\vref}
 (@pxref{Referencing Labels}).  The mode line of the selection buffer
@@ -2561,13 +2561,13 @@ in the buffer with @kbd{C-c /} (@code{reftex-index-selection-or-word}).
 The index tag is "idx".
 
 @node Viewing Cross-References, RefTeXs Menu, Index Support, Top
-@chapter Viewing Cross--References
+@chapter Viewing Cross-References
 @findex reftex-view-crossref
 @findex reftex-mouse-view-crossref
 @kindex C-c &
 @kindex S-mouse-2
 
-@RefTeX{} can display cross--referencing information.  This means,
+@RefTeX{} can display cross-referencing information.  This means,
 if two document locations are linked, @RefTeX{} can display the
 matching location(s) in another window.  The @code{\label} and @code{\ref}
 macros are one way of establishing such a link.  Also, a @code{\cite}
@@ -2576,7 +2576,7 @@ database entry.
 
 The feature is invoked by pressing @kbd{C-c &}
 (@code{reftex-view-crossref}) while point is on the @var{key} argument
-of a macro involved in cross--referencing.  You can also click with
+of a macro involved in cross-referencing.  You can also click with
 @kbd{S-mouse-2} on the macro argument.  Here is what will happen for
 individual classes of macros:
 
@@ -2587,7 +2587,7 @@ individual classes of macros:
 Display the corresponding label definition.  All usual
 variants@footnote{all macros that start with @samp{ref} or end with
 @samp{ref} or @samp{refrange}} of the @code{\ref} macro are active for
-cross--reference display.  This works also for labels defined in an
+cross-reference display.  This works also for labels defined in an
 external document when the current document refers to them through the
 @code{xr} interface (@pxref{xr (LaTeX package)}).
 
@@ -2598,13 +2598,13 @@ Display a document location which references this label.  Pressing
 @kbd{C-c &} several times moves through the entire document and finds
 all locations.  Not only the @code{\label} macro but also other macros
 with label arguments (as configured with @code{reftex-label-alist}) are
-active for cross--reference display.
+active for cross-reference display.
 
 @item @code{\cite}
 @cindex @code{\cite}
 Display the corresponding @BibTeX{} database entry or @code{\bibitem}.
 All usual variants@footnote{all macros that either start or end with
-@samp{cite}} of the @code{\cite} macro are active for cross--reference
+@samp{cite}} of the @code{\cite} macro are active for cross-reference
 display.
 
 @item @code{\bibitem}
@@ -2633,7 +2633,7 @@ and @code{\glossary} macros, all macros configured in
 
 @vindex reftex-view-crossref-extra
 While the display of cross referencing information for the above
-mentioned macros is hard--coded, you can configure additional relations
+mentioned macros is hard-coded, you can configure additional relations
 in the variable @code{reftex-view-crossref-extra}.
 
 @iftex
@@ -2886,7 +2886,7 @@ Specify the full search path directly in @RefTeX{}'s variables.
 @end lisp
 
 @item
-Some @TeX{} systems provide stand--alone programs to do the file search just
+Some @TeX{} systems provide stand-alone programs to do the file search just
 like @TeX{} and @BibTeX{}.  E.g. Thomas Esser's @code{teTeX} uses the
 @code{kpathsearch} library which provides the command @code{kpsewhich}
 to search for files.  @RefTeX{} can be configured to use this
@@ -3168,7 +3168,7 @@ will supply its label selection process (@pxref{Referencing
 Labels}).
 
 @item
-@b{@RefTeX{} tells @AUCTeX{} about new labels, citation-- and index keys}@*
+@b{@RefTeX{} tells @AUCTeX{} about new labels, citation and index keys}@*
 @RefTeX{} will add all newly created labels to @AUCTeX{}'s completion list.
 @end itemize
 
@@ -3637,7 +3637,7 @@ active TAGS table is required.
 
 @deffn Command reftex-isearch-minor-mode
 Toggle a minor mode which enables incremental search to work globally
-on the entire multifile document.  Files will be searched in th
+on the entire multifile document.  Files will be searched in the
 sequence they appear in the document.
 @end deffn
 
@@ -3993,7 +3993,7 @@ List of magic words which identify a reference to be of this type.  If
 the word before point is equal to one of these words when calling
 @code{reftex-reference}, the label list offered will be automatically
 restricted to labels of the correct type.  If the first element of this
-word--list is the symbol `regexp', the strings are interpreted as regular
+word list is the symbol `regexp', the strings are interpreted as regular
 expressions.
 
 @item @var{toc-level}
@@ -5098,7 +5098,7 @@ argument.
 @section Keymaps and Hooks
 @cindex Keymaps
 
-@RefTeX{} has the usual general keymap and load-- and mode-hook.
+@RefTeX{} has the usual general keymap, load hook and mode hook.
 
 @deffn Keymap reftex-mode-map
 The keymap for @RefTeX{} mode.
@@ -5112,7 +5112,7 @@ Normal hook which is being run when loading @file{reftex.el}.
 Normal hook which is being run when turning on @RefTeX{} mode.
 @end deffn
 
-Furthermore, the 4 modes used for referencing labels, creating
+Furthermore, the four modes used for referencing labels, creating
 citations, the table of contents buffer and the phrases buffer have
 their own keymaps and mode hooks.  See the respective sections.  There
 are many more hooks which are described in the relevant sections about
