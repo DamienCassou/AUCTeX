@@ -1,3 +1,20 @@
+2008-02-17  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-ref.el (reftex-format-special): Add third argument
+	for refstyle possible to be passed, making the byte compiler
+	happy.
+	(reftex-reference): Pass refstyle to `reftex-format-special'.
+
+	* lisp/reftex-vars.el (reftex-ref-style-active-list): Make
+	creation of type compatible with Emacs 21.
+	(reftex-format-ref-function): Mention third argument of special
+	format function.
+
+	* lisp/reftex-base.el (reftex-mode-menu): Make creation of
+	Reference Style menu compatible with Emacs 21.
+
+	* doc/reftex.texi: Fix some typos.
+
 2008-01-27  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-ref-style-active-list): Doc fix.
