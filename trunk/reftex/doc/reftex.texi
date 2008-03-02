@@ -24,7 +24,7 @@ This manual documents @RefTeX{} (version @value{VERSION} from
 for LaTeX documents with Emacs.
 
 Copyright @copyright{} 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-2005, 2006, 2007  Free Software Foundation, Inc.
+2005, 2006, 2007, 2008 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -134,9 +134,8 @@ Labels and References
 * Builtin Label Environments::       The environments RefTeX knows about.
 * Defining Label Environments::        ... and environments it doesn't.
 * Reference Info::                   View the label corresponding to a \ref.
+* Reference Styles::                 Macros to be used instead of \ref.
 * xr (LaTeX package)::               References to external documents.
-* varioref (LaTeX package)::         How to create \vref instead of \ref.
-* fancyref (LaTeX package)::         How to create \fref instead of \ref.
 
 Defining Label Environments
 
@@ -669,7 +668,7 @@ doing this: A label defined in a figure environment automatically
 records the figure counter, not the section counter.
 
 Several different environments can share a common counter and therefore
-a common label category.  E.g.  labels in both @code{equation} and
+a common label category.  For example labels in both @code{equation} and
 @code{eqnarray} environments record the value of the same counter -- the
 equation counter.
 
@@ -679,9 +678,8 @@ equation counter.
 * Builtin Label Environments::       The environments RefTeX knows about.
 * Defining Label Environments::        ... and environments it doesn't.
 * Reference Info::                   View the label corresponding to a \ref.
+* Reference Styles::                 Macros to be used instead of \ref.
 * xr (LaTeX package)::               References to external documents.
-* varioref (LaTeX package)::         How to create \vref instead of \ref.
-* fancyref (LaTeX package)::         How to create \fref instead of \ref.
 @end menu
 
 @node Creating Labels, Referencing Labels, , Labels and References
@@ -765,19 +763,19 @@ set it up to delegate the creation of labels to
 @RefTeX{} scans the document in order to find all labels.  To make
 referencing labels easier, it assigns to each label a category, the
 @emph{label type} (for example section, table, figure, equation, etc.).
-In order to determine the label type, RefTeX parses around each label
+In order to determine the label type, @RefTeX{} parses around each label
 to see in what kind of environments it is located.  You can speed up
 the parsing by using type-specific prefixes for labels and configuring
 the variable @code{reftex-trust-label-prefix}.
 
 Referencing Labels is really at the heart of @RefTeX{}.  Press @kbd{C-c
-)} in order to reference a label (reftex-reference).  This will start a
-selection process and finally insert the complete @samp{\ref@{label@}}
-into the buffer.
+)} in order to reference a label (@code{reftex-reference}).  This will
+start a selection process and finally insert the complete
+@samp{\ref@{label@}} into the buffer.
 
 First, @RefTeX{} will determine the label category which is required.
 Often that can be figured out from context.  For example, if you
-write @samp{As shown in eq.} and the press @kbd{C-c )}, @RefTeX{} knows
+write @samp{As shown in eq.} and then press @kbd{C-c )}, @RefTeX{} knows
 that an equation label is going to be referenced.  If it cannot figure
 out what label category is needed, it will query for one.
 
@@ -790,7 +788,7 @@ sufficient to identify the label.  If you are unsure about a certain
 label, pressing @key{SPC} will show the label definition point in
 another window.
 
-In order to reference a label, move to cursor to the correct label and
+In order to reference a label, move the cursor to the correct label and
 press @key{RET}.  You can also reference several labels with a single
 call to @code{reftex-reference} by marking entries with the @kbd{m}
 key (see below).
@@ -841,7 +839,7 @@ window.  See also the @kbd{f} key.
 Toggle follow mode.  When follow mode is active, the other window will
 always display the full context of the current label.  This is similar
 to pressing @key{SPC} after each cursor motion.  Note that only context
-in files already visited is shown.  @b{RefTeX} will not visit a file
+in files already visited is shown.  @RefTeX{} will not visit a file
 just for follow mode.  See, however, the variable
 @code{reftex-revisit-to-follow}.
 
@@ -858,8 +856,8 @@ references all marked labels.
 @item mouse-2
 @vindex reftex-highlight-selection
 Clicking with mouse button 2 on a label will accept it like @key{RET}
-would. See also variable @code{reftex-highlight-selection}, @ref{Options
-(Misc)}.
+would.  See also variable @code{reftex-highlight-selection},
+@ref{Options (Misc)}.
 
 @vindex reftex-multiref-punctuation
 @item m - + ,
@@ -893,26 +891,26 @@ Enter a label with completion.  This may also be a label which does not
 yet exist in the document.
 
 @item v
-@cindex @code{varioref}, LaTeX package
-@cindex @code{\vref}
-@cindex LaTeX packages, @code{varioref}
-Toggle between @code{\ref} and @code{\vref} macro for references.  The
-@code{\vref} macro is defined in the @code{varioref} @LaTeX{} package.
-With this key you can force @RefTeX{} to insert a @code{\vref}
-macro.  The current state of this flag is displayed by the @samp{S<>}
-indicator in the mode line of the selection buffer.
+@vindex reftex-ref-style-alist
+@vindex reftex-ref-style-active-list
+Cycle forward through reference macros defined by
+@code{reftex-ref-style-alist} and activated through
+@code{reftex-ref-style-active-list}.  The selected macro is displayed by
+the @samp{S<>} indicator in the mode line of the selection buffer.  This
+mechanism comes in handy if you are using @LaTeX{} packages like
+@code{varioref} or @code{fancyref} and want to use the special
+referencing macros they provide (e.g. @code{\vref} or @code{\fref})
+instead of @code{\ref}.
 
 @item V
-@cindex @code{fancyref}, LaTeX package
-@cindex @code{\fref}
-@cindex @code{\Fref}
-@cindex LaTeX packages, @code{fancyref}
-Cycle between @code{\ref}, @code{\fref} and @code{\Fref}.  The
-@code{\fref} and @code{\Fref} macros are defined in the @code{fancyref}
-@LaTeX{} package.  With this key you can force @RefTeX{} to insert a
-@code{\fref} or @code{\Fref} macro.  The current state of this flag is
-displayed by the @samp{S<>} indicator in the mode line of the
-selection buffer.
+Cycle backward through reference macros defined by
+@code{reftex-ref-style-alist} and activated through
+@code{reftex-ref-style-active-list}.
+
+@item p
+Toggle between @code{\ref}-style and @code{\pageref}-style referencing
+macros.  This affects the macros available for cycling through with the
+@key{v} and @key{V} commands.
 
 @tablesubheading{Exiting}
 
@@ -936,7 +934,7 @@ selection buffer.
 @item t
 Toggle the display of the table of contents in the selection buffer.
 With prefix @var{arg}, change the maximum level of toc entries displayed
-to @var{arg}.  Chapters are level 1, section are level 2.
+to @var{arg}.  Chapters are level 1, sections are level 2.
 
 @item #
 Toggle the display of a label counter in the selection buffer.
@@ -1196,7 +1194,7 @@ Environments)}).
 @end itemize
 
 The following list of strings is used to guess the correct label type
-from the word before point when creating a reference.  E.g. if you
+from the word before point when creating a reference.  For example if you
 write: @samp{As we have shown in Theorem} and then press @kbd{C-c )},
 @RefTeX{} will know that you are looking for a theorem label and
 restrict the menu to only these labels without even asking.
@@ -1280,7 +1278,7 @@ The first element in this list is now the macro with empty braces as an
 @emph{image} of the macro arguments.  @code{?e} indicates that this is
 an equation label, the different @code{nil} elements indicate to use the
 default values for equations.  The @samp{1} as the fifth element
-indicates that the context of the label definition should be the 1st
+indicates that the context of the label definition should be the first
 argument of the macro.
 
 Here is again how this would look in the customization buffer:
@@ -1322,7 +1320,7 @@ which would be called like
 \myfig[htp]@{filename@}@{caption text@}@{label@}@{1@}
 @end example
 
-Now we need to tell @RefTeX{} that the 4th argument of the
+Now we need to tell @RefTeX{} that the fourth argument of the
 @code{\myfig} macro @emph{is itself} a figure label, and where to find
 the context.
 
@@ -1336,8 +1334,8 @@ The empty pairs of brackets indicate the different arguments of the
 indicates that this is a figure label which will be listed together with
 labels from normal figure environments.  The @code{nil} entries for
 prefix and reference format mean to use the defaults for figure labels.
-The @samp{3} for the context method means to grab the 3rd macro argument
-- the caption.
+The @samp{3} for the context method means to grab the third macro argument
+-- the caption.
 
 As a side effect of this configuration, @code{reftex-label} will now
 insert the required naked label (without the @code{\label} macro) when
@@ -1390,7 +1388,7 @@ predefined label categories.
 
 Another case where one only wants to change the information associated
 with the label category is to change the macro which is used for
-referencing the label.  When working with the AMS-@LaTeX{} stuff, you might
+referencing the label.  When working with the AMS-@LaTeX{}, you might
 prefer @code{\eqref} for doing equation references.  Here is how to
 do this:
 
@@ -1406,7 +1404,7 @@ following is equivalent to the line above.
 @end lisp
 
 Note that this is automatically done by the @file{amsmath.el} style file
-of @AUCTeX{} (@pxref{Style Files}) - so if you use @AUCTeX{},
+of @AUCTeX{} (@pxref{Style Files}) -- so if you use @AUCTeX{},
 this configuration will not be necessary.
 
 @node Non-Standard Environments, Putting it Together, Using \eqref, Defining Label Environments
@@ -1528,7 +1526,7 @@ the entries described above:
     (detect-linguex ?x "ex:" "~\\ref@{%s@}" nil ("Example" "Ex."))))
 @end lisp
 
-@node Reference Info, xr (LaTeX package), Defining Label Environments, Labels and References
+@node Reference Info, Reference Styles, Defining Label Environments, Labels and References
 @section Reference Info
 @findex reftex-view-crossref
 @findex reftex-mouse-view-crossref
@@ -1550,7 +1548,83 @@ message.
 @code{\label} macro.  @xref{Viewing Cross-References}, for more
 information.
 
-@node xr (LaTeX package), varioref (LaTeX package), Reference Info, Labels and References
+@node Reference Styles, xr (LaTeX package), Reference Info, Labels and References
+@section Reference Styles
+
+In case you defined your own macros for referencing or you are using
+@LaTeX{} packages providing specialized macros to be used instead of
+@code{\ref}, @RefTeX{} provides ways for selecting and inserting them in
+a convenient way.
+
+@RefTeX{} comes equipped with a set of so-called reference styles where
+each relates to one or more reference macros.  The styles besides the
+Default option which relates to @code{\ref} and @code{\pageref} are
+Varioref for the @code{varioref} @LaTeX{} package (@code{\vref},
+@code{\Vref}, @code{\Ref}, @code{\vpageref}), Fancyref for the
+@code{fancyref} package (@code{\fref}, @code{\Fref}) and Hyperref for
+the @code{hyperref} package (@code{\autoref}, @code{\autopageref}.
+
+@vindex reftex-ref-style-active-list
+A style can be toggled by selecting the respective entry in the
+@samp{Reference Style} menu.  Changes made through the menu will only
+last for the Emacs session.  For configuring a preference permanently
+the variable @code{reftex-ref-style-active-list} should be customized.
+This variable specifies the list of active styles.  Of course it can
+also be set as a file variable if the preference should be set for a
+specific file.
+
+@vindex reftex-ref-style-alist
+In case the built-in styles do not suffice, you can add additional
+macros and styles can to the variable @code{reftex-ref-style-alist}.
+Those do not necessarily have to be related to a certain @LaTeX{}
+package but can follow an arbitrary grouping rule.  For example you
+could define a Personal style for your personal referencing macros.
+
+Once a style is active the macros it relates to are available in the
+buffer for selecting a label for reference.  Type @key{v} in order to
+cycle forward through the list of available macros or @key{V} to cycle
+backward.  The mode line of the selection buffer shows the macro
+currently selected.
+
+Per default these commands will cycle through @code{\ref}-style macros
+for referencing sections, figures, eqations, etc.  By typing @key{p} you
+can switch to the @code{\pageref}-style macros like for referencing
+pages.  Typing @key{p} again will select @code{\ref}-style macros again.
+
+In case you are not satisfied with the order of macros when cycling
+through them you should adapt the order of entries in the variable
+@code{reftex-ref-style-alist} to fit your liking.
+
+For each entry in @code{reftex-ref-style-alist} a function with the name
+@code{reftex-<package>-<macro>} (e.g. @code{reftex-varioref-vref}) will
+be created automatically by @RefTeX{}.  These functions can be used
+instead of @kbd{C-c )} and provide an alternative way of having your
+favorite referencing macro preselected and if cycling through the macros
+seems inconvenient to you.@footnote{You could e.g. bind
+@code{reftex-varioref-vref} to @kbd{C-c v} and
+@code{reftex-fancyref-fref} to @kbd{C-c f}.}
+
+@cindex @code{varioref}, LaTeX package
+@cindex LaTeX packages, @code{varioref}
+@cindex @code{fancyref}, LaTeX package
+@cindex LaTeX packages, @code{fancyref}
+@vindex reftex-vref-is-default (deprecated)
+@vindex reftex-fref-is-default (deprecated)
+In former versions of @RefTeX{} only support for @code{varioref} and
+@code{fancyref} was included.  @code{varioref} is a @LaTeX{} package to
+create cross-references with page information.  @code{fancyref} is a
+package where a macro call like @code{\fref@{@var{fig:map-of-germany}@}}
+creates not only the number of the referenced counter but also the
+complete text around it, like @samp{Figure 3 on the preceding page}.  In
+order to make it work you need to use label prefixes like @samp{fig:}
+consistently -- something @RefTeX{} does automatically.  For each of
+these packages a variable could be configured to make its macros to take
+precedence over @code{\ref}.  Those were @code{reftex-vref-is-default}
+and @code{reftex-fref-is-default} respectively.  While still working,
+these variables are deprecated now.  Instead of setting them, the
+variable @code{reftex-ref-style-active-list} should be adapted now.
+
+@node xr (LaTeX package), , Reference Styles, Labels and References
 @section @code{xr}: Cross-Document References
 @cindex @code{xr}, LaTeX package
 @cindex LaTeX packages, @code{xr}
@@ -1584,46 +1658,6 @@ insert it along with the required prefix.
 For this kind of inter-document cross-references, saving of parsing
 information and the use of multiple selection buffers can mean a large
 speed-up (@pxref{Optimizations}).
-
-@node varioref (LaTeX package), fancyref (LaTeX package), xr (LaTeX package), Labels and References
-@section @code{varioref}: Variable Page References
-@cindex @code{varioref}, LaTeX package
-@cindex @code{\vref}
-@cindex LaTeX packages, @code{varioref}
-@vindex reftex-vref-is-default
-@code{varioref} is a frequently used LaTeX package to create
-cross-references with page information.  When you want to make a
-reference with the @code{\vref} macro, just press the @kbd{v} key in the
-selection buffer to toggle between @code{\ref} and @code{\vref}
-(@pxref{Referencing Labels}).  The mode line of the selection buffer
-shows the current status of this switch.  If you find that you almost
-always use @code{\vref}, you may want to make it the default by
-customizing the variable @code{reftex-vref-is-default}.  If this
-toggling seems too inconvenient, you can also use the command
-@code{reftex-varioref-vref}@footnote{bind it to @kbd{C-c v}.}.
-Or use @AUCTeX{} to create your macros (@pxref{AUCTeX}).
-
-@node fancyref (LaTeX package), , varioref (LaTeX package), Labels and References
-@section @code{fancyref}: Fancy Cross References
-@cindex @code{fancyref}, LaTeX package
-@cindex @code{\fref}
-@cindex @code{\Fref}
-@cindex LaTeX packages, @code{fancyref}
-@vindex reftex-fref-is-default
-@code{fancyref} is a @LaTeX{} package where a macro call like
-@code{\fref@{@var{fig:map-of-germany}@}} creates not only the number of
-the referenced counter but also the complete text around it, like
-@samp{Figure 3 on the preceding page}.  In order to make it work you
-need to use label prefixes like @samp{fig:} consistently - something
-@RefTeX{} does automatically.  When you want to make a reference
-with the @code{\fref} macro, just press the @kbd{V} key in the selection
-buffer to cycle between @code{\ref}, @code{\fref} and @code{\Fref}
-(@pxref{Referencing Labels}).  The mode line of the selection buffer
-shows the current status of this switch.  If this cycling seems
-inconvenient, you can also use the commands @code{reftex-fancyref-fref}
-and @code{reftex-fancyref-Fref}@footnote{bind them to @kbd{C-c
-f} and @kbd{C-c F}.}.  Or use @AUCTeX{} to create your macros
-(@pxref{AUCTeX}).
 
 @node Citations, Index Support, Labels and References, Top
 @chapter Citations
@@ -4238,35 +4272,31 @@ This is used to string together whole reference sets, like
 @code{reftex-reference}.
 @end defopt
 
-@defopt reftex-vref-is-default
-Non-@code{nil} means, the varioref macro @code{\vref} is used as
-default.  In the selection buffer, the @kbd{v} key toggles the reference
-macro between @code{\ref} and @code{\vref}.  The value of this variable
-determines the default which is active when entering the selection
-process.  Instead of @code{nil} or @code{t}, this may also be a string
-of type letters indicating the label types for which it should be
-true.
+@defopt reftex-ref-style-alist
+Alist of reference styles.  Each element is a list of the string to be
+inserted as reference macro, the style name, the @LaTeX{} package
+providing the macro (the package name as a string or t for no specific
+package) and the reference type (the symbol @code{num} for a number
+reference or @code{page} for a page reference macro).
 @end defopt
 
-@defopt reftex-fref-is-default
-Non-@code{nil} means, the fancyref macro @code{\fref} is used as
-default.  In the selection buffer, the @kbd{V} key toggles the reference
-macro between @code{\ref}, @code{\fref} and @code{\Fref}.  The value of
-this variable determines the default which is active when entering the
-selection process.  Instead of @code{nil} or @code{t}, this may also be
-a string of type letters indicating the label types for which it should
-be true.
+@defopt reftex-ref-style-active-list
+List of active reference styles.  The order is significant and controls
+the order in which macros can be cycled in the buffer for selecting a
+label.  The entries in the list have to match the respective reference
+style names used in the variable @code{reftex-ref-style-alist}.
 @end defopt
 
 @deffn Hook reftex-format-ref-function
 If non-@code{nil}, should be a function which produces the string to
 insert as a reference.  Note that the insertion format can also be
 changed with @code{reftex-label-alist}.  This hook also is used by the
-special commands to insert @code{\vref} and @code{\fref} references, so
-even if you set this, your setting will be ignored by the special
-commands.  The function will be called with two arguments, the
-@var{label} and the @var{default-format} (usually @samp{~\ref@{%s@}}).
-It should return the string to insert into the buffer.
+special commands to insert e.g. @code{\vref} and @code{\fref}
+references, so even if you set this, your setting will be ignored by the
+special commands.  The function will be called with three arguments, the
+@var{label}, the @var{default format} which normally is
+@samp{~\ref@{%s@}} and the @var{reference style}.  The function should
+return the string to insert into the buffer.
 @end deffn
 
 @defopt reftex-level-indent
