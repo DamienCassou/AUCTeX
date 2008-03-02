@@ -1,3 +1,14 @@
+2008-03-02  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/reftex.texi: Lots of small fixes.
+	(Reference Styles): New section.
+	(varioref (LaTeX package), fancyref (LaTeX package)): Remove.
+	(Options (Referencing Labels)): Remove descriptions of deprecated
+	variables `reftex-vref-is-default' and `reftex-fref-is-default'.
+	Add descriptions for `reftex-ref-style-alist' and
+	`reftex-ref-style-active-list'.
+	(Referencing Labels): Update regarding reference styles.
+
 2008-02-17  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-ref.el (reftex-format-special): Add third argument
