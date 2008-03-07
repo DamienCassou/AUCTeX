@@ -1,3 +1,12 @@
+2008-03-07  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/Makefile (install): Remove existing dir entry without .info
+	extension.
+
+	* lisp/reftex-cite.el (reftex-extract-bib-entries): Check if
+	BibTeX file changed on disk and ask if it should be reread in case
+	it did.
+
 2008-03-02  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/reftex.texi: Lots of small fixes.
