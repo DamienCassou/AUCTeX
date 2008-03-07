@@ -1,7 +1,7 @@
 ;;; reftex-cite.el --- creating citations with RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -231,7 +231,13 @@
                            buffer (not reftex-keep-temporary-buffers))))
           (if (not buffer1)
               (message "No such BibTeX file %s (ignored)" buffer)
-            (message "Scanning bibliography database %s" buffer1))
+            (message "Scanning bibliography database %s" buffer1)
+	    (unless (verify-visited-file-modtime buffer1)
+		 (when (y-or-n-p
+			(format "File %s changed on disk.  Reread from disk? "
+				(file-name-nondirectory
+				 (buffer-file-name buffer1))))
+		   (with-current-buffer buffer1 (revert-buffer t t)))))
 
           (set-buffer buffer1)
           (reftex-with-special-syntax-for-bib
