@@ -1,3 +1,26 @@
+2008-03-16  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-index.el (reftex-index-selection-or-word): Use
+	`reftex-region-active-p'.
+	(reftex-index-show-entry)
+	(reftex-index-initialize-phrases-buffer)
+	(reftex-index-phrases-apply-to-region): Sync with Emacs trunk.
+
+	* lisp/reftex-dcr.el (reftex-start-itimer-once): Silence the byte
+	compiler.
+
+	* lisp/reftex-auc.el: Move `provide' call to bottom of file.
+
+	* lisp/reftex-base.el: Require easymenu and define autoloads
+	earlier to avoid compiler warnings.
+	(reftex-region-active-p, reftex-select-with-char)
+	(reftex-show-commentary): Sync with version in Emacs trunk.
+	(reftex-make-overlay, reftex-overlay-put, reftex-move-overlay)
+	(reftex-delete-overlay): Define in a way which hides the XEmacs
+	symbols from the byte compiler.
+	(reftex-info): Silence the byte compiler.  Use `reftex.info'
+	instead of `reftex' in order to get the correct file.
+
 2008-03-07  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/Makefile (install): Remove existing dir entry without .info
