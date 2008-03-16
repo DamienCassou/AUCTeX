@@ -28,9 +28,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
-(provide 'reftex-auc)
 (require 'reftex-base)
-;;;
 
 (defun reftex-plug-flag (which)
   ;; Tell if a certain flag is set in reftex-plug-into-AUCTeX
@@ -214,6 +212,8 @@ of ENTRY-LIST is a list of cons cells (\"MACRONAME\" . LEVEL).  See
 
 (defun reftex-notice-new-section ()
   (reftex-notice-new 1 'force))
+
+(provide 'reftex-auc)
 
 ;;; arch-tag: 4a798e68-3405-421c-a09b-0269aac64ab4
 ;;; reftex-auc.el ends here
