@@ -1,7 +1,7 @@
 ;;; reftex-index.el --- index support with RefTeX
 
 ;; Copyright (C) 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
-;;   2006, 2007 Free Software Foundation, Inc.
+;;   2006, 2007, 2008 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <dominik@science.uva.nl>
 ;; Maintainer: auctex-devel@gnu.org
@@ -51,9 +51,7 @@ which is part of AUCTeX, the string is first processed with the
   (interactive "P")
   (let* ((use-default (not (equal arg '(16))))  ; check for double prefix
          ;; check if we have an active selection
-         (active (if (boundp 'zmacs-regions)
-                     (and zmacs-regions (region-exists-p))  ; XEmacs
-                   (and transient-mark-mode mark-active)))  ; Emacs
+         (active (reftex-region-active-p))
          (beg (if active 
                   (region-beginning)
                 (save-excursion 
@@ -363,7 +361,7 @@ _ ^        Add/Remove parent key (to make this item a subitem).
             (goto-char (or pos (point-min)))
             (or (looking-at re)
                 (reftex-nearest-match re (length literal))))
-           (t (message reftex-no-follow-message) nil))))
+           (t (message "%s" reftex-no-follow-message) nil))))
     (when match
       (goto-char (match-beginning 0))
       (recenter '(4))
@@ -1244,8 +1242,9 @@ If the buffer is non-empty, delete the old header first."
           (beginning-of-line 2))
       (while (looking-at "^[ \t]*$")
           (beginning-of-line 2))          
-      (cond ((fboundp 'zmacs-activate-region) (zmacs-activate-region))
-            ((boundp 'make-active) (setq mark-active t)))
+      (if (featurep 'xemacs) 
+	  (zmacs-activate-region)
+	(setq mark-active t))
       (if (yes-or-no-p "Delete and rebuild header? ")
           (delete-region (point-min) (point))))
 
@@ -1497,8 +1496,9 @@ index the new part without having to go over the unchanged parts again."
       (unwind-protect
           (progn
             ;; Hide the region highlighting
-            (cond ((fboundp 'zmacs-deactivate-region) (zmacs-deactivate-region))
-                  ((fboundp 'deactivate-mark) (deactivate-mark)))
+            (if (featurep 'xemacs)
+		(zmacs-deactivate-region)
+	      (deactivate-mark))
             (delete-other-windows)
             (reftex-index-visit-phrases-buffer)
             (reftex-index-all-phrases))
