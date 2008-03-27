@@ -1,3 +1,7 @@
+2008-03-27  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el: Some whitespace, doc and checkdoc fixes.
+
 2008-03-16  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-index.el (reftex-index-selection-or-word): Use
