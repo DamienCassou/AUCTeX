@@ -1044,8 +1044,8 @@ This enforces rescanning the buffer on next use."
     ;; Calculate the regular expressions
     (let* (
 ;          (wbol "\\(\\`\\|[\n\r]\\)[ \t]*")
-           (wbol "\\(^\\)[ \t]*")  ; Need to keep the empty group because
-                                  ;;; because match number are hard coded
+           (wbol "\\(^\\)[ \t]*") ; Need to keep the empty group because
+                                  ; because match numbers are hard coded
            (label-re "\\\\label{\\([^}]*\\)}")
            (include-re (concat wbol
                                "\\\\\\("
@@ -1053,10 +1053,27 @@ This enforces rescanning the buffer on next use."
                                           reftex-include-file-commands "\\|")
                                "\\)[{ \t]+\\([^} \t\n\r]+\\)"))
            (section-re
+;;             (concat wbol "\\\\\\("
+;;                     (mapconcat (lambda (x) (regexp-quote (car x)))
+;;                                reftex-section-levels-all "\\|")
+;;                     "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n]"))
+	    ;; The old regexp above could not deal with stuff like
+	    ;; "\begin{foo}\label{x}", so we now try to treat
+	    ;; environments and macros differently without changing
+	    ;; the regexp groups too much.
             (concat wbol "\\\\\\("
-                    (mapconcat (lambda (x) (regexp-quote (car x)))
-                               reftex-section-levels-all "\\|")
-                    "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n]"))
+		    ;; Environments ("begin{foo}")
+                    (reftex-mapconcat-with-predicate
+		     (lambda (x) (regexp-quote (car x)))
+		     reftex-section-levels-all "\\|"
+		     (lambda (x) (string-match "begin{[^}]*}" (car x))))
+		    "\\|\\(?:"
+		    ;; Macros ("foo")
+                    (reftex-mapconcat-with-predicate
+		     (lambda (x) (regexp-quote (car x)))
+		     reftex-section-levels-all "\\|"
+		     (lambda (x) (not (string-match "begin{[^}]*}" (car x)))))
+                    "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n]\\)"))
            (appendix-re (concat wbol "\\(\\\\appendix\\)"))
            (macro-re
             (if macros-with-labels
@@ -2061,6 +2078,19 @@ IGNORE-WORDS List of words which should be removed from the string."
    ((= (length text) 0) (make-string 1 ?\ ))
    (t text)))
 
+(defun reftex-mapconcat-with-predicate (function sequence separator predicate)
+  "Apply FUNCTION to each element of SEQUENCE and concatenate the results.
+Put SEPARATOR between each pair of results.  Use only those
+elements of SEQUENCE where PREDICATE returns non-nil.  PREDICATE
+is a function accepting one parameter, an element of SEQUENCE."
+  (let (list)
+    (dolist (elt sequence)
+      (when (funcall predicate elt)
+	(add-to-list 'list elt t)))
+    (delq nil list)
+    (mapconcat function list separator)))
+
+
 ;;; =========================================================================
 ;;;
 ;;; Fontification and Highlighting
@@ -2310,7 +2340,7 @@ IGNORE-WORDS List of words which should be removed from the string."
 		      `(if (member ,elt reftex-ref-style-active-list)
 			   (setq reftex-ref-style-active-list
 				 (delete ,elt reftex-ref-style-active-list))
-			 (add-to-list 'reftex-ref-style-active-list ,elt))
+			 (add-to-list 'reftex-ref-style-active-list ,elt t))
 		      :style 'toggle
 		      :selected `(member ,elt reftex-ref-style-active-list)))
 	  (unless (member item list)
