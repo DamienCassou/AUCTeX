@@ -1587,9 +1587,9 @@ backward.  The mode line of the selection buffer shows the macro
 currently selected.
 
 Per default these commands will cycle through @code{\ref}-style macros
-for referencing sections, figures, eqations, etc.  By typing @key{p} you
+for referencing sections, figures, eqations, etc.  By typing @key{s} you
 can switch to the @code{\pageref}-style macros like for referencing
-pages.  Typing @key{p} again will select @code{\ref}-style macros again.
+pages.  Typing @key{s} again will select @code{\ref}-style macros again.
 
 In case you are not satisfied with the order of macros when cycling
 through them you should adapt the order of entries in the variable
@@ -3962,7 +3962,7 @@ Example: In a file @file{intro.tex}, @samp{eq:%f:} will become
 @samp{eq:intro:}.
 
 @item @var{reference-format}
-Format string for reference insert in buffer.  @samp{%s} will be
+Format string for reference insertion in buffer.  @samp{%s} will be
 replaced by the label.  When the format starts with @samp{~}, this
 @samp{~} will only be inserted when the character before point is
 @emph{not} a whitespace.
@@ -3990,7 +3990,7 @@ If an integer, use the nth argument of the macro.  As a special case,
 1000 means to get text after the last macro argument.
 @item
 If a string, use as regexp to search @emph{backward} from the label.
-Context is then the text following the end of the match.  E.g. putting
+Context is then the text following the end of the match.  E.g. setting
 this to @samp{\\caption[[@{]} will use the caption in a figure or table
 environment.  @samp{\\begin@{eqnarray@}\|\\\\} works for
 eqnarrays.
@@ -4116,7 +4116,7 @@ Flags governing label insertion.  The value has the form
 (@var{derive} @var{prompt})
 @end example
 
-If @var{derive}is @code{t}, @RefTeX{} will try to derive a sensible
+If @var{derive} is @code{t}, @RefTeX{} will try to derive a sensible
 label from context.  A section label for example will be derived from
 the section heading.  The conversion of the context to a valid label is
 governed by the specifications given in
