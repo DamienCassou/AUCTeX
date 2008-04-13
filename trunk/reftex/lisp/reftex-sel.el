@@ -747,7 +747,7 @@ Reverse list if optional argument REVERSE is non-nil."
 (loop for x in
       '(("b"        . reftex-select-jump-to-previous)
         ("z"        . reftex-select-jump)
-	("p"        . reftex-select-toggle-numref-pageref)
+	("s"        . reftex-select-toggle-numref-pageref)
         ("v"        . reftex-select-cycle-ref-style-forward)
         ("V"        . reftex-select-cycle-ref-style-backward)
         ("m"        . reftex-select-mark)
