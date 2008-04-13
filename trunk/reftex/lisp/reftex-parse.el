@@ -239,7 +239,12 @@ of master file."
 
                 ((match-end 3)
                  ;; It is a section
-                 (setq bound (point))
+
+		 ;; Use the beginning as bound and not the end
+		 ;; (i.e. (point)) because the section command might
+		 ;; be the start of the current environment to be
+		 ;; found by `reftex-label-info'.
+                 (setq bound (match-beginning 0))
 
                  ;; Insert in List
                  (setq toc-entry (reftex-section-info file))
