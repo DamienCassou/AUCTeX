@@ -1,3 +1,19 @@
+2008-04-13  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-base.el (reftex-mapconcat-with-predicate): New
+	function.
+	(reftex-compile-variables): Use it.  Treat environments and macros
+	differently in the regexp for section matching.
+
+	* lisp/reftex-parse.el (reftex-parse-from-file): Use beginning of
+	match instead of end as bound.
+
+	* lisp/reftex-sel.el (reftex-select-label-map): Changing binding
+	of reference style toggling to "s" which is not already taken.
+
+	* doc/reftex.texi (Reference Styles): Reflect change in key
+	binding for toggling reference styles.  Some minor changes.
+
 2008-03-27  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el: Some whitespace, doc and checkdoc fixes.
