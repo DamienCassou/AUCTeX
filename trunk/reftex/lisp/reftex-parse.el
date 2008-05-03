@@ -245,7 +245,11 @@ of master file."
 		 ;; be the start of the current environment to be
 		 ;; found by `reftex-label-info'.
                  (setq bound (match-beginning 0))
-
+		 ;; The section regexp matches a character at the end
+		 ;; we are not interested in.  Especially if it is the
+		 ;; backslash of a following macro we want to find in
+		 ;; the next parsing iteration.
+		 (when (eq (char-before) ?\\) (backward-char))
                  ;; Insert in List
                  (setq toc-entry (reftex-section-info file))
                  (when toc-entry
