@@ -407,20 +407,18 @@ Also checks if buffers visiting the files are in read-only mode."
 (defun reftex-isearch-switch-to-next-file (crt-buf &optional wrapp)
   (reftex-access-scan-info)
   (let* ((cb (buffer-file-name crt-buf))
-	 (flist (reftex-all-document-files))
-	 (orig-flist flist))
+	 (flist (reftex-all-document-files)))
     (when flist
       (if wrapp
 	  (unless isearch-forward
-	      (setq flist (last flist)))
+	    (setq flist (last flist)))
 	(unless isearch-forward
-	  (setq flist (nreverse (copy-list flist)))
-	  (setq orig-flist flist))
+	  (setq flist (reverse flist)))
 	(while (not (string= (car flist) cb))
 	  (setq flist (cdr flist)))
 	(setq flist (cdr flist)))
       (when flist
-	(find-file  (car flist))))))
+	(find-file (car flist))))))
 
 ;;;###autoload
 (defun reftex-isearch-minor-mode (&optional arg)
