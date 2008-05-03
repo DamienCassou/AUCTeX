@@ -1053,27 +1053,16 @@ This enforces rescanning the buffer on next use."
                                           reftex-include-file-commands "\\|")
                                "\\)[{ \t]+\\([^} \t\n\r]+\\)"))
            (section-re
-;;             (concat wbol "\\\\\\("
-;;                     (mapconcat (lambda (x) (regexp-quote (car x)))
-;;                                reftex-section-levels-all "\\|")
-;;                     "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n]"))
-	    ;; The old regexp above could not deal with stuff like
-	    ;; "\begin{foo}\label{x}", so we now try to treat
-	    ;; environments and macros differently without changing
-	    ;; the regexp groups too much.
+	    ;; Including `\' as a character to be matched at the end
+	    ;; of the regexp will allow stuff like
+	    ;; \begin{foo}\label{bar} to be matched.  This will make
+	    ;; the parser to advance one char too much.  Therefore
+	    ;; `reftex-parse-from-file' will step one char back if a
+	    ;; section is found.
             (concat wbol "\\\\\\("
-		    ;; Environments ("begin{foo}")
-                    (reftex-mapconcat-with-predicate
-		     (lambda (x) (regexp-quote (car x)))
-		     reftex-section-levels-all "\\|"
-		     (lambda (x) (string-match "begin{[^}]*}" (car x))))
-		    "\\|\\(?:"
-		    ;; Macros ("foo")
-                    (reftex-mapconcat-with-predicate
-		     (lambda (x) (regexp-quote (car x)))
-		     reftex-section-levels-all "\\|"
-		     (lambda (x) (not (string-match "begin{[^}]*}" (car x)))))
-                    "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n]\\)"))
+                    (mapconcat (lambda (x) (regexp-quote (car x)))
+                               reftex-section-levels-all "\\|")
+                    "\\)\\*?\\(\\[[^]]*\\]\\)?[[{ \t\r\n\\]"))
            (appendix-re (concat wbol "\\(\\\\appendix\\)"))
            (macro-re
             (if macros-with-labels
@@ -2077,18 +2066,6 @@ IGNORE-WORDS List of words which should be removed from the string."
    ((> (length text) 100) (substring text 0 100))
    ((= (length text) 0) (make-string 1 ?\ ))
    (t text)))
-
-(defun reftex-mapconcat-with-predicate (function sequence separator predicate)
-  "Apply FUNCTION to each element of SEQUENCE and concatenate the results.
-Put SEPARATOR between each pair of results.  Use only those
-elements of SEQUENCE where PREDICATE returns non-nil.  PREDICATE
-is a function accepting one parameter, an element of SEQUENCE."
-  (let (list)
-    (dolist (elt sequence)
-      (when (funcall predicate elt)
-	(add-to-list 'list elt t)))
-    (delq nil list)
-    (mapconcat function list separator)))
 
 
 ;;; =========================================================================
