@@ -1,3 +1,16 @@
+2008-05-03  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-parse.el (reftex-parse-from-file): Move backward one
+	char if a `\' was matched after a section macro.
+
+	* lisp/reftex-global.el (reftex-isearch-switch-to-next-file): Use
+	`reverse' instead of `nreverse' and `copy-list' in order to make
+	the byte compiler happy.  Get rid of unused `orig-flist' variable.
+
+	* lisp/reftex-base.el (reftex-compile-variables): Revert last
+	change.  Match `\' after a section macro.
+	(reftex-mapconcat-with-predicate): Remove.
+
 2008-04-13  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-base.el (reftex-mapconcat-with-predicate): New
