@@ -1,3 +1,7 @@
+2008-06-07  David Kastrup  <dak@gnu.org>
+
+	* lisp/reftex-base.el (reftex-remove-if): Improve performance.
+
 2008-06-07  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-cite.el (reftex-get-string-refs): Use a regexp
