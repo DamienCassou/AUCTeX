@@ -485,11 +485,11 @@
           (setq key (downcase (reftex-match-string 1)))
           (cond
            ((= (following-char) ?{)
-            (cond 
-             (raw 
-              (setq start (point)) 
+            (cond
+             (raw
+              (setq start (point))
               (forward-char 1))
-             (t 
+             (t
               (forward-char 1)
               (setq start (point))
               (condition-case nil
@@ -1158,22 +1158,16 @@ While entering the regexp, completion on knows citation keys is possible.
     (reftex-kill-temporary-buffers)
     keys))
 
-(defun reftex-stringref-p (string)
-  "Return non-nil if STRING is not enclosed in double quotes 
-   or curly braces and is not a number."
-  (not 
-   (or
-    (string-match "^[\"{]" string)
-    (string-match "^[0-9]+$" string))))
-
-(defun reftex-get-string-refs (alist) 
-  "Return a list of BibTeX @string references that appear as values in alist."
-  (remove-if-not 'reftex-stringref-p
-                 ; get list of values, discard keys
-                 (mapcar 'cdr
-                         ; remove &key and &type entries
-                         (remove-if (lambda (pair) (string-match "^&" (car pair)))
-                                    alist))))
+(defun reftex-get-string-refs (alist)
+  "Return a list of BibTeX @string references that appear as values in ALIST."
+  (reftex-remove-if (lambda (x) (or (string-match "^[\"{]" x)
+				    (string-match "^[0-9]+$" x)))
+		    ;; get list of values, discard keys
+		    (mapcar 'cdr
+			    ;; remove &key and &type entries
+			    (reftex-remove-if (lambda (pair)
+						(string-match "^&" (car pair)))
+					      alist))))
 
 (defun reftex-create-bibtex-file (bibfile)
   "Create a new BibTeX database file with all entries referenced in document.
@@ -1181,7 +1175,8 @@ The command prompts for a filename and writes the collected entries to
 that file.  Only entries referenced in the current document with
 any \\cite-like macros are used.
 The sequence in the new file is the same as it was in the old database.
-Entries referenced from other entries must appear after all referencing entries."
+Entries referenced from other entries must appear after all referencing
+entries."
   (interactive "FNew BibTeX file: ")
   (let ((keys (reftex-all-used-citation-keys))
         (files (reftex-get-bibfile-list))
@@ -1219,9 +1214,8 @@ Entries referenced from other entries must appear after all referencing entries.
                         (string-fields (reftex-get-string-refs raw-fields)))
                    (dolist (skey string-fields)
                      (unless (member skey string-keys)
-                       (push skey string-keys))))
-                 )))))))
-    ;;; second pass: grab @string references
+                       (push skey string-keys)))))))))))
+    ;; second pass: grab @string references
     (if string-keys
         (save-excursion
           (dolist (file files)
