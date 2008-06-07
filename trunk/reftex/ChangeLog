@@ -1,8 +1,16 @@
 2008-06-07  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/changes.texi: Document new features.
+
+	* doc/reftex.texi (Commands): Mention options for definition of
+	header and footer in BibTeX files.
+	(Options (Creating Citations)): Document
+	`reftex-create-bibtex-header' and `reftex-create-bibtex-footer'.
+
 	* lisp/reftex-cite.el (reftex-stringref-p): Remove.
 	(reftex-get-string-refs): Do without `reftex-stringref-p' and use
 	`reftex-remove-if' instead of the cl-based `remove-if'.
+	(reftex-create-bibtex-file): Doc fix.
 
 	* lisp/reftex-base.el (reftex-remove-if): New function.
 
