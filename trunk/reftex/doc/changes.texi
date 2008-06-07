@@ -1,10 +1,29 @@
 @c This is part of the RefTeX manual.
-@c Copyright (C) 2007 Free Software Foundation, Inc.
+@c Copyright (C) 2007, 2008 Free Software Foundation, Inc.
 @c See file reftex.texi for copying conditions.
 @ifset rawfile
 @include macros.texi
 @end ifset
 Here is a list of recent changes to @RefTeX{}.
+
+@noindent @b{Since version 4.33}
+
+@itemize @bullet
+@item
+The creation of @BibTeX{} files with @code{reftex-create-bibtex-file}
+now recognizes cross-referenced entries and @samp{@@string} definitions.
+@item
+@RefTeX{} now provides better options for defining and selecting special
+referencing macros like @samp{\vref} or @samp{\fref} as well as
+page-referencing macros like @samp{\pageref}.
+@ifset rawfile
+See section Reference Styles in the manual
+@end ifset
+@ifclear rawfile
+@xref{Reference Styles},
+@end ifclear
+for details.
+@end itemize
 
 @noindent @b{Version 4.33}
 
