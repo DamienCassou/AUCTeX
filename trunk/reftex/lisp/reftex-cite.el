@@ -1160,8 +1160,7 @@ While entering the regexp, completion on knows citation keys is possible.
 
 (defun reftex-get-string-refs (alist)
   "Return a list of BibTeX @string references that appear as values in ALIST."
-  (reftex-remove-if (lambda (x) (or (string-match "^[\"{]" x)
-				    (string-match "^[0-9]+$" x)))
+  (reftex-remove-if (lambda (x) (string-match "^\\([\"{]\\|[0-9]+$\\)" x))
 		    ;; get list of values, discard keys
 		    (mapcar 'cdr
 			    ;; remove &key and &type entries
