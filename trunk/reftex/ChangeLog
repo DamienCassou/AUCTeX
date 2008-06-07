@@ -1,5 +1,8 @@
 2008-06-07  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-cite.el (reftex-get-string-refs): Use a regexp
+	alternative for better performance.
+
 	* doc/changes.texi: Document new features.
 
 	* doc/reftex.texi (Commands): Mention options for definition of
