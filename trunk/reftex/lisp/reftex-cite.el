@@ -1171,12 +1171,17 @@ While entering the regexp, completion on knows citation keys is possible.
 
 (defun reftex-create-bibtex-file (bibfile)
   "Create a new BibTeX database file with all entries referenced in document.
-The command prompts for a filename and writes the collected entries to
-that file.  Only entries referenced in the current document with
-any \\cite-like macros are used.
-The sequence in the new file is the same as it was in the old database.
-Entries referenced from other entries must appear after all referencing
-entries."
+The command prompts for a filename and writes the collected
+entries to that file.  Only entries referenced in the current
+document with any \\cite-like macros are used.  The sequence in
+the new file is the same as it was in the old database.
+
+Entries referenced from other entries must appear after all
+referencing entries.
+
+You can define strings to be used as header or footer for the
+created files in the variables `reftex-create-bibtex-header' or
+`reftex-create-bibtex-footer' respectively."
   (interactive "FNew BibTeX file: ")
   (let ((keys (reftex-all-used-citation-keys))
         (files (reftex-get-bibfile-list))
