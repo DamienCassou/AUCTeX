@@ -1,3 +1,11 @@
+2008-06-07  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el (reftex-stringref-p): Remove.
+	(reftex-get-string-refs): Do without `reftex-stringref-p' and use
+	`reftex-remove-if' instead of the cl-based `remove-if'.
+
+	* lisp/reftex-base.el (reftex-remove-if): New function.
+
 2008-06-07  Wolfgang Mayer  <wmayer7@gmail.com>
 
 	* lisp/reftex-vars.el (reftex-create-bibtex-header)
