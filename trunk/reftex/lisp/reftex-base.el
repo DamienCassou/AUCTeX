@@ -1967,6 +1967,14 @@ When DIE is non-nil, throw an error if file not found."
 	(pop lst)))
     (delq nil alist)))
 
+(defun reftex-remove-if (predicate list)
+  "Nondestructively remove all items from LIST which satisfy PREDICATE."
+  (let (result)
+    (dolist (elt list)
+      (unless (funcall predicate elt)
+	(add-to-list 'result elt t)))
+    result))
+
 (defun reftex-abbreviate-title (string)
   (reftex-convert-string string "[-~ \t\n\r,;]" nil t t
                          5 40 nil 1 " " (nth 5 reftex-derive-label-parameters)))
