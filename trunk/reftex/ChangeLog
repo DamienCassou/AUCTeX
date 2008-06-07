@@ -1,3 +1,17 @@
+2008-06-07  Wolfgang Mayer  <wmayer7@gmail.com>
+
+	* lisp/reftex-vars.el (reftex-create-bibtex-header)
+	(reftex-create-bibtex-footer): New variables.
+
+	* lisp/reftex-cite.el (reftex-parse-bibtex-entry): Accept
+	additional optional argument `raw' and keep quotes or braces if it
+	is non-nil.
+	(reftex-stringref-p, reftex-get-string-refs): New functions.
+	(reftex-create-bibtex-file): Include entries that are
+	cross-referenced from cited entries.  Include @String definitions
+	in the resulting bib file.  Add header and footer defined in
+	`reftex-create-bibtex-header' and `reftex-create-bibtex-footer'.
+
 2008-05-03  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-parse.el (reftex-parse-from-file): Move backward one
