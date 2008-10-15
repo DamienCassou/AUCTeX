@@ -1,3 +1,22 @@
+2008-10-15  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el (reftex-ref-style-alist): Remove the symbols
+	for symbols for macro type distinction.  Add characters for macro
+	selection.
+	(reftex-ref-macro-prompt): New variable.
+
+	* lisp/reftex-sel.el (reftex-select-cycle-ref-style-internal):
+	Remove code for testing macro type.
+	(reftex-select-toggle-numref-pageref): Remove.
+	(reftex-select-label-map): Remove binding for
+	`reftex-select-toggle-numref-pageref'.
+
+	* lisp/reftex-ref.el (reftex-reference): Prompt for a reference
+	macro if `reftex-ref-macro-prompt' is non-nil.
+
+	* lisp/reftex-base.el (reftex-select-with-char): Kill the RefTeX
+	Select buffer when done.
+
 2008-06-07  David Kastrup  <dak@gnu.org>
 
 	* lisp/reftex-base.el (reftex-remove-if): Improve performance.
