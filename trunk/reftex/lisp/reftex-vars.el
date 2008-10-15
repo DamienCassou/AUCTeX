@@ -948,31 +948,35 @@ This is used to string together whole reference sets, like
   :type '(repeat (cons (character) (string))))
 
 (defcustom reftex-ref-style-alist
-  '(("\\ref" "Default" t num)
-    ("\\pageref" "Default" t page)
-    ("\\vref" "Varioref" "varioref" num)
-    ("\\vpageref" "Varioref" "varioref" page)
-    ("\\Vref" "Varioref" "varioref" num)
-    ("\\Ref" "Varioref" "varioref" num)
-    ("\\fref" "Fancyref" "fancyref" num)
-    ("\\Fref" "Fancyref" "fancyref" num)
-    ("\\autoref" "Hyperref" "hyperref" num)
-    ("\\autopageref" "Hyperref" "hyperref" page))
+  '(("\\ref" "Default" t ?\C-m)
+    ("\\pageref" "Default" t ?p)
+    ("\\vref" "Varioref" "varioref" ?v)
+    ("\\vpageref" "Varioref" "varioref" ?g)
+    ("\\Vref" "Varioref" "varioref" ?V)
+    ("\\Ref" "Varioref" "varioref" ?R)
+    ("\\fref" "Fancyref" "fancyref" ?f)
+    ("\\Fref" "Fancyref" "fancyref" ?F)
+    ("\\autoref" "Hyperref" "hyperref" ?a)
+    ("\\autopageref" "Hyperref" "hyperref" ?u))
   "Alist of reference styles.
 Each element is a list of the string to be inserted as reference
 macro, the style name, the LaTeX package providing the macro (the
 package name as a string or t for no specific package) and the
-reference type (the symbol `num' for a number reference or `page'
-for a page reference macro)."
+key with which the macro can be selected when it is being
+prompted for.  (See also `reftex-ref-macro-prompt'.)  The keys,
+represented as characters, have to be unique."
   :group 'reftex-referencing-labels
   :type '(alist :key-type (string :tag "Macro")
 		:value-type (group (string :tag "Style name")
 				   (choice :tag "Package"
 					   (const :tag "Any package" t)
 					   (string :tag "Name"))
-				   (choice :tag "Reference type"
-					   (const :tag "Number" num)
-					   (const :tag "Page" page)))))
+				   (character :tag "Key"))))
+
+(defcustom reftex-ref-macro-prompt t
+  "If non-nil, `reftex-reference' prompts for the reference macro."
+  :group 'reftex-referencing-labels
+  :type 'boolean)
 
 (defcustom reftex-vref-is-default nil
   "Non-nil means, the varioref reference style is used as default.
