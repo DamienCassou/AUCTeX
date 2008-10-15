@@ -547,22 +547,13 @@ Useful for large TOC's."
   "Cycle through macros used for referencing.
 Reverse list if optional argument REVERSE is non-nil."
   ;; First build a list containing only active styles, then reassemble
-  ;; the list so that the current entry is at the beginning, then
-  ;; traverse the list and find the next entry with the currently
-  ;; selected reference type.  (XXX: Possible optimizations: Walk
-  ;; through `reftex-ref-style-alist' for each active style in the
-  ;; order given in `reftex-ref-style-active-list' instead of building
-  ;; an ordered list each time or cache the ordered list somehow.)
+  ;; the list so that the current entry is at the beginning and then
+  ;; select the first entry.
   (let* ((orig (reftex-select-cycle-active-ref-styles))
 	 (orig (if reverse (reverse orig) orig))
 	 (list (member (assoc refstyle orig) orig))
-	 (list (append list (butlast orig (length list))))
-	 (cur-type (nth 3 (assoc refstyle reftex-ref-style-alist))))
-    (catch 'found
-      (dolist (elt (cdr list))
-	(when (eq (nth 3 elt) cur-type)
-	  (setq refstyle (car elt))
-	  (throw 'found nil)))))
+	 (list (cdr (append list (butlast orig (length list))))))
+    (setq refstyle (caar list)))
   (force-mode-line-update))
 
 (defun reftex-select-cycle-ref-style-forward ()
@@ -574,17 +565,6 @@ Reverse list if optional argument REVERSE is non-nil."
   "Cycle backward through macros used for referencing."
   (interactive)
   (reftex-select-cycle-ref-style-internal t))
-
-(defun reftex-select-toggle-numref-pageref ()
-  "Toggle between number and page reference types."
-  (interactive)
-  (let ((cur-type (nth 3 (assoc refstyle reftex-ref-style-alist))))
-    (catch 'found
-      (dolist (elt reftex-ref-style-alist)
-	(unless (eq (nth 3 elt) cur-type)
-	  (setq refstyle (car elt))
-	  (throw 'found nil)))))
-  (force-mode-line-update))
 
 (defun reftex-select-show-insertion-point ()
   "Show the point from where selection was started in another window."
@@ -747,7 +727,6 @@ Reverse list if optional argument REVERSE is non-nil."
 (loop for x in
       '(("b"        . reftex-select-jump-to-previous)
         ("z"        . reftex-select-jump)
-	("s"        . reftex-select-toggle-numref-pageref)
         ("v"        . reftex-select-cycle-ref-style-forward)
         ("V"        . reftex-select-cycle-ref-style-backward)
         ("m"        . reftex-select-mark)
