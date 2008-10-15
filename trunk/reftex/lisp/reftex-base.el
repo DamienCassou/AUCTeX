@@ -1755,6 +1755,7 @@ When DIE is non-nil, throw an error if file not found."
                  (condition-case nil (scroll-down) (error nil))
                  (message "%s" prompt))
                 (t (message "")
+		   (reftex-kill-buffer "*RefTeX Select*")
                    (throw 'exit char)))
           (setq char (read-char-exclusive)))))))
 
