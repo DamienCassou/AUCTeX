@@ -417,35 +417,53 @@ When called with 2 C-u prefix args, disable magic word recognition."
 
   (interactive)
 
-  ;; check for active recursive edits
+  ;; Check for active recursive edits
   (reftex-check-recursive-edit)
 
-  ;; Ensure access to scanning info and rescan buffer if prefix are is '(4)
+  ;; Ensure access to scanning info and rescan buffer if prefix is '(4)
   (reftex-access-scan-info current-prefix-arg)
 
-  (unless type
-    ;; guess type from context
-    (if (and reftex-guess-label-type
-             (setq type (reftex-guess-label-type)))
-        (setq cut (cdr type)
-              type (car type))
-      (setq type (reftex-query-label-type))))
+  (let ((refstyle (when (and (boundp 'refstyle) refstyle) refstyle))
+	(reftex-format-ref-function reftex-format-ref-function)
+	(form "\\ref{%s}")
+	label labels sep sep1 style-alist)
 
-  (let* ((refstyle (if (and (boundp 'refstyle) refstyle)
-		       refstyle
-		     ;; Get the first macro from
-		     ;; `reftex-ref-style-alist' which matches the
-		     ;; first entry in `reftex-ref-style-active-list'.
-		     (catch 'found
-		       (dolist (elt reftex-ref-style-alist)
-			 (when (equal (nth 1 elt)
-				      (car reftex-ref-style-active-list))
-			   (throw 'found (car elt))))
-		       ;; Use the first entry in r-r-s-a as a last resort.
-		       (caar reftex-ref-style-alist))))
-         (reftex-format-ref-function reftex-format-ref-function)
-         (form "\\ref{%s}")
-         label labels sep sep1)
+    (unless refstyle
+      (if reftex-ref-macro-prompt
+	  (progn
+	    ;; Build a temporary list which handles more easily.
+	    (dolist (elt reftex-ref-style-alist)
+	      (when (member (nth 1 elt) reftex-ref-style-active-list)
+		(add-to-list 'style-alist (cons (nth 3 elt) (car elt)) t)))
+	    ;; Prompt the user for the macro.
+	    (let ((key (reftex-select-with-char
+			"" (concat "SELECT A REFERENCE FORMAT\n\n"
+				   (mapconcat
+				    (lambda (x)
+				      (format "[%c] %s  %s" (car x)
+					      (if (> (car x) 31) " " "")
+					      (cdr x)))
+				    style-alist "\n")))))
+	      (setq refstyle (cdr (assq key style-alist)))
+	      (unless refstyle
+		(error "No reference macro associated with key `%c'" key))))
+	;; Get the first macro from `reftex-ref-style-alist' which
+	;; matches the first entry in `reftex-ref-style-active-list'.
+	(setq refstyle
+	      (catch 'found
+		(dolist (elt reftex-ref-style-alist)
+		  (when (equal (nth 1 elt) (car reftex-ref-style-active-list))
+		    (throw 'found (car elt))))
+		;; Use the first entry in r-r-s-a as a last resort.
+		(caar reftex-ref-style-alist)))))
+
+    (unless type
+      ;; Guess type from context
+      (if (and reftex-guess-label-type
+	       (setq type (reftex-guess-label-type)))
+	  (setq cut (cdr type)
+		type (car type))
+	(setq type (reftex-query-label-type))))
 
     ;; Have the user select a label
     (set-marker reftex-select-return-marker (point))
