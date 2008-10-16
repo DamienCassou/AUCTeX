@@ -1,3 +1,8 @@
+2008-10-16  Ralf Angeli  <angeli@caeruleus.net>
+
+	* doc/reftex.texi (Referencing Labels, Reference Styles): Document
+	changes in the referencing functionality.
+
 2008-10-15  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-ref-style-alist): Remove the symbols
