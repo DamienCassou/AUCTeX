@@ -773,11 +773,18 @@ Referencing Labels is really at the heart of @RefTeX{}.  Press @kbd{C-c
 start a selection process and finally insert the complete
 @samp{\ref@{label@}} into the buffer.
 
-First, @RefTeX{} will determine the label category which is required.
-Often that can be figured out from context.  For example, if you
-write @samp{As shown in eq.} and then press @kbd{C-c )}, @RefTeX{} knows
-that an equation label is going to be referenced.  If it cannot figure
-out what label category is needed, it will query for one.
+@vindex reftex-ref-macro-prompt
+First, you can select which reference macro you want to use,
+e.g. @samp{\ref} or @samp{\pageref}.  Later in the process you have
+another chance to make this selection and you can therefore disable this
+step by customizing @code{reftex-ref-macro-prompt} if you find it too
+intrusive.  @xref{Reference Styles}.
+
+Then, @RefTeX{} will determine the label category which is required.
+Often that can be figured out from context.  For example, if you write
+@samp{As shown in eq.} and then press @kbd{C-c )}, @RefTeX{} knows that
+an equation label is going to be referenced.  If it cannot figure out
+what label category is needed, it will query for one.
 
 You will then be presented with a label selection menu.  This is a
 special buffer which contains an outline of the document along with all
@@ -906,11 +913,6 @@ instead of @code{\ref}.
 Cycle backward through reference macros defined by
 @code{reftex-ref-style-alist} and activated through
 @code{reftex-ref-style-active-list}.
-
-@item p
-Toggle between @code{\ref}-style and @code{\pageref}-style referencing
-macros.  This affects the macros available for cycling through with the
-@key{v} and @key{V} commands.
 
 @tablesubheading{Exiting}
 
@@ -1553,43 +1555,52 @@ information.
 
 In case you defined your own macros for referencing or you are using
 @LaTeX{} packages providing specialized macros to be used instead of
-@code{\ref}, @RefTeX{} provides ways for selecting and inserting them in
-a convenient way.
+@code{\ref}, @RefTeX{} provides ways to select and insert them in a
+convenient way.
 
 @RefTeX{} comes equipped with a set of so-called reference styles where
-each relates to one or more reference macros.  The styles besides the
-Default option which relates to @code{\ref} and @code{\pageref} are
-Varioref for the @code{varioref} @LaTeX{} package (@code{\vref},
-@code{\Vref}, @code{\Ref}, @code{\vpageref}), Fancyref for the
-@code{fancyref} package (@code{\fref}, @code{\Fref}) and Hyperref for
-the @code{hyperref} package (@code{\autoref}, @code{\autopageref}.
+each relates to one or more reference macros.  The standard macros
+@samp{\ref} and @samp{\pageref} or provided by the ``Default'' style.
+The ``Varioref'' style offers macros for the @samp{varioref} @LaTeX{}
+package (@samp{\vref}, @samp{\Vref}, @samp{\Ref}, @samp{\vpageref}),
+``Fancyref'' for the @samp{fancyref} package (@samp{\fref},
+@samp{\Fref}) and ``Hyperref'' for the @samp{hyperref} package
+(@samp{\autoref}, @samp{\autopageref}).
 
 @vindex reftex-ref-style-active-list
 A style can be toggled by selecting the respective entry in the
 @samp{Reference Style} menu.  Changes made through the menu will only
-last for the Emacs session.  For configuring a preference permanently
-the variable @code{reftex-ref-style-active-list} should be customized.
-This variable specifies the list of active styles.  Of course it can
-also be set as a file variable if the preference should be set for a
-specific file.
+last for the Emacs session.  In order to configure a preference
+permanently, the variable @code{reftex-ref-style-active-list} should be
+customized.  This variable specifies the list of active styles.  Of
+course it can also be set as a file variable if the preference should be
+set for a specific file.
 
 @vindex reftex-ref-style-alist
 In case the built-in styles do not suffice, you can add additional
-macros and styles can to the variable @code{reftex-ref-style-alist}.
-Those do not necessarily have to be related to a certain @LaTeX{}
-package but can follow an arbitrary grouping rule.  For example you
-could define a Personal style for your personal referencing macros.
+macros and styles to the variable @code{reftex-ref-style-alist}.  Those
+do not necessarily have to be related to a certain @LaTeX{} package but
+can follow an arbitrary grouping rule.  For example you could define a
+style called ``Personal'' for your personal referencing macros.
 
-Once a style is active the macros it relates to are available in the
-buffer for selecting a label for reference.  Type @key{v} in order to
-cycle forward through the list of available macros or @key{V} to cycle
+Once a style is active the macros it relates to are available for
+selection when you are about to insert a reference.  In general this
+process involves three steps: the selection of a reference macro, a
+label type and a label.  Reference macros can be chosen in the first and
+last step.
+
+@vindex reftex-ref-macro-prompt
+In the first step you will be presented with a list of macros from which
+you can select one by typing a single key.  If you dislike having an
+extra step for reference macro selection, you can disable it by
+customizing @code{reftex-ref-macro-prompt} and relying only on the
+selection facilities provided in the last step.
+
+In the last step, i.e. the label selection, two key bindings are
+provided to set the reference macro.  Type @key{v} in order to cycle
+forward through the list of available macros or @key{V} to cycle
 backward.  The mode line of the selection buffer shows the macro
 currently selected.
-
-Per default these commands will cycle through @code{\ref}-style macros
-for referencing sections, figures, eqations, etc.  By typing @key{s} you
-can switch to the @code{\pageref}-style macros like for referencing
-pages.  Typing @key{s} again will select @code{\ref}-style macros again.
 
 In case you are not satisfied with the order of macros when cycling
 through them you should adapt the order of entries in the variable
