@@ -534,26 +534,16 @@ Useful for large TOC's."
   (setq reftex-last-follow-point -1)
   (setq cb-flag (not cb-flag)))
 
-(defun reftex-select-cycle-active-ref-styles ()
-  "Return ordered alist of active reference styles."
-  (let (list)
-    (dolist (style reftex-ref-style-active-list)
-      (dolist (spec reftex-ref-style-alist)
-	(when (string= (nth 1 spec) style)
-	  (add-to-list 'list spec t))))
-    list))
-
 (defun reftex-select-cycle-ref-style-internal (&optional reverse)
   "Cycle through macros used for referencing.
-Reverse list if optional argument REVERSE is non-nil."
-  ;; First build a list containing only active styles, then reassemble
-  ;; the list so that the current entry is at the beginning and then
-  ;; select the first entry.
-  (let* ((orig (reftex-select-cycle-active-ref-styles))
-	 (orig (if reverse (reverse orig) orig))
-	 (list (member (assoc refstyle orig) orig))
-	 (list (cdr (append list (butlast orig (length list))))))
-    (setq refstyle (caar list)))
+Cycle in reverse order if optional argument REVERSE is non-nil."
+  (let (list)
+    (dolist (style reftex-ref-style-active-list)
+      (mapc (lambda (x) (add-to-list 'list (car x) t))
+	    (nth 2 (assoc style reftex-ref-style-alist))))
+    (when reverse
+      (setq list (reverse list)))
+    (setq refstyle (or (cadr (member refstyle list)) (car list))))
   (force-mode-line-update))
 
 (defun reftex-select-cycle-ref-style-forward ()
