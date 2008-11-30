@@ -433,8 +433,10 @@ When called with 2 C-u prefix args, disable magic word recognition."
 	  (progn
 	    ;; Build a temporary list which handles more easily.
 	    (dolist (elt reftex-ref-style-alist)
-	      (when (member (nth 1 elt) reftex-ref-style-active-list)
-		(add-to-list 'style-alist (cons (nth 3 elt) (car elt)) t)))
+	      (when (member (car elt) reftex-ref-style-active-list)
+		(mapc (lambda (x)
+			(add-to-list 'style-alist (cons (cadr x) (car x)) t))
+		      (nth 2 elt))))
 	    ;; Prompt the user for the macro.
 	    (let ((key (reftex-select-with-char
 			"" (concat "SELECT A REFERENCE FORMAT\n\n"
@@ -444,18 +446,16 @@ When called with 2 C-u prefix args, disable magic word recognition."
 					      (if (> (car x) 31) " " "")
 					      (cdr x)))
 				    style-alist "\n")))))
-	      (setq refstyle (cdr (assq key style-alist)))
+	      (setq refstyle (cdr (assoc key style-alist)))
 	      (unless refstyle
 		(error "No reference macro associated with key `%c'" key))))
 	;; Get the first macro from `reftex-ref-style-alist' which
 	;; matches the first entry in `reftex-ref-style-active-list'.
 	(setq refstyle
-	      (catch 'found
-		(dolist (elt reftex-ref-style-alist)
-		  (when (equal (nth 1 elt) (car reftex-ref-style-active-list))
-		    (throw 'found (car elt))))
-		;; Use the first entry in r-r-s-a as a last resort.
-		(caar reftex-ref-style-alist)))))
+	      (or (caar (nth 2 (assoc (car reftex-ref-style-active-list)
+				      reftex-ref-style-alist)))
+		  ;; Use the first entry in r-r-s-a as a last resort.
+		  (caar (nth 2 (car reftex-ref-style-alist)))))))
 
     (unless type
       ;; Guess type from context
@@ -823,17 +823,18 @@ When called with 2 C-u prefix args, disable magic word recognition."
 ;; macros.  The functions are named `reftex-<package>-<macro>',
 ;; e.g. `reftex-varioref-vref'.
 (dolist (elt reftex-ref-style-alist)
-  (when (stringp (nth 2 elt))
-    (let ((macro (car elt))
-	  (package (nth 2 elt)))
-      (eval `(defun ,(intern (format "reftex-%s-%s" package
-				     (substring macro 1 (length macro)))) ()
-	       ,(format "Insert a reference using the `%s' macro from the %s \
+  (when (stringp (nth 1 elt))
+    (dolist (item (nth 2 elt))
+      (let ((macro (car item))
+	    (package (nth 1 elt)))
+	(eval `(defun ,(intern (format "reftex-%s-%s" package
+				       (substring macro 1 (length macro)))) ()
+		 ,(format "Insert a reference using the `%s' macro from the %s \
 package.\n\nThis is a generated function."
-		      macro package)
-	       (interactive)
-	       (let ((refstyle ,macro))
-		 (reftex-reference)))))))
+			  macro package)
+		 (interactive)
+		 (let ((refstyle ,macro))
+		   (reftex-reference))))))))
 
 (defun reftex-format-special (label fmt refstyle)
   "Apply selected reference style to format FMT and add LABEL.
