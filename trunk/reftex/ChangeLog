@@ -1,3 +1,27 @@
+2008-11-30  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el (reftex-ref-style-alist): Change structure
+	so that it is not possible to use multiple different package names
+	within a style.
+	(reftex-ref-style-active-list): Adapt to new structure of
+	`reftex-ref-style-alist'.
+
+	* lisp/reftex-sel.el (reftex-select-cycle-active-ref-styles):
+	Remove.
+	(reftex-select-cycle-ref-style-internal): Adapt to new structure
+	of `reftex-ref-style-alist'.
+
+	* lisp/reftex-ref.el: Adapt creaton of `reftex-<package>-<macro>'
+	functions to new structure of `reftex-ref-style-alist'.
+	(reftex-reference): Adapt to new structure of
+	`reftex-ref-style-alist'.
+
+	* lisp/reftex-base.el (reftex-mode-menu): Adapt to new structure
+	of `reftex-ref-style-alist'.
+
+	* doc/reftex.texi (Options (Referencing Labels)): Adapt to new
+	structure of `reftex-ref-style-alist'.
+
 2008-10-16  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/reftex.texi (Referencing Labels, Reference Styles): Document
