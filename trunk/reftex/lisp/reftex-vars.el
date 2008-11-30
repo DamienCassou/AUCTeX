@@ -948,30 +948,30 @@ This is used to string together whole reference sets, like
   :type '(repeat (cons (character) (string))))
 
 (defcustom reftex-ref-style-alist
-  '(("\\ref" "Default" t ?\C-m)
-    ("\\pageref" "Default" t ?p)
-    ("\\vref" "Varioref" "varioref" ?v)
-    ("\\vpageref" "Varioref" "varioref" ?g)
-    ("\\Vref" "Varioref" "varioref" ?V)
-    ("\\Ref" "Varioref" "varioref" ?R)
-    ("\\fref" "Fancyref" "fancyref" ?f)
-    ("\\Fref" "Fancyref" "fancyref" ?F)
-    ("\\autoref" "Hyperref" "hyperref" ?a)
-    ("\\autopageref" "Hyperref" "hyperref" ?u))
+  '(("Default" t
+     (("\\ref" ?\C-m) ("\\pageref" ?p)))
+    ("Varioref" "varioref"
+     (("\\vref" ?v) ("\\vpageref" ?g) ("\\Vref" ?V) ("\\Ref" ?R)))
+    ("Fancyref" "fancyref"
+     (("\\fref" ?f) ("\\Fref" ?F)))
+    ("Hyperref" "hyperref"
+     (("\\autoref" ?a) ("\\autopageref" ?u))))
   "Alist of reference styles.
-Each element is a list of the string to be inserted as reference
-macro, the style name, the LaTeX package providing the macro (the
-package name as a string or t for no specific package) and the
-key with which the macro can be selected when it is being
-prompted for.  (See also `reftex-ref-macro-prompt'.)  The keys,
-represented as characters, have to be unique."
+Each element is a list of the style name, the name of the LaTeX
+package associated with the style or t for any package, and an
+alist of macros where the first entry of each item is the
+reference macro and the second a key for selecting the macro when
+the macro type is being prompted for.  (See also
+`reftex-ref-macro-prompt'.)  The keys, represented as characters,
+have to be unique."
   :group 'reftex-referencing-labels
-  :type '(alist :key-type (string :tag "Macro")
-		:value-type (group (string :tag "Style name")
-				   (choice :tag "Package"
+  :type '(alist :key-type (string :tag "Style name")
+		:value-type (group (choice :tag "Package"
 					   (const :tag "Any package" t)
 					   (string :tag "Name"))
-				   (character :tag "Key"))))
+				   (repeat :tag "Macros"
+					   (group (string :tag "Macro")
+						  (character :tag "Key"))))))
 
 (defcustom reftex-ref-macro-prompt t
   "If non-nil, `reftex-reference' prompts for the reference macro."
@@ -1011,14 +1011,12 @@ can be cycled in the buffer for selecting a label.  The entries
 in the list have to match the respective reference style names
 used in the variable `reftex-ref-style-alist'."
   :group 'reftex-referencing-labels
-  :type `(repeat (choice ,@(let (list item)
+  :type `(repeat (choice ,@(let (list)
 			     (dolist (elt reftex-ref-style-alist)
-			       (setq item (list 'const (nth 1 elt)))
-			       (unless (member item list)
-				 (add-to-list 'list item t)))
+			       (add-to-list 'list (list 'const (car elt)) t))
 			     list))))
 
-;; Compatibility with obsolote variables.
+;; Compatibility with obsolete variables.
 (when reftex-vref-is-default
   (add-to-list 'reftex-ref-style-active-list "Varioref"))
 (when reftex-fref-is-default
