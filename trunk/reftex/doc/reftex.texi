@@ -121,6 +121,7 @@ The Index
 * Index::                            The full index.
 
 @detailmenu
+ --- The Detailed Node Listing ---
 
 Introduction
 
@@ -4293,11 +4294,13 @@ This is used to string together whole reference sets, like
 @end defopt
 
 @defopt reftex-ref-style-alist
-Alist of reference styles.  Each element is a list of the string to be
-inserted as reference macro, the style name, the @LaTeX{} package
-providing the macro (the package name as a string or t for no specific
-package) and the reference type (the symbol @code{num} for a number
-reference or @code{page} for a page reference macro).
+Alist of reference styles.  Each element is a list of the style name,
+the name of the @LaTeX{} package associated with the style or @code{t}
+for any package, and an alist of macros where the first entry of each
+item is the reference macro and the second a key for selecting the macro
+when the macro type is being prompted for.  (See also
+@code{reftex-ref-macro-prompt}.)  The keys, represented as characters,
+have to be unique.
 @end defopt
 
 @defopt reftex-ref-style-active-list
@@ -4305,6 +4308,10 @@ List of active reference styles.  The order is significant and controls
 the order in which macros can be cycled in the buffer for selecting a
 label.  The entries in the list have to match the respective reference
 style names used in the variable @code{reftex-ref-style-alist}.
+@end defopt
+
+@defopt reftex-ref-macro-prompt
+Controls if @code{reftex-reference} prompts for the reference macro.
 @end defopt
 
 @deffn Hook reftex-format-ref-function
