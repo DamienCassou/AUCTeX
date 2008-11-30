@@ -2319,7 +2319,7 @@ IGNORE-WORDS List of words which should be removed from the string."
    ("Reference Style"
     ,@(let (list item)
 	(dolist (elt reftex-ref-style-alist)
-	  (setq elt (nth 1 elt)
+	  (setq elt (car elt)
 		item (vector
 		      elt
 		      `(if (member ,elt reftex-ref-style-active-list)
