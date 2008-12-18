@@ -1538,9 +1538,12 @@ When DIE is non-nil, throw an error if file not found."
         "In unfinished selection process. Finish, or abort with \\[abort-recursive-edit]"))))
 
 (defun reftex-in-comment ()
+  "Return non-nil if point is in a comment."
   (save-excursion
-    (skip-chars-backward "^%\n\r")
-    (eq (preceding-char) ?%)))
+    (save-match-data
+      (let ((pos (point)))
+	(beginning-of-line)
+	(re-search-forward comment-start-skip pos t)))))
 
 (defun reftex-no-props (string)
   ;; Return STRING with all text properties removed
