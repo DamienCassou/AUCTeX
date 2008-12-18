@@ -1,3 +1,8 @@
+2008-12-18  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-base.el (reftex-in-comment): Deal correctly with
+	escaped comment characters.
+
 2008-11-30  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-ref-style-alist): Change structure
