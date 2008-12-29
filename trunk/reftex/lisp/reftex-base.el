@@ -396,16 +396,15 @@ on the menu bar.
   (incf reftex-multifile-index))
 
 (defun reftex-tie-multifile-symbols ()
-  ;; Tie the buffer-local symbols to globals connected with the master file.
-  ;; If the symbols for the current master file do not exist, they are created.
-
+  "Tie the buffer-local symbols to globals connected with the master file.
+If the symbols for the current master file do not exist, they are created."
   (let* ((master (file-truename (reftex-TeX-master-file)))
          (index (assoc master reftex-master-index-list))
          (symlist reftex-multifile-symbols)
          symbol symname newflag)
     ;; Find the correct index.
     (if index
-        ;; symbols do exist
+        ;; Symbols do exist
         (setq index (cdr index))
       ;; Get a new index and add info to the alist.
       (setq index (reftex-next-multifile-index)
@@ -422,13 +421,15 @@ on the menu bar.
       ;; Initialize if new symbols.
       (when newflag
         (set (symbol-value symbol) nil)
-        (put (symbol-value symbol) 'reftex-index-macros-style '(default))))
+        (put (symbol-value symbol) 'reftex-index-macros-style '(default))
+	(put (symbol-value symbol) 'reftex-ref-style-list
+	     reftex-ref-style-default-list)))
 
     ;; Return t if the symbols did already exist, nil when we've made them.
     (not newflag)))
 
 (defun reftex-untie-multifile-symbols ()
-  ;; Remove ties from multifile symbols, so that next use makes new ones.
+  "Remove ties from multifile symbols, so that next use makes new ones."
   (let ((symlist reftex-multifile-symbols)
         (symbol nil))
     (while symlist
@@ -523,7 +524,7 @@ for details.
 This function makes it possible to support RefTeX from AUCTeX style files.
 The entries in ENTRY-LIST will be processed after the user settings in
 `reftex-index-entries', and before the defaults.  Any changes made to
-`reftex-label-alist-style' will raise a flag to the effect that
+`reftex-index-macros-style' will raise a flag to the effect that
 the label information is recompiled on next use."
   (unless reftex-docstruct-symbol
     (reftex-tie-multifile-symbols))
@@ -544,6 +545,52 @@ the label information is recompiled on next use."
           (push entry list)))
       (when changed
         (put reftex-docstruct-symbol 'reftex-index-macros-style list)))))
+
+(defun reftex-ref-style-activate (style)
+  "Activate the referencing style STYLE."
+  (reftex-ref-style-toggle style 'activate))
+
+(defun reftex-ref-style-toggle (style &optional action)
+  "Activate or deactivate the referencing style STYLE.
+With the optional argument ACTION a certain action can be forced.
+The symbol `activate' will activate the style and `deactivate'
+will deactivate it."
+  (unless reftex-docstruct-symbol
+    (reftex-tie-multifile-symbols))
+  (when (and reftex-docstruct-symbol
+             (symbolp reftex-docstruct-symbol))
+    (let ((list (get reftex-docstruct-symbol 'reftex-ref-style-list))
+          changed)
+      (cond ((eq action 'activate)
+	     (unless (member style list)
+	       (setq reftex-tables-dirty t
+		     changed t)
+	       (add-to-list 'list style t)))
+	    ((eq action 'deactivate)
+	     (when (member style list)
+	       (setq reftex-tables-dirty t
+		     changed t)
+	       (delete style list)))
+	    (t
+	     (if (member style list)
+		 (delete style list)
+	       (add-to-list 'list style t))
+	     (setq reftex-tables-dirty t
+		   changed t)))
+      (when changed
+        (put reftex-docstruct-symbol 'reftex-ref-style-list list)))))
+
+(defun reftex-ref-style-list ()
+  "Return the list of referencing styles to be active at the moment."
+  ;; Initialize the value of `reftex-ref-style-list' and tie it to the
+  ;; docstruct symbol if necessary.
+  (unless reftex-docstruct-symbol
+    (reftex-tie-multifile-symbols))
+  (if (and reftex-docstruct-symbol
+           (symbolp reftex-docstruct-symbol)
+           (get reftex-docstruct-symbol 'reftex-ref-style-list))
+      (get reftex-docstruct-symbol 'reftex-ref-style-list)
+    reftex-ref-style-default-list))
 
 ;;; =========================================================================
 ;;;
@@ -2325,12 +2372,9 @@ IGNORE-WORDS List of words which should be removed from the string."
 	  (setq elt (car elt)
 		item (vector
 		      elt
-		      `(if (member ,elt reftex-ref-style-active-list)
-			   (setq reftex-ref-style-active-list
-				 (delete ,elt reftex-ref-style-active-list))
-			 (add-to-list 'reftex-ref-style-active-list ,elt t))
+		      `(reftex-ref-style-toggle ,elt)
 		      :style 'toggle
-		      :selected `(member ,elt reftex-ref-style-active-list)))
+		      :selected `(member ,elt (reftex-ref-style-list))))
 	  (unless (member item list)
 	    (add-to-list 'list item t)))
 	list))
