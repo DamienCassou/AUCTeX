@@ -985,7 +985,7 @@ when entering the selection process.  Instead of nil or t, this
 may also be a string of type letters indicating the label types
 for which it should be true.
 
-This variable is obsolete, use `reftex-ref-style-active-list'
+This variable is obsolete, use `reftex-ref-style-default-list'
 instead."
   :group  'reftex-referencing-labels
   :type `(choice :tag "\\vref is default macro" ,@reftex-tmp))
@@ -998,29 +998,27 @@ when entering the selection process.  Instead of nil or t, this
 may also be a string of type letters indicating the label types
 for which it should be true.
 
-This variable is obsolete, use `reftex-ref-style-active-list'
+This variable is obsolete, use `reftex-ref-style-default-list'
 instead."
   :group  'reftex-referencing-labels
   :type `(choice :tag "\\fref is default macro" ,@reftex-tmp))
 ;;;###autoload(put 'reftex-fref-is-default 'safe-local-variable (lambda (x) (or (stringp x) (symbolp x))))
 
-(defcustom reftex-ref-style-active-list '("Default")
-  "List of active reference styles.
+(defcustom reftex-ref-style-default-list '("Default")
+  "List of reference styles to be activated by default.
 The order is significant and controls the order in which macros
 can be cycled in the buffer for selecting a label.  The entries
 in the list have to match the respective reference style names
 used in the variable `reftex-ref-style-alist'."
   :group 'reftex-referencing-labels
-  :type `(repeat (choice ,@(let (list)
-			     (dolist (elt reftex-ref-style-alist)
-			       (add-to-list 'list (list 'const (car elt)) t))
-			     list))))
+  :type `(set ,@(mapcar (lambda (x) (list 'const (car x)))
+			reftex-ref-style-alist)))
 
 ;; Compatibility with obsolete variables.
 (when reftex-vref-is-default
-  (add-to-list 'reftex-ref-style-active-list "Varioref"))
+  (add-to-list 'reftex-ref-style-default-list "Varioref"))
 (when reftex-fref-is-default
-  (add-to-list 'reftex-ref-style-active-list "Fancyref"))
+  (add-to-list 'reftex-ref-style-default-list "Fancyref"))
 
 (defcustom reftex-level-indent 2
   "*Number of spaces to be used for indentation per section level."
