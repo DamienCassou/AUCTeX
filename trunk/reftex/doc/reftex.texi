@@ -899,21 +899,15 @@ Enter a label with completion.  This may also be a label which does not
 yet exist in the document.
 
 @item v
-@vindex reftex-ref-style-alist
-@vindex reftex-ref-style-active-list
-Cycle forward through reference macros defined by
-@code{reftex-ref-style-alist} and activated through
-@code{reftex-ref-style-active-list}.  The selected macro is displayed by
-the @samp{S<>} indicator in the mode line of the selection buffer.  This
-mechanism comes in handy if you are using @LaTeX{} packages like
-@code{varioref} or @code{fancyref} and want to use the special
-referencing macros they provide (e.g. @code{\vref} or @code{\fref})
-instead of @code{\ref}.
+Cycle forward through active reference macros.  The selected macro is
+displayed by the @samp{S<...>} indicator in the mode line of the
+selection buffer.  This mechanism comes in handy if you are using
+@LaTeX{} packages like @code{varioref} or @code{fancyref} and want to
+use the special referencing macros they provide (e.g. @code{\vref} or
+@code{\fref}) instead of @code{\ref}.
 
 @item V
-Cycle backward through reference macros defined by
-@code{reftex-ref-style-alist} and activated through
-@code{reftex-ref-style-active-list}.
+Cycle backward through active reference macros.
 
 @tablesubheading{Exiting}
 
@@ -1568,21 +1562,24 @@ package (@samp{\vref}, @samp{\Vref}, @samp{\Ref}, @samp{\vpageref}),
 @samp{\Fref}) and ``Hyperref'' for the @samp{hyperref} package
 (@samp{\autoref}, @samp{\autopageref}).
 
-@vindex reftex-ref-style-active-list
+@vindex reftex-ref-style-default-list
 A style can be toggled by selecting the respective entry in the
 @samp{Reference Style} menu.  Changes made through the menu will only
 last for the Emacs session.  In order to configure a preference
-permanently, the variable @code{reftex-ref-style-active-list} should be
-customized.  This variable specifies the list of active styles.  Of
-course it can also be set as a file variable if the preference should be
-set for a specific file.
+permanently, the variable @code{reftex-ref-style-default-list} should be
+customized.  This variable specifies the list of styles to be activated.
+It can also be set as a file variable if the preference should be set
+for a specific file.
 
 @vindex reftex-ref-style-alist
 In case the built-in styles do not suffice, you can add additional
 macros and styles to the variable @code{reftex-ref-style-alist}.  Those
 do not necessarily have to be related to a certain @LaTeX{} package but
 can follow an arbitrary grouping rule.  For example you could define a
-style called ``Personal'' for your personal referencing macros.
+style called ``Personal'' for your personal referencing macros.  (When
+changing the variable you should be aware that other Emacs packages,
+like @AUCTeX{}, might rely on the entries from the default value to be
+present.)
 
 Once a style is active the macros it relates to are available for
 selection when you are about to insert a reference.  In general this
@@ -1634,7 +1631,7 @@ these packages a variable could be configured to make its macros to take
 precedence over @code{\ref}.  Those were @code{reftex-vref-is-default}
 and @code{reftex-fref-is-default} respectively.  While still working,
 these variables are deprecated now.  Instead of setting them, the
-variable @code{reftex-ref-style-active-list} should be adapted now.
+variable @code{reftex-ref-style-default-list} should be adapted now.
 
 @node xr (LaTeX package), , Reference Styles, Labels and References
 @section @code{xr}: Cross-Document References
@@ -4303,11 +4300,12 @@ when the macro type is being prompted for.  (See also
 have to be unique.
 @end defopt
 
-@defopt reftex-ref-style-active-list
-List of active reference styles.  The order is significant and controls
-the order in which macros can be cycled in the buffer for selecting a
-label.  The entries in the list have to match the respective reference
-style names used in the variable @code{reftex-ref-style-alist}.
+@defopt reftex-ref-style-default-list
+List of reference styles to be activated by default.  The order is
+significant and controls the order in which macros can be cycled in the
+buffer for selecting a label.  The entries in the list have to match the
+respective reference style names used in the variable
+@code{reftex-ref-style-alist}.
 @end defopt
 
 @defopt reftex-ref-macro-prompt
