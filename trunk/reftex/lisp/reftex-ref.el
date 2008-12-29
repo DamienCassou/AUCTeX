@@ -433,7 +433,7 @@ When called with 2 C-u prefix args, disable magic word recognition."
 	  (progn
 	    ;; Build a temporary list which handles more easily.
 	    (dolist (elt reftex-ref-style-alist)
-	      (when (member (car elt) reftex-ref-style-active-list)
+	      (when (member (car elt) (reftex-ref-style-list))
 		(mapc (lambda (x)
 			(add-to-list 'style-alist (cons (cadr x) (car x)) t))
 		      (nth 2 elt))))
@@ -450,9 +450,9 @@ When called with 2 C-u prefix args, disable magic word recognition."
 	      (unless refstyle
 		(error "No reference macro associated with key `%c'" key))))
 	;; Get the first macro from `reftex-ref-style-alist' which
-	;; matches the first entry in `reftex-ref-style-active-list'.
+	;; matches the first entry in the list of active styles.
 	(setq refstyle
-	      (or (caar (nth 2 (assoc (car reftex-ref-style-active-list)
+	      (or (caar (nth 2 (assoc (car (reftex-ref-style-list))
 				      reftex-ref-style-alist)))
 		  ;; Use the first entry in r-r-s-a as a last resort.
 		  (caar (nth 2 (car reftex-ref-style-alist)))))))
