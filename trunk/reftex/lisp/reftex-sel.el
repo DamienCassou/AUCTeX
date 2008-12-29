@@ -538,7 +538,7 @@ Useful for large TOC's."
   "Cycle through macros used for referencing.
 Cycle in reverse order if optional argument REVERSE is non-nil."
   (let (list)
-    (dolist (style reftex-ref-style-active-list)
+    (dolist (style (reftex-ref-style-list))
       (mapc (lambda (x) (add-to-list 'list (car x) t))
 	    (nth 2 (assoc style reftex-ref-style-alist))))
     (when reverse
