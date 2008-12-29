@@ -1,3 +1,33 @@
+2008-12-29  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-vars.el (reftex-vref-is-default)
+	(reftex-fref-is-default): Adapt doc string.
+	(reftex-ref-style-default-list): New name for
+	`reftex-ref-style-active-list'.  Use :set instead of :repeat.
+	(reftex-vref-is-default, reftex-fref-is-default): Adapt to new
+	name.
+
+	* lisp/reftex-base.el (reftex-tie-multifile-symbols): Add doc
+	string.
+	(reftex-tie-multifile-symbols): Initialize
+	`reftex-ref-style-list'.
+	(reftex-untie-multifile-symbols): Add doc string.
+	(reftex-add-index-macros): Doc fix.
+	(reftex-ref-style-activate, reftex-ref-style-toggle)
+	(reftex-ref-style-list): New functions.
+	(reftex-mode-menu): Use them.
+
+	* lisp/reftex-sel.el (reftex-select-cycle-ref-style-internal): Use
+	`reftex-ref-style-list' function.
+
+	* lisp/reftex-ref.el (reftex-reference): Use
+	`reftex-ref-style-list' function.
+
+	* doc/reftex.texi (Referencing Labels): Simplify section about
+	reference macro cycling.
+	(Reference Styles, Options (Referencing Labels)): Adapt to changed
+	implementation.
+
 2008-12-18  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-base.el (reftex-in-comment): Deal correctly with
