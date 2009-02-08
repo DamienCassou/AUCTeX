@@ -1,3 +1,14 @@
+2009-02-08  Juri Linkov  <juri@jurta.org>
+
+	This is a synch with the Emacs trunk where the change happened on
+	2008-12-28.
+
+	* lisp/reftex-global.el (reftex-isearch-switch-to-next-file):
+	Use `find-file-noselect' instead of `find-file' (for Emacs 22 and 23).
+	(reftex-isearch-minor-mode): If `multi-isearch-next-buffer-function'
+	is bound set it to `reftex-isearch-switch-to-next-file'.  Otherwise,
+	set 4 obsolete variables for backward-compatibility with Emacs 22.
+
 2008-12-29  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-vref-is-default)
