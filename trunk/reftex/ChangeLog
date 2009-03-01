@@ -1,3 +1,8 @@
+2009-03-01  Wolfgang Mayer  <wmayer7@gmail.com>
+
+	* lisp/reftex-cite.el (reftex-all-used-citation-keys):
+	Fix regexp to correctly extract all citations in the same line.
+
 2009-02-08  Juri Linkov  <juri@jurta.org>
 
 	This is a synch with the Emacs trunk where the change happened on
