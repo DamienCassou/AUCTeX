@@ -1,3 +1,8 @@
+2009-04-29  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-base.el (reftex-in-comment): Do not error out if
+	`comment-start-skip' is not set.
+
 2009-03-01  Wolfgang Mayer  <wmayer7@gmail.com>
 
 	* lisp/reftex-cite.el (reftex-all-used-citation-keys):
