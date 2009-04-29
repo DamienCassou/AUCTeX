@@ -1590,7 +1590,13 @@ When DIE is non-nil, throw an error if file not found."
     (save-match-data
       (let ((pos (point)))
 	(beginning-of-line)
-	(re-search-forward comment-start-skip pos t)))))
+	(re-search-forward
+	 (or comment-start-skip
+	     ;; The parser may open files in fundamental mode if
+	     ;; `reftex-initialize-temporary-buffers' is nil, so here
+	     ;; is a default suitable for plain TeX and LaTeX.
+	     "\\(\\(^\\|[^\\\n]\\)\\(\\\\\\\\\\)*\\)\\(%+[ \t]*\\)")
+	 pos t)))))
 
 (defun reftex-no-props (string)
   ;; Return STRING with all text properties removed
