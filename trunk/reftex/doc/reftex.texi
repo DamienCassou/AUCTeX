@@ -24,7 +24,7 @@ This manual documents @RefTeX{} (version @value{VERSION} from
 for LaTeX documents with Emacs.
 
 Copyright @copyright{} 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-2005, 2006, 2007, 2008 Free Software Foundation, Inc.
+2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -1157,10 +1157,10 @@ was chosen for @code{theorem} since @code{?t} is already taken by
 @noindent
 The labels for Axioms and Theorems will have the prefixes @samp{ax:} and
 @samp{thr:}, respectively.  @xref{AUCTeX}, for information on how
-@AUCTeX{} can use RefTeX to automatically create labels when a new environment
-is inserted into a buffer.  Additionally, the following needs to be
-added to one's .emacs file before @AUCTeX{} will automatically create
-labels for the new environments.
+@AUCTeX{} can use @RefTeX{} to automatically create labels when a new
+environment is inserted into a buffer.  Additionally, the following
+needs to be added to one's .emacs file before @AUCTeX{} will
+automatically create labels for the new environments.
 
 @lisp
 (add-hook 'LaTeX-mode-hook
@@ -1708,8 +1708,8 @@ logic @code{and} for regular expressions. For example
 @samp{Einstein&&Bose} will match all articles which mention
 Bose-Einstein condensation, or which are co-authored by Bose and
 Einstein.  When entering the regular expression, you can complete on
-known citation keys.  RefTeX also offers a default when prompting for a
-regular expression.  This default is the word before the cursor or the
+known citation keys.  @RefTeX{} also offers a default when prompting for
+a regular expression.  This default is the word before the cursor or the
 word before the current @samp{\cite} command.  Sometimes this may be a
 good search key.
 
@@ -1827,6 +1827,17 @@ entries.
 In order to define additional commands for this selection process, the
 keymap @code{reftex-select-bib-map} may be used.
 
+Note that if you do not use Emacs to edit the @BibTeX{} database files,
+@RefTeX{} will ask if the related buffers should be updated once it
+detects that the files were changed externally.  If you do not want to
+be bothered by such queries, you can activate Auto Revert mode for these
+buffers by adding the following expression to your init file:
+
+@lisp
+(add-hook 'bibtex-mode-hook 'turn-on-auto-revert-mode)
+@end lisp
+
+
 @node Citation Styles, Citation Info, Creating Citations, Citations
 @section Citation Styles
 @cindex Citation styles
@@ -1892,7 +1903,7 @@ citation style based on the @code{usepackage} commands in a given
 document.  @xref{Style Files}, for information on how to set up the style
 files correctly.
 
-@node Citation Info, Chapterbib and Bibunits, Citation Styles, Citations, Top
+@node Citation Info, Chapterbib and Bibunits, Citation Styles, Citations
 @section Citation Info
 @cindex Displaying citations
 @cindex Citations, displaying
