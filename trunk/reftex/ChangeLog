@@ -1,5 +1,8 @@
 2009-07-05  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/reftex.texi (Creating Citations): Give a hint about how to
+	auto-revert the BibTeX database file when using external editors.
+
 	* lisp/reftex-cite.el (reftex-do-citation): Save match data when
 	asking for optional arguments.
 
