@@ -702,8 +702,9 @@ While entering the regexp, completion on knows citation keys is possible.
                        (equal arg '(4))))
           (let ((start 0) (nth 0) value)
             (while (setq start (string-match "\\[\\]" string start))
-              (setq value (read-string (format "Optional argument %d: "
-                                               (setq nth (1+ nth)))))
+              (setq value (save-match-data
+			    (read-string (format "Optional argument %d: "
+						 (setq nth (1+ nth))))))
               (setq string (replace-match (concat "[" value "]") t t string))
               (setq start (1+ start)))))
         ;; Should we cleanup empty optional arguments?
