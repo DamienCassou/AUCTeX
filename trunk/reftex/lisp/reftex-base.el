@@ -2461,7 +2461,7 @@ IGNORE-WORDS List of words which should be removed from the string."
   "Read documentation for RefTeX in the info system.
 With optional NODE, go directly to that node."
   (interactive)
-  (info (format "(reftex.info)%s" (or node ""))))
+  (info (format "(reftex)%s" (or node ""))))
 
 (defun reftex-report-bug ()
   "Report a bug in RefTeX.
