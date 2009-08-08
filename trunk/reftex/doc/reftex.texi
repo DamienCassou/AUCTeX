@@ -3544,10 +3544,11 @@ Angeli, Fran Burstall, Alastair Burt, Lars Clausen, Soren Dayton,
 Stephen Eglen, Karl Eichwalder, Erik Frisk, Peter Galbraith, Kai
 Grossjohann, Frank Harrell, Till A. Heilmann, Peter Heslin, Stephan
 Heuel, Alan Ho, Lute Kamstra, Dieter Kraft, David Kastrup, Adrian Lanz,
-Juri Linkov, Rory Molinari, Stefan Monnier, Laurent Mugnier, Dan
-Nicolaescu, Sudeep Kumar Palat, Daniel Polani, Alan Shutko, Robin Socha,
-Richard Stanton, Allan Strand, Jan Vroonhof, Christoph Wedler, Alan
-Williams, Roland Winkler, Hans-Christoph Wirth, Eli Zaretskii}.
+Juri Linkov, Wolfgang Mayer, Rory Molinari, Stefan Monnier, Laurent
+Mugnier, Dan Nicolaescu, Sudeep Kumar Palat, Daniel Polani, Alan Shutko,
+Robin Socha, Richard Stanton, Allan Strand, Jan Vroonhof, Christoph
+Wedler, Alan Williams, Roland Winkler, Hans-Christoph Wirth, Eli
+Zaretskii}.
 
 The @code{view-crossref} feature was inspired by @i{Peter Galbraith's}
 @file{bib-cite.el}.
