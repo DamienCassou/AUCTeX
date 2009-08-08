@@ -1,5 +1,7 @@
 2009-08-08  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/reftex.texi 
+
 	* doc/changes.texi: Prepare for release.
 
 	* lisp/reftex-base.el (reftex-info): Refer to `reftex' instead of
@@ -15,6 +17,7 @@
 
 	* doc/reftex.texi: Use `reftex' instead of `reftex.info' for dir
 	entry.
+	(Imprint): Mention Wolfgang in list of contributors.
 
 	* doc/install.texi: Mention where to extend load-path.
 
