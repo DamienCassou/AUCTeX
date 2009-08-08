@@ -33,7 +33,7 @@
 ##  (or pass your own values for them to make)
 ##----------------------------------------------------------------------
 
-# Where local software is found
+# Where local software is located.
 prefix=/usr/local
 
 # Where info files go.
@@ -42,13 +42,13 @@ infodir=$(prefix)/share/info
 # Where local lisp files go.
 lispdir=$(prefix)/share/emacs/site-lisp/reftex
 
-# Name of your emacs binary
+# Name of emacs binary.
 EMACS=emacs
 
-# How to create directories
+# How to create directories.
 MKDIR=mkdir -p
 
-# How to move the byte compiled files to their destination.
+# How to move files.
 MV=mv
 
 # How to copy the lisp files to their distination.
@@ -77,7 +77,7 @@ install:
 	cd lisp && make INSTALL_DATA="$(INSTALL_DATA)" MKDIR="$(MKDIR)" \
 		lispdir="$(lispdir)" install
 	cd doc && make INSTALL_DATA="$(INSTALL_DATA)" MKDIR="$(MKDIR)" \
-		infodir="$(infodir)" install
+		MV="$(MV)" infodir="$(infodir)" install
 
 info:
 	cd doc && make info
@@ -139,7 +139,7 @@ COMMITTER="Ralf Angeli  <angeli@caeruleus.net>"
 
 release-commit:
 	@if [ "X$(TAG)" = "X" ]; then echo "*** No tag ***"; exit 1; fi
-	mv ChangeLog ChangeLog.old
+	$(MV) ChangeLog ChangeLog.old
 	echo `date "+%Y-%m-%d "`" "${COMMITTER} > ChangeLog
 	echo >> ChangeLog
 	echo "	* Version" $(TAG) released. >> ChangeLog
