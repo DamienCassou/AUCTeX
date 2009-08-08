@@ -1935,7 +1935,7 @@ These extra bindings are located in the users `C-c letter' map."
 
 (defcustom reftex-plug-into-AUCTeX nil
   "*Plug-in flags for AUCTeX interface.
-This variable is a list of 4 boolean flags.  When a flag is non-nil,
+This variable is a list of 5 boolean flags.  When a flag is non-nil,
 RefTeX will
 
   - supply labels in new sections and environments  (flag 1)
@@ -1965,8 +1965,7 @@ may require a restart of Emacs in order to become effective."
            (boolean :tag "supply argument for macros like `\\label'     ")
            (boolean :tag "supply argument for macros like `\\ref'       ")
            (boolean :tag "supply argument for macros like `\\cite'      ")
-           (boolean :tag "supply argument for macros like `\\index'     ")
-           )))
+           (boolean :tag "supply argument for macros like `\\index'     "))))
 
 (defcustom reftex-allow-detached-macro-args nil
   "*Non-nil means, allow arguments of macros to be detached by whitespace.
