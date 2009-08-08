@@ -27,11 +27,13 @@
 
 ;;; Code:
 
+;; All glory to the byte compiler.
 (eval-when-compile (require 'cl))
-(provide 'reftex-dcr)
-(provide 'reftex-vcr)
+(eval-and-compile
+  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
+(declare-function bibtex-beginning-of-entry "bibtex" ())
+
 (require 'reftex-base)
-;;;
 
 (defun reftex-view-crossref (&optional arg auto-how fail-quietly)
   "View cross reference of macro at point.  Point must be on the KEY
@@ -483,6 +485,8 @@ Calling this function several times find successive citation locations."
         t
       (move-marker reftex-global-search-marker nil)
       (error "All files processed"))))
+
+(provide 'reftex-dcr)
 
 ;;; arch-tag: d2f52b56-744e-44ad-830d-1fc193b90eda
 ;;; reftex-dcr.el ends here

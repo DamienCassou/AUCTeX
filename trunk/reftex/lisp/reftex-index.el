@@ -27,10 +27,13 @@
 
 ;;; Code:
 
+;; All glory to the byte compiler.
 (eval-when-compile (require 'cl))
-(provide 'reftex-index)
+(eval-and-compile
+  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
+(declare-function texmathp "ext:texmathp" ())
+
 (require 'reftex-base)
-;;;
 
 ;; START remove for XEmacs release
 (defvar mark-active)
@@ -2106,6 +2109,7 @@ Does not do a save-excursion."
    "--"
    ["Save and Return" reftex-index-phrases-save-and-return t]))
 
+(provide 'reftex-index)
 
 ;;; arch-tag: 4b2362af-c156-42c1-8932-ea2823e205c1
 ;;; reftex-index.el ends here
