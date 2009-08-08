@@ -1,5 +1,10 @@
 2009-08-08  Ralf Angeli  <angeli@caeruleus.net>
 
+	* doc/changes.texi: Prepare for release.
+
+	* lisp/reftex-base.el (reftex-info): Refer to `reftex' instead of
+	`reftex.info'.
+
 	* lisp/reftex-index.el: Suppress byte-compiler warnings.  Move
 	provide statement to end of file.
 
@@ -98,7 +103,7 @@
 	(reftex-select-cycle-ref-style-internal): Adapt to new structure
 	of `reftex-ref-style-alist'.
 
-	* lisp/reftex-ref.el: Adapt creaton of `reftex-<package>-<macro>'
+	* lisp/reftex-ref.el: Adapt creation of `reftex-<package>-<macro>'
 	functions to new structure of `reftex-ref-style-alist'.
 	(reftex-reference): Adapt to new structure of
 	`reftex-ref-style-alist'.
