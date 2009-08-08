@@ -27,7 +27,23 @@
 
 ;;; Code:
 
+;; All glory to the byte compiler.
 (eval-when-compile (require 'cl))
+(eval-and-compile
+  (unless (fboundp 'declare-function) (defmacro declare-function (&rest r))))
+(declare-function TeX-argument-prompt "ext:tex"
+		  (optional prompt default &optional complete))
+(declare-function TeX-argument-insert "ext:tex"
+		  (name optional &optional prefix))
+(declare-function LaTeX-add-labels "ext:tex" (&rest entries))
+(declare-function LaTeX-add-index-entries "ext:tex" (&rest entries))
+(declare-function LaTeX-bibitem-list "ext:tex" ())
+(declare-function LaTeX-index-entry-list "ext:tex" ())
+(declare-function LaTeX-label-list "ext:tex" ())
+(declare-function multi-prompt "ext:multi-prompt"
+		  (separator unique prompt table &optional
+			     mp-predicate require-match initial history))
+
 (require 'reftex-base)
 
 (defun reftex-plug-flag (which)
