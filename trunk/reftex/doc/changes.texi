@@ -6,7 +6,7 @@
 @end ifset
 Here is a list of recent changes to @RefTeX{}.
 
-@noindent @b{Since version 4.33}
+@noindent @b{4.34}
 
 @itemize @bullet
 @item
@@ -14,8 +14,10 @@ The creation of @BibTeX{} files with @code{reftex-create-bibtex-file}
 now recognizes cross-referenced entries and @samp{@@string} definitions.
 @item
 @RefTeX{} now provides better options for defining and selecting special
-referencing macros like @samp{\vref} or @samp{\fref} as well as
-page-referencing macros like @samp{\pageref}.
+referencing macros like @samp{\vref} from the @samp{fancyref} package,
+@samp{\fref} from the @samp{fancyref} package or @samp{\autoref} from
+the @samp{hyperref} package as well as page-referencing macros like
+@samp{\pageref}.
 @ifset rawfile
 See section Reference Styles in the manual
 @end ifset
