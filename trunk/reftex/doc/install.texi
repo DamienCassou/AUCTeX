@@ -38,7 +38,8 @@ where @RefTeX{} is installed in your case.
 (add-to-list 'load-path "/path/to/reftex")
 @end example
 
-Put this command into your init file.
+Put this command into your init file before other @RefTeX{}-related
+settings.
 
 @subsubheading Installation by Hand
 
