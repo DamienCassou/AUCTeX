@@ -69,6 +69,8 @@ reftex.html: $(TEXIFILES)
 install: reftex.info
 	if [ ! -d $(infodir) ]; then $(MKDIR) $(infodir); else true; fi ;
 	$(INSTALL_DATA) reftex.info $(infodir)
+	test ! -f $(infodir)/reftex || \
+	  $(MV) $(infodir)/reftex $(infodir)/reftex.old
 	-$(INSTALL_INFO) --info-dir=$(infodir) --remove reftex
 	-$(INSTALL_INFO) --info-dir=$(infodir) reftex.info
 
