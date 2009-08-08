@@ -1,3 +1,26 @@
+2009-08-08  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-index.el: Suppress byte-compiler warnings.  Move
+	provide statement to end of file.
+
+	* lisp/reftex-dcr.el: Suppress byte-compiler warnings.  Move
+	provide statement to end of file.
+
+	* lisp/reftex-auc.el: Suppress byte-compiler warnings.
+
+	* doc/reftex.texi: Use `reftex' instead of `reftex.info' for dir
+	entry.
+
+	* doc/install.texi: Mention where to extend load-path.
+
+	* doc/Makefile (install): Rename old info file in order to prevent
+	it from being found before the new one.
+
+	* Makefile (install): Pass $(MV) to doc Makefile.
+	(release-commit): Use $(MV).
+
+	* lisp/reftex-vars.el (reftex-plug-into-AUCTeX): Doc fix.
+
 2009-07-05  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/reftex.texi (Creating Citations): Give a hint about how to
