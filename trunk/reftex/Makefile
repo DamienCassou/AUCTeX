@@ -119,7 +119,7 @@ dist:
 	cvs export -d reftex-$(TAG) \
           "`echo $(TAG) | sed -e '/^\([-0-9]*[0-9]\)[-a-z]*$$/s//-D \1T2359/' \
                              -e '/[.]/{s/^/-rrelease_/;s/[.]/_/g}'`" reftex
-	cd reftex-$(TAG)/lisp && make dist
+	cd reftex-$(TAG)/lisp && make EMACS="$(EMACS)" dist
 	cd reftex-$(TAG)/doc && make dist
 	chmod -R go-w+rX reftex-$(TAG)
 	tar -cf - --owner=root --group=root reftex-$(TAG) | \
@@ -174,5 +174,5 @@ www-doc: dist
 	&& wget -O gendocs_template 'http://savannah.gnu.org/cgi-bin/viewcvs/%2acheckout%2a/texinfo/texinfo/util/gendocs_template?rev=HEAD' \
 	&& sed -i -e 's/html_node\/index\.html/%%PACKAGE%%\/index.html/' gendocs_template \
 	&& mkdir .texinfo \
-	&& echo -e "emacs split http://www.gnu.org/software/emacs/manual/html_node/\nemacs mono http://www.gnu.org/software/emacs/manual/emacs.html\nauctex mono http://www.gnu.org/software/auctex/manual/auctex.html\nauctex split http://www.gnu.org/software/auctex/manual/auctex/\n" > .texinfo/htmlxref.cnf \
-	&& ./gendocs.sh reftex "RefTeX Manual"
+	&& echo -e "emacs split http://www.gnu.org/software/emacs/manual/html_node/emacs/\nemacs mono http://www.gnu.org/software/emacs/manual/html_mono/emacs.html\nauctex mono http://www.gnu.org/software/auctex/manual/auctex.html\nauctex split http://www.gnu.org/software/auctex/manual/auctex/\n" > .texinfo/htmlxref.cnf \
+	&& ./gendocs.sh --email bug-auctex@gnu.org reftex "RefTeX Manual"
