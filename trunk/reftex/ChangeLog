@@ -1,5 +1,10 @@
 2009-08-09  Ralf Angeli  <angeli@caeruleus.net>
 
+	* Makefile (dist): Pass $(EMACS) to make in lisp dir.
+	(www-dir): Adapt paths to Emacs manuals and set email address.
+
+2009-08-09  Ralf Angeli  <angeli@caeruleus.net>
+
 	* Version 4.34 released.
 
 2009-08-09  Ralf Angeli  <angeli@caeruleus.net>
