@@ -1,6 +1,10 @@
-2009-08-08  Ralf Angeli  <angeli@caeruleus.net>
+2009-08-09  Ralf Angeli  <angeli@caeruleus.net>
 
-	* doc/reftex.texi 
+	* RELEASE: Update for 4.34.
+
+	* doc/changes.texi: Update for 4.34.
+
+2009-08-08  Ralf Angeli  <angeli@caeruleus.net>
 
 	* doc/changes.texi: Prepare for release.
 
