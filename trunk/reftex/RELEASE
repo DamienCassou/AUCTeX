@@ -1,16 +1,16 @@
 This is the RELEASE file for the RefTeX distribution.
 
-  Copyright (C) 2007 Free Software Foundation, Inc.
+  Copyright (C) 2009 Free Software Foundation, Inc.
 
   Copying and distribution of this file, with or without modification,
   are permitted in any medium without royalty provided the copyright
   notice and this notice are preserved.
 
-Release Notes for RefTeX 4.33 (2007-09-02)
+Release Notes for RefTeX 4.34 (2009-08-09)
 ==========================================
 
 RefTeX is a specialized package for support of labels, references,
-citations, and the index in LaTeX.  RefTeX wraps itself round four
+citations, and the index in LaTeX.  RefTeX wraps itself around four
 LaTeX macros: \label, \ref, \cite, and \index.  Using these macros
 usually requires looking up different parts of the document and
 searching through BibTeX database files.  RefTeX automates these
@@ -21,9 +21,11 @@ structure quickly.
 New Features and Bug Fixes
 --------------------------
 
-The principal change of this release is an update to GPLv3 (see
-http://www.gnu.org/licenses/gpl.html).  See the CHANGES file for a
-description of other changes.
+Reference styles make it easier to use special referencing macros as
+provided by the `varioref', `fancyref' or `hyperref' LaTeX packages.
+The creation of BibTeX files with `reftex-create-bibtex-file' now
+recognizes cross-referenced entries and @string definitions.  See also
+the CHANGES file for a description of other changes.
 
 Availability
 ------------
