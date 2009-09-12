@@ -1,5 +1,7 @@
 2009-09-12  Ralf Angeli  <angeli@caeruleus.net>
 
+	* lisp/reftex-vars.el (reftex-label-alist): Doc fix.
+
 	* lisp/reftex-toc.el (reftex-re-enlarge): Call `enlarge-window'
 	only if there is something to do because in Emacs the horizontal
 	version throws an error even if the parameter is 0.
