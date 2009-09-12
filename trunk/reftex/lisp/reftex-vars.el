@@ -480,12 +480,11 @@ ENV-OR-MACRO
     Special names: `section' for section labels, `any' to define a group
     which contains all labels.
 
-    This may also be a function to do local parsing and identify point
-    to be in a non-standard label environment.  The function must take
-    an argument BOUND and limit backward searches to this value.  It
-    should return either nil or a cons cell (FUNCTION . POSITION) with
-    the function symbol and the position where the special environment
-    starts.  See the Info documentation for an example.
+    This may also be a function to do local parsing and identify point to
+    be in a non-standard label environment.  The function must take an
+    argument BOUND and limit backward searches to this value.  It should
+    return either nil or the position where the special environment starts.
+    See the Info documentation for an example.
 
     Finally this may also be nil if the entry is only meant to change
     some settings associated with the type indicator character (see below).
