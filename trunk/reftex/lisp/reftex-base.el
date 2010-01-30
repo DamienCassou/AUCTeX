@@ -229,8 +229,7 @@
   (modify-syntax-entry ?\) "." reftex-syntax-table))
 
 (unless reftex-syntax-table-for-bib
-  (setq reftex-syntax-table-for-bib
-        (copy-syntax-table reftex-syntax-table))
+  (setq reftex-syntax-table-for-bib (copy-syntax-table))
   (modify-syntax-entry ?\' "." reftex-syntax-table-for-bib)
   (modify-syntax-entry ?\" "." reftex-syntax-table-for-bib)
   (modify-syntax-entry ?\[ "." reftex-syntax-table-for-bib)
@@ -304,8 +303,7 @@ on the menu bar.
         (modify-syntax-entry ?\( "." reftex-syntax-table)
         (modify-syntax-entry ?\) "." reftex-syntax-table)
 
-        (setq reftex-syntax-table-for-bib
-              (copy-syntax-table reftex-syntax-table))
+        (setq reftex-syntax-table-for-bib (copy-syntax-table))
         (modify-syntax-entry ?\' "." reftex-syntax-table-for-bib)
         (modify-syntax-entry ?\" "." reftex-syntax-table-for-bib)
         (modify-syntax-entry ?\[ "." reftex-syntax-table-for-bib)
