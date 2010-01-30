@@ -1,3 +1,11 @@
+2010-01-30  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-base.el (reftex-syntax-table-for-bib, reftex-mode):
+	Do not derive `reftex-syntax-table-for-bib' from
+	`reftex-syntax-table' because parens have to retain their paren
+	syntax in order for parsing of BibTeX entries like @book(...) to
+	work.
+
 2009-09-12  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-vars.el (reftex-label-alist): Doc fix.
