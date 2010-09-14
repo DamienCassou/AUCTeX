@@ -664,15 +664,13 @@ While entering the regexp, completion on knows citation keys is possible.
          (insert-entries selected-entries)
          entry string cite-view)
 
-    (when (stringp selected-entries)
-      (error selected-entries))
     (unless selected-entries (error "Quit"))
 
     (if (stringp selected-entries)
         ;; Nonexistent entry
-        (setq selected-entries nil
-              insert-entries (list (list selected-entries
-                                         (cons "&key" selected-entries))))
+        (setq insert-entries (list (list selected-entries
+                                         (cons "&key" selected-entries)))
+	      selected-entries nil)
       ;; It makes sense to compute the cite-view strings.
       (setq cite-view t))
 
