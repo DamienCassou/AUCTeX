@@ -1,3 +1,8 @@
+2010-09-14  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el (reftex-do-citation): Make it possible again
+	to insert non-existent entries.
+
 2010-01-30  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-base.el (reftex-syntax-table-for-bib, reftex-mode):
