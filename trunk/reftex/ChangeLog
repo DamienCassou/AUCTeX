@@ -1,3 +1,9 @@
+2010-10-16  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el
+	(reftex-extract-bib-entries-from-thebibliography): Use
+	`with-current-buffer'.
+
 2010-09-14  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-cite.el (reftex-do-citation): Make it possible again
