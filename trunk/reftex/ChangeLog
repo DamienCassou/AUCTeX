@@ -1,3 +1,8 @@
+2010-11-06  Ralf Angeli  <angeli@caeruleus.net>
+
+	* lisp/reftex-cite.el (reftex-create-bibtex-file): Make sure that
+	entries with whitespace at various places are found.
+
 2010-10-16  Ralf Angeli  <angeli@caeruleus.net>
 
 	* lisp/reftex-cite.el
