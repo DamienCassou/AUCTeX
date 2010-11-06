@@ -2,6 +2,8 @@
 
 	* lisp/reftex-cite.el (reftex-create-bibtex-file): Make sure that
 	entries with whitespace at various places are found.
+	(reftex-extract-bib-entries-from-thebibliography): Remove
+	superfluous backslash.
 
 2010-10-16  Ralf Angeli  <angeli@caeruleus.net>
 

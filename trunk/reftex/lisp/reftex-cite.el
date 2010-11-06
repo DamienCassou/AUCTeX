@@ -386,7 +386,7 @@
 					      (split-string
 					       (buffer-substring-no-properties
 						start end)
-					       "[ \t\n\r]*\\\\bibitem\[ \t]*\
+					       "[ \t\n\r]*\\\\bibitem[ \t]*\
 \\(\\[[^]]*]\\)*\[ \t]*"))))))
 	      (goto-char end))))))
     (unless entries
