@@ -1193,9 +1193,8 @@ created files in the variables `reftex-create-bibtex-header' or
            (save-restriction
              (widen)
              (goto-char (point-min))
-             (while (re-search-forward
-                     "^[ \t]*@\\(?:\\w\\|\\s_\\)+[ \t]*{\\([^ \t\r\n]+\\),"
-                     nil t)
+             (while (re-search-forward "^[ \t]*@\\(?:\\w\\|\\s_\\)+[ \t\n\r]*\
+\[{(][ \t\n\r]*\\([^ \t\n\r,]+\\)" nil t)
                (setq key (match-string 1)
                      beg (match-beginning 0)
                      end (progn
